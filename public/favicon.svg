@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Friendly Star Logo with thick black outline -->
+  <polygon points="24,3 30.5,16.5 45,18.5 34.5,28.8 37,43.2 24,36.4 11,43.2 13.5,28.8 3,18.5 17.5,16.5" 
+    fill="#FFD329" stroke="#111827" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Eyes -->
+  <ellipse cx="19" cy="24" rx="2" ry="2.6" fill="#111827"/>
+  <ellipse cx="29" cy="24" rx="2" ry="2.6" fill="#111827"/>
+  <circle cx="19.7" cy="23.2" r="0.7" fill="#FFFFFF"/>
+  <circle cx="29.7" cy="23.2" r="0.7" fill="#FFFFFF"/>
+  <!-- Cute smile -->
+  <path d="M 21 28 Q 24 32 27 28" fill="none" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Cheeks -->
+  <circle cx="15.5" cy="27" r="1.8" fill="#FF8A7A" opacity="0.8"/>
+  <circle cx="32.5" cy="27" r="1.8" fill="#FF8A7A" opacity="0.8"/>
+</svg>

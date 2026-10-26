@@ -1,0 +1,1027 @@
+[
+  {
+    "id": "c1-eng-q01",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "opposites",
+    "difficulty": "easy",
+    "question": "Which word means the opposite of HOT?",
+    "illustration": "sun",
+    "options": [
+      "Warm",
+      "Cold",
+      "Sunny",
+      "Boiling"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The opposite of HOT is COLD, like ice!"
+  },
+  {
+    "id": "c1-eng-q02",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "opposites",
+    "difficulty": "easy",
+    "question": "Which word means the opposite of HAPPY?",
+    "illustration": "smile",
+    "options": [
+      "Glad",
+      "Joyful",
+      "Sad",
+      "Kind"
+    ],
+    "correctAnswer": 2,
+    "explanation": "When someone is not HAPPY, they feel SAD."
+  },
+  {
+    "id": "c1-eng-q03",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "opposites",
+    "difficulty": "easy",
+    "question": "Which word means the opposite of BIG?",
+    "illustration": "elephant",
+    "options": [
+      "Huge",
+      "Small",
+      "Large",
+      "Tall"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The opposite of BIG is SMALL, like a tiny ant compared to an elephant."
+  },
+  {
+    "id": "c1-eng-q04",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "opposites",
+    "difficulty": "easy",
+    "question": "Which word means the opposite of EARLY?",
+    "illustration": "clock",
+    "options": [
+      "Late",
+      "Soon",
+      "Quick",
+      "First"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The opposite of arriving EARLY is arriving LATE."
+  },
+  {
+    "id": "c1-eng-q05",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "opposites",
+    "difficulty": "easy",
+    "question": "Which word means the opposite of CLEAN?",
+    "illustration": "dog",
+    "options": [
+      "Neat",
+      "Fresh",
+      "Dirty",
+      "Tidy"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The opposite of CLEAN is DIRTY."
+  },
+  {
+    "id": "c1-eng-q06",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which word means the same as QUICK?",
+    "illustration": "car",
+    "options": [
+      "Slow",
+      "Fast",
+      "Quiet",
+      "Soft"
+    ],
+    "correctAnswer": 1,
+    "explanation": "QUICK and FAST both mean moving with high speed."
+  },
+  {
+    "id": "c1-eng-q07",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which word means the same as TINY?",
+    "illustration": "cat",
+    "options": [
+      "Little",
+      "Giant",
+      "Long",
+      "Wide"
+    ],
+    "correctAnswer": 0,
+    "explanation": "TINY means very small or LITTLE."
+  },
+  {
+    "id": "c1-eng-q08",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which word means the same as ANGRY?",
+    "illustration": "smile",
+    "options": [
+      "Calm",
+      "Mad",
+      "Happy",
+      "Kind"
+    ],
+    "correctAnswer": 1,
+    "explanation": "When you are ANGRY, you feel upset or MAD."
+  },
+  {
+    "id": "c1-eng-q09",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "spelling",
+    "difficulty": "easy",
+    "question": "Which is the correct spelling?",
+    "illustration": "pencil",
+    "options": [
+      "Becaus",
+      "Because",
+      "Becose",
+      "Beacuse"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The correct spelling is \"Because\" (B-E-C-A-U-S-E)."
+  },
+  {
+    "id": "c1-eng-q10",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "spelling",
+    "difficulty": "easy",
+    "question": "Which is the correct spelling?",
+    "illustration": "boy",
+    "options": [
+      "Frend",
+      "Freind",
+      "Friend",
+      "Frind"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Remember \"i before e\" in \"Friend\" (F-R-I-E-N-D)."
+  },
+  {
+    "id": "c1-eng-q11",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "spelling",
+    "difficulty": "medium",
+    "question": "Which is the correct spelling?",
+    "illustration": "elephant",
+    "options": [
+      "Elefant",
+      "Eliphant",
+      "Elephent",
+      "Elephant"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The big animal with a trunk is spelled \"Elephant\" (E-L-E-P-H-A-N-T)."
+  },
+  {
+    "id": "c1-eng-q12",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which word rhymes with CAKE?",
+    "illustration": "cake",
+    "options": [
+      "Book",
+      "Lake",
+      "Cup",
+      "Cat"
+    ],
+    "correctAnswer": 1,
+    "explanation": "CAKE and LAKE end with the same rhyming sound \"-ake\"."
+  },
+  {
+    "id": "c1-eng-q13",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which word rhymes with LIGHT?",
+    "illustration": "sun",
+    "options": [
+      "Night",
+      "Late",
+      "Leaf",
+      "Little"
+    ],
+    "correctAnswer": 0,
+    "explanation": "LIGHT and NIGHT have the exact same ending sound \"-ight\"."
+  },
+  {
+    "id": "c1-eng-q14",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which word does NOT belong?",
+    "illustration": "apple",
+    "options": [
+      "Apple",
+      "Banana",
+      "Carrot",
+      "Mango"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Apple, Banana, and Mango are all fruits, while Carrot is a vegetable."
+  },
+  {
+    "id": "c1-eng-q15",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which word does NOT belong?",
+    "illustration": "pencil",
+    "options": [
+      "Run",
+      "Jump",
+      "Sleep",
+      "Pencil"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Run, Jump, and Sleep are all action verbs, while Pencil is a stationary thing (noun)."
+  },
+  {
+    "id": "c1-eng-q16",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: ___ apple is red.",
+    "illustration": "apple",
+    "options": [
+      "A",
+      "An",
+      "Thee",
+      "Am"
+    ],
+    "correctAnswer": 1,
+    "explanation": "\"Apple\" begins with a vowel sound (A), so we use \"An apple\"."
+  },
+  {
+    "id": "c1-eng-q17",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: I saw ___ dog.",
+    "illustration": "dog",
+    "options": [
+      "an",
+      "a",
+      "are",
+      "am"
+    ],
+    "correctAnswer": 1,
+    "explanation": "\"Dog\" starts with a consonant sound (D), so we say \"a dog\"."
+  },
+  {
+    "id": "c1-eng-q18",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: She ___ my sister.",
+    "illustration": "boy",
+    "options": [
+      "am",
+      "are",
+      "is",
+      "be"
+    ],
+    "correctAnswer": 2,
+    "explanation": "With singular pronoun \"She\", we use \"is\": \"She is my sister.\""
+  },
+  {
+    "id": "c1-eng-q19",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: They ___ playing.",
+    "illustration": "park",
+    "options": [
+      "is",
+      "am",
+      "are",
+      "was"
+    ],
+    "correctAnswer": 2,
+    "explanation": "\"They\" is plural (more than one), so we use \"are\": \"They are playing.\""
+  },
+  {
+    "id": "c1-eng-q20",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: I ___ seven years old.",
+    "illustration": "boy",
+    "options": [
+      "is",
+      "am",
+      "are",
+      "be"
+    ],
+    "correctAnswer": 1,
+    "explanation": "With the pronoun \"I\", we always use \"am\" in present tense: \"I am.\""
+  },
+  {
+    "id": "c1-eng-q21",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: He ___ a blue bag.",
+    "illustration": "school",
+    "options": [
+      "have",
+      "has",
+      "having",
+      "had"
+    ],
+    "correctAnswer": 1,
+    "explanation": "We use \"has\" with singular pronouns: \"He has a blue bag.\""
+  },
+  {
+    "id": "c1-eng-q22",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: We ___ two pencils.",
+    "illustration": "pencil",
+    "options": [
+      "has",
+      "is",
+      "have",
+      "am"
+    ],
+    "correctAnswer": 2,
+    "explanation": "We use \"have\" with plural pronoun \"We\": \"We have two pencils.\""
+  },
+  {
+    "id": "c1-eng-q23",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "medium",
+    "question": "Choose the plural of CHILD.",
+    "illustration": "boy",
+    "options": [
+      "Childs",
+      "Children",
+      "Childes",
+      "Childrens"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The special plural of ONE child is MANY children."
+  },
+  {
+    "id": "c1-eng-q24",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the plural of BOX.",
+    "illustration": "box",
+    "options": [
+      "Boxs",
+      "Boxies",
+      "Boxes",
+      "Boxen"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Nouns ending in -x add \"-es\": one box, two boxes."
+  },
+  {
+    "id": "c1-eng-q25",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "medium",
+    "question": "Choose the plural of FOOT.",
+    "illustration": "boy",
+    "options": [
+      "Foots",
+      "Feet",
+      "Feets",
+      "Footes"
+    ],
+    "correctAnswer": 1,
+    "explanation": "One foot, two feet! The plural of foot is feet."
+  },
+  {
+    "id": "c1-eng-q26",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "medium",
+    "question": "Choose the singular of MICE.",
+    "illustration": "cat",
+    "options": [
+      "Mouse",
+      "Mouses",
+      "Rat",
+      "Mices"
+    ],
+    "correctAnswer": 0,
+    "explanation": "\"Mice\" is plural. The singular form for just one is \"Mouse\"."
+  },
+  {
+    "id": "c1-eng-q27",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct pronoun: Riya is singing. ___ is happy.",
+    "illustration": "girl",
+    "options": [
+      "He",
+      "She",
+      "It",
+      "They"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Riya is a girl, so we use the pronoun \"She\"."
+  },
+  {
+    "id": "c1-eng-q28",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct pronoun: Rahul is running. ___ is fast.",
+    "illustration": "boy",
+    "options": [
+      "She",
+      "It",
+      "He",
+      "We"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Rahul is a boy, so we use the pronoun \"He\"."
+  },
+  {
+    "id": "c1-eng-q29",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct pronoun: The ball is red. ___ is round.",
+    "illustration": "ball",
+    "options": [
+      "He",
+      "She",
+      "They",
+      "It"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A ball is a thing, so we use the pronoun \"It\"."
+  },
+  {
+    "id": "c1-eng-q30",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "sentence-formation",
+    "difficulty": "easy",
+    "question": "Choose the correct sentence.",
+    "illustration": "book",
+    "options": [
+      "i like milk.",
+      "I like milk.",
+      "I like milk",
+      "i Like milk."
+    ],
+    "correctAnswer": 1,
+    "explanation": "A sentence starts with a capital \"I\" and ends with a full stop: \"I like milk.\""
+  },
+  {
+    "id": "c1-eng-q31",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "sentence-formation",
+    "difficulty": "medium",
+    "question": "Choose the correct sentence.",
+    "illustration": "school",
+    "options": [
+      "She go to school.",
+      "She going to school.",
+      "She goes to school.",
+      "She gone to school."
+    ],
+    "correctAnswer": 2,
+    "explanation": "With singular third-person \"She\", we add \"-es\" to the verb: \"She goes to school.\""
+  },
+  {
+    "id": "c1-eng-q32",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "medium",
+    "question": "Choose the correct word: The birds ___ in the sky.",
+    "illustration": "bird",
+    "options": [
+      "fly",
+      "flies",
+      "flying",
+      "flys"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Plural subject \"The birds\" takes base verb \"fly\": \"The birds fly in the sky.\""
+  },
+  {
+    "id": "c1-eng-q33",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "medium",
+    "question": "Choose the correct word: My mother ___ tea every morning.",
+    "illustration": "house",
+    "options": [
+      "drink",
+      "drinks",
+      "drinking",
+      "drank"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Singular subject \"My mother\" takes \"drinks\": \"My mother drinks tea every morning.\""
+  },
+  {
+    "id": "c1-eng-q34",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Which word is a naming word (noun)?",
+    "illustration": "school",
+    "options": [
+      "Dance",
+      "Beautiful",
+      "Teacher",
+      "Slowly"
+    ],
+    "correctAnswer": 2,
+    "explanation": "\"Teacher\" is the name of a person, which makes it a naming word (noun)."
+  },
+  {
+    "id": "c1-eng-q35",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Which word is an action word (verb)?",
+    "illustration": "boy",
+    "options": [
+      "Chair",
+      "Jump",
+      "Blue",
+      "Happy"
+    ],
+    "correctAnswer": 1,
+    "explanation": "\"Jump\" describes an action, so it is an action word (verb)."
+  },
+  {
+    "id": "c1-eng-q36",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "medium",
+    "question": "Which word is a describing word (adjective)?",
+    "illustration": "flower",
+    "options": [
+      "Pretty",
+      "Eat",
+      "Table",
+      "Under"
+    ],
+    "correctAnswer": 0,
+    "explanation": "\"Pretty\" describes how something looks, so it is a describing word (adjective)."
+  },
+  {
+    "id": "c1-eng-q37",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: This is ___ umbrella.",
+    "illustration": "umbrella",
+    "options": [
+      "a",
+      "an",
+      "are",
+      "am"
+    ],
+    "correctAnswer": 1,
+    "explanation": "\"Umbrella\" begins with a vowel sound (U), so we say \"an umbrella\"."
+  },
+  {
+    "id": "c1-eng-q38",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: The cat is ___ the table. (It is below it.)",
+    "illustration": "cat-table",
+    "options": [
+      "on",
+      "under",
+      "above",
+      "beside"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Below the table means \"under the table\"."
+  },
+  {
+    "id": "c1-eng-q39",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: The picture is ___ the wall.",
+    "illustration": "house",
+    "options": [
+      "in",
+      "under",
+      "on",
+      "between"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Pictures hang \"on the wall\"."
+  },
+  {
+    "id": "c1-eng-q40",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "grammar",
+    "difficulty": "easy",
+    "question": "Choose the correct word: I wake up ___ the morning.",
+    "illustration": "sun",
+    "options": [
+      "in",
+      "on",
+      "at",
+      "by"
+    ],
+    "correctAnswer": 0,
+    "explanation": "We say \"in the morning\", \"in the afternoon\", and \"at night\"."
+  },
+  {
+    "id": "c1-eng-q41",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "spelling",
+    "difficulty": "medium",
+    "question": "Which word comes FIRST in a dictionary?",
+    "illustration": "apple",
+    "options": [
+      "Ball",
+      "Apple",
+      "Cat",
+      "Dog"
+    ],
+    "correctAnswer": 1,
+    "explanation": "\"Apple\" starts with \"A\", which is the first letter of the alphabet."
+  },
+  {
+    "id": "c1-eng-q42",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "spelling",
+    "difficulty": "medium",
+    "question": "Which word comes LAST in alphabetical order?",
+    "illustration": "fish",
+    "options": [
+      "Fish",
+      "Frog",
+      "Fan",
+      "Fox"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Looking at second letters (a, i, o, r): Fan, Fish, Fox, Frog. So \"Frog\" comes last!"
+  },
+  {
+    "id": "c1-eng-q43",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "sentence-formation",
+    "difficulty": "easy",
+    "question": "Which is a question?",
+    "illustration": "question",
+    "options": [
+      "I am fine.",
+      "What is your name?",
+      "The sun is hot.",
+      "Please sit down."
+    ],
+    "correctAnswer": 1,
+    "explanation": "\"What is your name?\" asks something, which makes it a question."
+  },
+  {
+    "id": "c1-eng-q44",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "sentence-formation",
+    "difficulty": "easy",
+    "question": "Which punctuation mark ends a question?",
+    "illustration": "question",
+    "options": [
+      ".",
+      "!",
+      "?",
+      ","
+    ],
+    "correctAnswer": 2,
+    "explanation": "Every question finishes with a question mark (?)."
+  },
+  {
+    "id": "c1-eng-q45",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "sentence-formation",
+    "difficulty": "easy",
+    "question": "Choose the correct sentence.",
+    "illustration": "school",
+    "options": [
+      "Where is my bag?",
+      "Where is my bag.",
+      "where is my bag?",
+      "Where is my bag!"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Starts with capital \"Where\" and finishes with a question mark: \"Where is my bag?\""
+  },
+  {
+    "id": "c1-eng-q46",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Complete: A bird lives in a ___.",
+    "illustration": "bird",
+    "options": [
+      "kennel",
+      "nest",
+      "stable",
+      "den"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Birds build and live in a nest."
+  },
+  {
+    "id": "c1-eng-q47",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Complete: A doctor works in a ___.",
+    "illustration": "school",
+    "options": [
+      "hospital",
+      "farm",
+      "bakery",
+      "post office"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Doctors care for unwell patients in a hospital."
+  },
+  {
+    "id": "c1-eng-q48",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Complete: We use our ears to ___.",
+    "illustration": "boy",
+    "options": [
+      "see",
+      "smell",
+      "hear",
+      "taste"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Our ears are the sense organs for hearing sounds and music."
+  },
+  {
+    "id": "c1-eng-q49",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Complete: I brush my ___ every morning.",
+    "illustration": "boy",
+    "options": [
+      "hands",
+      "teeth",
+      "eyes",
+      "ears"
+    ],
+    "correctAnswer": 1,
+    "explanation": "We use a toothbrush and toothpaste to brush our teeth."
+  },
+  {
+    "id": "c1-eng-q50",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Which pair is correct?",
+    "illustration": "sun",
+    "options": [
+      "Day - Moon",
+      "Night - Sun",
+      "Day - Sun",
+      "Night - Rainbow"
+    ],
+    "correctAnswer": 2,
+    "explanation": "During the day, the bright sun shines in the sky."
+  },
+  {
+    "id": "c1-eng-q51",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "sentence-formation",
+    "difficulty": "easy",
+    "question": "Choose the correct order:",
+    "illustration": "school",
+    "options": [
+      "school / to / I / go",
+      "I go to school.",
+      "Go school I to.",
+      "To I school go."
+    ],
+    "correctAnswer": 1,
+    "explanation": "\"I go to school.\" is the only correct sentence order."
+  },
+  {
+    "id": "c1-eng-q52",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "sentence-formation",
+    "difficulty": "easy",
+    "question": "Choose the correct order:",
+    "illustration": "book",
+    "options": [
+      "Is my this book.",
+      "Book this is my.",
+      "This is my book.",
+      "My is book this."
+    ],
+    "correctAnswer": 2,
+    "explanation": "\"This is my book.\" makes complete, correct sense."
+  },
+  {
+    "id": "c1-eng-q53",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "medium",
+    "question": "What is the female of KING?",
+    "illustration": "crown",
+    "options": [
+      "Queen",
+      "Princess",
+      "Lady",
+      "Mother"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The female counterpart of a King is a Queen."
+  },
+  {
+    "id": "c1-eng-q54",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "What is the opposite gender of UNCLE?",
+    "illustration": "family",
+    "options": [
+      "Sister",
+      "Aunt",
+      "Mother",
+      "Niece"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The opposite gender of Uncle is Aunt."
+  },
+  {
+    "id": "c1-eng-q55",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "vocabulary",
+    "difficulty": "easy",
+    "question": "Choose the correct word: There are ___ days in a week.",
+    "illustration": "calendar",
+    "options": [
+      "five",
+      "six",
+      "seven",
+      "eight"
+    ],
+    "correctAnswer": 2,
+    "explanation": "There are seven days in a week (Monday through Sunday)."
+  },
+  {
+    "id": "c1-eng-q56",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "reading-comprehension",
+    "difficulty": "easy",
+    "question": "What is the puppy's name?",
+    "passage": "Mina has a small brown puppy named Coco. Coco likes to play with a red ball. Every evening, Mina takes Coco to the park. Coco drinks water after playing.",
+    "illustration": "dog",
+    "options": [
+      "Mina",
+      "Coco",
+      "Rani",
+      "Bobo"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The first sentence tells us: \"a small brown puppy named Coco.\""
+  },
+  {
+    "id": "c1-eng-q57",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "reading-comprehension",
+    "difficulty": "easy",
+    "question": "What colour is Coco?",
+    "passage": "Mina has a small brown puppy named Coco. Coco likes to play with a red ball. Every evening, Mina takes Coco to the park. Coco drinks water after playing.",
+    "illustration": "dog",
+    "options": [
+      "White",
+      "Black",
+      "Brown",
+      "Golden"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The story says: \"a small brown puppy\"."
+  },
+  {
+    "id": "c1-eng-q58",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "reading-comprehension",
+    "difficulty": "easy",
+    "question": "What does Coco play with?",
+    "passage": "Mina has a small brown puppy named Coco. Coco likes to play with a red ball. Every evening, Mina takes Coco to the park. Coco drinks water after playing.",
+    "illustration": "dog",
+    "options": [
+      "A kite",
+      "A doll",
+      "A red ball",
+      "A toy car"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Coco loves playing with \"a red ball\"."
+  },
+  {
+    "id": "c1-eng-q59",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "reading-comprehension",
+    "difficulty": "medium",
+    "question": "When does Mina take Coco to the park?",
+    "passage": "Mina has a small brown puppy named Coco. Coco likes to play with a red ball. Every evening, Mina takes Coco to the park. Coco drinks water after playing.",
+    "illustration": "park",
+    "options": [
+      "Every morning",
+      "Every evening",
+      "At midnight",
+      "At lunchtime"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The story says: \"Every evening, Mina takes Coco to the park.\""
+  },
+  {
+    "id": "c1-eng-q60",
+    "classNumber": 1,
+    "subjectId": "english",
+    "topicId": "reading-comprehension",
+    "difficulty": "easy",
+    "question": "What does Coco drink after playing?",
+    "passage": "Mina has a small brown puppy named Coco. Coco likes to play with a red ball. Every evening, Mina takes Coco to the park. Coco drinks water after playing.",
+    "illustration": "dog",
+    "options": [
+      "Milk",
+      "Juice",
+      "Water",
+      "Soup"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The story finishes: \"Coco drinks water after playing.\""
+  }
+]

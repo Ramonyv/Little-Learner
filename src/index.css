@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: #111827;
+    background-color: #F8FAFC;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  /* Native dialog backdrop */
+  dialog::backdrop {
+    background-color: rgba(17, 24, 39, 0.45);
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print styles for printable result summary */
+@media print {
+  header, nav, footer, .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-page {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+}
+
+/* Custom interactive pill button styles */
+.btn-chunky {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.btn-chunky:active {
+  transform: translateY(2px);
+}
