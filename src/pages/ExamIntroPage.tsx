@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useSession } from '../context/SessionContext';
-import { ENGLISH_TOPICS, SUBJECTS, getTopicQuestionCount } from '../data/questionRepository';
-import { ExamMode, SubjectId, TopicId } from '../types';
+import { ENGLISH_TOPICS, SUBJECTS, getPracticeSet, getPracticeSetQuestionCount, getTopicQuestionCount } from '../data/questionRepository';
+import { ExamMode, PracticeSetId, SubjectId, TopicId } from '../types';
 
 export const ExamIntroPage: React.FC = () => {
   const { subjectId = 'english', topicId = 'mixed-practice' } = useParams<{
@@ -12,6 +12,7 @@ export const ExamIntroPage: React.FC = () => {
   }>();
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { selectedClass } = useSession();
 
   const [mode, setMode] = useState<ExamMode>('practice');
@@ -19,13 +20,22 @@ export const ExamIntroPage: React.FC = () => {
 
   const currentSubject = SUBJECTS.find((s) => s.id === subjectId) || SUBJECTS[0];
   const currentTopic = ENGLISH_TOPICS.find((t) => t.id === topicId) || ENGLISH_TOPICS[0];
-  const totalQuestions = getTopicQuestionCount(selectedClass, subjectId as SubjectId, topicId as TopicId);
+  const requestedSet = searchParams.get('set');
+  const practiceSetId: PracticeSetId = requestedSet === 'paper-1' || requestedSet === 'paper-2' ? requestedSet : 'all';
+  const practiceSet = getPracticeSet(practiceSetId);
+  const isPracticePaper = topicId === 'mixed-practice';
+  const displayTitle = isPracticePaper ? practiceSet.title : currentTopic.title;
+  const displayDescription = isPracticePaper ? practiceSet.description : currentTopic.description;
+  const totalQuestions = isPracticePaper
+    ? getPracticeSetQuestionCount(practiceSetId)
+    : getTopicQuestionCount(selectedClass, subjectId as SubjectId, topicId as TopicId);
 
   // Suggested time: ~1 minute per question for Exam Mode
   const estimatedMinutes = currentTopic.estimatedMinutes || Math.max(5, Math.ceil(totalQuestions * 1.2));
 
   const handleStart = () => {
-    navigate(`/exam/${subjectId}/${topicId}?mode=${mode}&shuffle=${shuffleQuestions}`);
+    const setParam = isPracticePaper ? `&set=${practiceSetId}` : '';
+    navigate(`/exam/${subjectId}/${topicId}?mode=${mode}&shuffle=${shuffleQuestions}${setParam}`);
   };
 
   return (
@@ -49,19 +59,22 @@ export const ExamIntroPage: React.FC = () => {
         <div className="flex items-center gap-4 mb-6">
           <div
             className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center flex-shrink-0 shadow-sm"
-            style={{ backgroundColor: currentTopic.iconBgColor, color: currentTopic.iconColor }}
+            style={{
+              backgroundColor: isPracticePaper ? practiceSet.iconBgColor : currentTopic.iconBgColor,
+              color: isPracticePaper ? practiceSet.iconColor : currentTopic.iconColor,
+            }}
           >
-            <Icon icon={currentTopic.icon} className="w-8 h-8 sm:w-10 sm:h-10" />
+            <Icon icon={isPracticePaper ? practiceSet.icon : currentTopic.icon} className="w-8 h-8 sm:w-10 sm:h-10" />
           </div>
           <div>
             <span className="text-xs font-black uppercase tracking-wider text-brand-blue">
               {currentSubject.title} • Class {selectedClass}
             </span>
             <h1 className="text-2xl sm:text-3xl font-black text-brand-ink">
-              {currentTopic.title}
+              {displayTitle}
             </h1>
             <p className="text-slate-500 font-bold text-xs sm:text-sm mt-0.5">
-              {currentTopic.description}
+              {displayDescription}
             </p>
           </div>
         </div>

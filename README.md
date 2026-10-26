@@ -7,7 +7,7 @@ Built strictly according to product design principles:
 - **Instant practice**: Open the app and start immediately on any desktop, tablet, or phone.
 - **Client-side session memory**: All test responses, timers, and progress run in browser memory.
 - **Authentic activity book design**: Handcrafted flat vector SVG artwork with thick outlines (`#111827`), friendly rounded typography (`Nunito`), and vivid children's book colors (`#087CF7`, `#FFD329`, `#20C86B`, `#FF6656`, `#9256F5`).
-- **Authentic CBSE Olympiad Content**: Imported directly from `CBSE_Class_1_English_Olympiad_60_Questions.pdf` (all 60 questions with verified answer key and comprehensive child-friendly explanations).
+- **Authentic CBSE Olympiad Content**: Two complete Class 1 English practice papers (120 questions) with verified answer keys and child-friendly explanations.
 
 ---
 
@@ -118,6 +118,7 @@ Each question implements the `Question` TypeScript interface (`src/types/index.t
 - **Two Learning Modes**:
   - **Practice Mode**: Untimed, friendly learning mode with instant feedback and child-friendly explanations.
   - **Exam Mode**: Timed mock Olympiad with countdown clock; results and explanations revealed at the end.
+- **Separate Practice Papers**: Each imported PDF remains available as its own paper, while Mixed Practice combines every imported set.
 - **Keyboard Shortcuts**:
   - `1`, `2`, `3`, `4` or `A`, `B`, `C`, `D` to choose answers.
   - `ArrowLeft` / `ArrowRight` for Previous / Next question.

@@ -31,6 +31,17 @@ export interface Question {
 
 export type ExamMode = 'practice' | 'exam';
 
+export type PracticeSetId = 'all' | 'paper-1' | 'paper-2';
+
+export interface PracticeSetMeta {
+  id: PracticeSetId;
+  title: string;
+  description: string;
+  icon: string;
+  iconBgColor: string;
+  iconColor: string;
+}
+
 export interface SubjectMeta {
   id: SubjectId;
   title: string;

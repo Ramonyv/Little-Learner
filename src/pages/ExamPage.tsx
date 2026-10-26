@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useSession } from '../context/SessionContext';
-import { ENGLISH_TOPICS, getQuestionsForTest } from '../data/questionRepository';
-import { Question, ExamMode, SubjectId, TopicId, ExamResultSummary, UserExamSession } from '../types';
+import { ENGLISH_TOPICS, getPracticeSet, getQuestionsForTest } from '../data/questionRepository';
+import { Question, ExamMode, PracticeSetId, SubjectId, TopicId, ExamResultSummary, UserExamSession } from '../types';
 import { ExamProgress } from '../components/exam/ExamProgress';
 import { QuestionCard } from '../components/exam/QuestionCard';
 import { ExamNavigation } from '../components/exam/ExamNavigation';
@@ -23,9 +23,22 @@ export const ExamPage: React.FC = () => {
 
   const mode = (searchParams.get('mode') as ExamMode) || 'practice';
   const shuffleParam = searchParams.get('shuffle') !== 'false';
+  const requestedSet = searchParams.get('set');
+  const practiceSetId: PracticeSetId = requestedSet === 'paper-1' || requestedSet === 'paper-2' ? requestedSet : 'all';
 
   // Topic Metadata
   const topic = ENGLISH_TOPICS.find((t) => t.id === topicId) || ENGLISH_TOPICS[0];
+  const practiceSet = getPracticeSet(practiceSetId);
+  const displayTopic = topicId === 'mixed-practice'
+    ? {
+        ...topic,
+        title: practiceSet.title,
+        description: practiceSet.description,
+        icon: practiceSet.icon,
+        iconBgColor: practiceSet.iconBgColor,
+        iconColor: practiceSet.iconColor,
+      }
+    : topic;
 
   // Load questions
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -49,14 +62,14 @@ export const ExamPage: React.FC = () => {
 
   // Initialize questions
   const initializeTest = useCallback(() => {
-    const loaded = getQuestionsForTest(selectedClass, subjectId as SubjectId, topicId as TopicId, shuffleParam);
+    const loaded = getQuestionsForTest(selectedClass, subjectId as SubjectId, topicId as TopicId, shuffleParam, practiceSetId);
     setQuestions(loaded);
     setCurrentIndex(0);
     setUserAnswers({});
     setIsSubmitted(false);
     setIsReviewing(false);
     setTimeLeft(Math.max(180, loaded.length * 75));
-  }, [selectedClass, subjectId, topicId, shuffleParam]);
+  }, [selectedClass, subjectId, topicId, shuffleParam, practiceSetId]);
 
   useEffect(() => {
     initializeTest();
@@ -174,7 +187,7 @@ export const ExamPage: React.FC = () => {
       sessionId: `sess-${finishTimestamp}`,
       subjectId: subjectId as SubjectId,
       topicId: topicId as TopicId,
-      topicTitle: topic.title,
+      topicTitle: displayTopic.title,
       mode,
       startTime,
       endTime: finishTimestamp,
@@ -247,7 +260,7 @@ export const ExamPage: React.FC = () => {
     return (
       <ResultSummary
         summary={resultSummary}
-        topic={topic}
+        topic={displayTopic}
         onReviewAnswers={() => {
           setIsReviewing(true);
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -268,7 +281,7 @@ export const ExamPage: React.FC = () => {
         questions={questions}
         userAnswers={userAnswers}
         summary={resultSummary}
-        topic={topic}
+        topic={displayTopic}
         onBackToResult={() => setIsReviewing(false)}
         onRetake={() => initializeTest()}
       />

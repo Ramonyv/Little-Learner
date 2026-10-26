@@ -1,5 +1,6 @@
-import { SubjectMeta, TopicMeta, Question, SubjectId, TopicId } from '../types';
+import { SubjectMeta, TopicMeta, Question, SubjectId, TopicId, PracticeSetId, PracticeSetMeta } from '../types';
 import class1EnglishData from './questions/class1/english.json';
+import class1EnglishPracticePaper2Data from './questions/class1/english-practice-paper-2.json';
 
 // Static metadata for all subjects
 export const SUBJECTS: SubjectMeta[] = [
@@ -114,8 +115,51 @@ export const ENGLISH_TOPICS: TopicMeta[] = [
   },
 ];
 
+export const ENGLISH_PRACTICE_SETS: PracticeSetMeta[] = [
+  {
+    id: 'paper-1',
+    title: 'Practice Paper 1',
+    description: 'The original 60-question English Olympiad paper.',
+    icon: 'solar:document-text-bold',
+    iconBgColor: '#EBF4FE',
+    iconColor: '#087CF7',
+  },
+  {
+    id: 'paper-2',
+    title: 'Practice Paper 2',
+    description: 'The newest 60-question English Olympiad paper.',
+    icon: 'solar:document-add-bold',
+    iconBgColor: '#E8F9F0',
+    iconColor: '#20C86B',
+  },
+  {
+    id: 'all',
+    title: 'Mixed Practice',
+    description: 'Questions from every practice paper in one challenge.',
+    icon: 'solar:shuffle-bold',
+    iconBgColor: '#F4EFFF',
+    iconColor: '#9256F5',
+  },
+];
+
 // In-memory typed question store
-const rawQuestions: Question[] = class1EnglishData as Question[];
+const rawQuestions: Question[] = [
+  ...(class1EnglishData as Question[]),
+  ...(class1EnglishPracticePaper2Data as Question[]),
+];
+
+const questionsBySet: Record<Exclude<PracticeSetId, 'all'>, Question[]> = {
+  'paper-1': class1EnglishData as Question[],
+  'paper-2': class1EnglishPracticePaper2Data as Question[],
+};
+
+export function getPracticeSet(setId: PracticeSetId): PracticeSetMeta {
+  return ENGLISH_PRACTICE_SETS.find((set) => set.id === setId) || ENGLISH_PRACTICE_SETS[2];
+}
+
+export function getPracticeSetQuestionCount(setId: PracticeSetId): number {
+  return setId === 'all' ? rawQuestions.length : questionsBySet[setId].length;
+}
 
 /**
  * Get all questions for a subject and class
@@ -147,11 +191,15 @@ export function getQuestionsForTest(
   classNumber: number,
   subjectId: SubjectId,
   topicId: TopicId,
-  shuffle = false
+  shuffle = false,
+  practiceSetId: PracticeSetId = 'all'
 ): Question[] {
   let list: Question[] = [];
   if (topicId === 'mixed-practice') {
-    list = [...getAllSubjectQuestions(classNumber, subjectId)];
+    const source = practiceSetId === 'all' ? rawQuestions : questionsBySet[practiceSetId];
+    list = source.filter(
+      (q) => q.classNumber === classNumber && q.subjectId === subjectId
+    );
   } else {
     list = rawQuestions.filter(
       (q) => q.classNumber === classNumber && q.subjectId === subjectId && q.topicId === topicId

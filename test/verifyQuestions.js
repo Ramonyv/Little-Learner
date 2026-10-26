@@ -6,9 +6,13 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const questionsPath = path.resolve(__dirname, '../src/data/questions/class1/english.json');
-const rawData = fs.readFileSync(questionsPath, 'utf8');
-const questions = JSON.parse(rawData);
+const questionPaths = [
+  path.resolve(__dirname, '../src/data/questions/class1/english.json'),
+  path.resolve(__dirname, '../src/data/questions/class1/english-practice-paper-2.json'),
+];
+const questions = questionPaths.flatMap((questionsPath) =>
+  JSON.parse(fs.readFileSync(questionsPath, 'utf8'))
+);
 
 console.log(`\n🔍 Verifying Little Learner Question Bank: ${questions.length} total questions found.`);
 
