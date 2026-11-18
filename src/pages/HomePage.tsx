@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useSession } from '../context/SessionContext';
-import { HeroIllustration } from '../components/illustrations/Illustrations';
 import { TopicCard } from '../components/cards/TopicCard';
 import { SubjectCard } from '../components/cards/SubjectCard';
 import { ENGLISH_TOPICS, SUBJECTS, getTopicQuestionCount, getAllSubjectQuestions } from '../data/questionRepository';
@@ -16,18 +15,18 @@ export const HomePage: React.FC = () => {
       
       {/* 1. Hero Banner matching Desktop UI Reference */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-4 sm:pt-8">
-        <div className="relative rounded-3xl sm:rounded-4xl bg-gradient-to-b from-[#6EB3FC] to-[#087CF7] text-white p-6 sm:p-10 lg:p-12 shadow-xl border-4 border-slate-900/10 overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-10">
+        <div className="relative rounded-3xl sm:rounded-4xl bg-[#1479f7] text-white p-6 sm:p-10 lg:p-12 shadow-xl border-4 border-slate-900/10 overflow-hidden flex flex-col lg:block items-center gap-6 lg:min-h-[444px]">
           
           {/* Decorative Clouds */}
-          <div className="absolute top-4 left-10 opacity-30 pointer-events-none">
+          <div className="absolute top-4 left-10 opacity-30 pointer-events-none hidden lg:block">
             <Icon icon="solar:cloud-bold" className="w-16 h-16 sm:w-20 sm:h-20" />
           </div>
-          <div className="absolute bottom-6 right-12 opacity-25 pointer-events-none">
+          <div className="absolute bottom-6 right-12 opacity-25 pointer-events-none hidden lg:block">
             <Icon icon="solar:cloud-bold" className="w-14 h-14 sm:w-16 sm:h-16" />
           </div>
 
           {/* Left Text Content */}
-          <div className="relative z-10 max-w-xl text-center lg:text-left">
+          <div className="relative z-10 max-w-[448px] text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-sm text-xs sm:text-sm font-black uppercase tracking-wider mb-3">
               <Icon icon="solar:star-fall-bold" className="w-4 h-4 text-brand-yellow" />
               <span>CBSE Class {selectedClass} Olympiad Prep</span>
@@ -61,8 +60,10 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Right Hero Illustration */}
-          <div className="relative z-10 w-full max-w-[340px] sm:max-w-[420px] lg:max-w-[460px] flex-shrink-0">
-            <HeroIllustration className="w-full h-auto drop-shadow-lg" />
+          <div className="relative z-10 w-full max-w-[690px] aspect-[690/323] mt-6 lg:mt-0 lg:absolute lg:w-[60%] lg:max-w-none lg:right-[-2%] lg:bottom-0" role="img" aria-label="Child reading with a globe, books, cat, and a rocket">
+            <img src="/hero-palm.svg" alt="" className="absolute left-0 top-[16.8%] w-[20.5%] h-auto" />
+            <img src="/hero-books.svg" alt="" className="absolute left-[63%] top-[42.5%] w-[13.2%] h-auto" />
+            <img src="/hero-scene.svg" alt="" className="absolute left-[1.8%] top-0 w-[98.2%] h-auto" />
           </div>
 
         </div>
