@@ -7,12 +7,99 @@
 @media(max-width:600px){.drawing-board{padding-top:12px}.board-heading,.board-top{flex-wrap:wrap;gap:6px}.board-paper{height:clamp(220px,34svh,350px)}.board-heading h1{font-size:26px}.board-switch button{font-size:13px;padding:8px}.board-heading{margin-bottom:10px}.board-tools .tool{padding:4px 7px}.board-tools svg{width:27px;height:27px}}
 
 /* The board uses the whole workspace at every viewport width. */
-.drawing-board{width:100%;max-width:none;min-height:calc(100svh - 5rem);padding:clamp(14px,2vw,32px) clamp(12px,3.7vw,76px) 28px;background:radial-gradient(ellipse at 2% 0%,#f4fbff,transparent 48%),linear-gradient(135deg,#d8efff,#e8f6ff 62%,#cfeaff)}
+.drawing-board{width:100%;max-width:none;min-height:100svh;padding:clamp(14px,2vw,32px) clamp(12px,3.7vw,76px) 28px;background:radial-gradient(ellipse at 2% 0%,#f4fbff,transparent 48%),linear-gradient(135deg,#d8efff,#e8f6ff 62%,#cfeaff)}
 .drawing-board .board-heading{margin:0 0 clamp(14px,2vw,30px);gap:12px}.board-heading .board-switch,.board-top .board-switch{border-radius:100px;padding:4px;box-shadow:0 3px 9px #2571b51a}.board-switch button{border-radius:100px}.board-heading .board-switch button{padding-inline:clamp(10px,1.6vw,28px)}
 .board-frame,.guide-list{min-width:0;border:2px solid #fff;border-radius:26px;box-shadow:0 5px 16px #30699915}.board-frame{padding:clamp(8px,1vw,18px);background:linear-gradient(145deg,#fafcff,#e0efff)}.guide-list{background:#d7edff;padding:12px}.guide-list button,.board-tools button{box-shadow:0 2px 4px #19466b12}
 .board-layout{grid-template-columns:clamp(156px,14vw,250px) minmax(0,1fr)}.board-layout.free{grid-template-columns:minmax(0,1fr)}.board-top{padding:6px 8px 14px;gap:12px}.board-top p{font-weight:700;color:#506384}.guide-count{margin-right:auto;padding:4px 12px;border-radius:99px;background:#d6eaff;font-weight:900;white-space:nowrap}
-.board-paper{height:clamp(290px,calc(100svh - 365px),850px);border-radius:20px}.board-paper.dark{background:radial-gradient(ellipse at 40% 20%,#205953,#093d38);color:#bcd8cb}
+.board-paper{height:clamp(290px,calc(100svh - 285px),100svh);border-radius:20px}.board-paper.dark{background:radial-gradient(ellipse at 40% 20%,#205953,#093d38);color:#bcd8cb}
 .board-tools{padding:10px;margin-top:10px;background:#dceeff;border-radius:18px;gap:clamp(5px,.6vw,12px)}.board-tools .tool{min-width:60px}.board-size{display:flex;align-items:center;gap:2px;font-weight:850}.board-size button{display:grid;place-items:center;padding:5px;min-width:30px}.board-size i{background:#192950;border-radius:50%}
-@media(max-width:1000px){.board-layout{grid-template-columns:minmax(0,1fr)}.guide-list{display:flex;overflow-x:auto;gap:6px;padding:6px}.guide-list h2{display:none}.guide-list button{width:auto;flex:none;margin:0;padding:6px 10px}.board-top{flex-wrap:wrap}.guide-count{margin-right:0}.drawing-board{padding-bottom:84px}}
-@media(max-width:600px){.board-paper{height:clamp(250px,39svh,450px)}.board-heading .board-switch{width:100%}.board-heading .board-switch button{flex:1}.board-tools{padding:6px}.board-tools .tool{min-width:42px}.board-top p{font-size:13px}.board-frame{border-radius:18px}.drawing-board{padding-inline:8px}.board-colors{flex-wrap:wrap}.board-tools label{font-size:14px}}
+@media(max-width:1000px){.board-layout{grid-template-columns:minmax(0,1fr)}.guide-list{display:flex;overflow-x:auto;gap:6px;padding:6px}.guide-list h2{display:none}.guide-list button{width:auto;flex:none;margin:0;padding:6px 10px}.board-top{flex-wrap:wrap}.guide-count{margin-right:0}.drawing-board{padding-bottom:16px}}
+@media(max-width:600px){.board-paper{height:clamp(250px,calc(39svh + 4rem),520px)}.board-heading .board-switch{width:100%}.board-heading .board-switch button{flex:1}.board-tools{padding:6px}.board-tools .tool{min-width:42px}.board-top p{font-size:13px}.board-frame{border-radius:18px}.drawing-board{padding-inline:8px}.board-colors{flex-wrap:wrap}.board-tools label{font-size:14px}}
 .letter-size-control{display:flex;align-items:center;gap:12px;padding:0 8px 12px;font-weight:850}.letter-size-control input{width:clamp(100px,25vw,260px);accent-color:#2563eb;min-height:28px}.letter-size-control output{font-variant-numeric:tabular-nums}
+
+.board-tools.drawing-dock{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 10px;background:linear-gradient(180deg,#eaf5ff,#d9edff)}
+.drawing-dock .dock-brushes,.drawing-dock .dock-actions{display:flex;gap:5px}
+.drawing-dock .tool,.drawing-dock .dock-actions button{display:grid;place-items:center;gap:3px;min-width:clamp(48px,5.6vw,94px);height:clamp(56px,5.2vw,84px);padding:4px;font-size:clamp(12px,1.1vw,18px)}
+.drawing-dock .dock-actions svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.drawing-dock .board-colors{padding:6px;flex-wrap:nowrap;gap:6px}.drawing-dock .board-colors button{height:clamp(25px,2.7vw,44px);width:clamp(25px,2.7vw,44px);border:2px solid white}.drawing-dock .board-colors button[aria-pressed=true]{outline:3px solid #ffc800;outline-offset:1px}
+.dock-field{display:grid;gap:3px;font-size:13px;font-weight:900}.dock-pill{display:flex;align-items:center;justify-content:center;position:relative;gap:6px;background:white;border:1px solid #bed9f3;border-radius:24px;padding:5px 9px;min-height:36px}.dock-pill input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}.dock-pill:focus-within{outline:2px solid #347bd3}.dock-pill i{display:block;border-radius:50%;background:#132345}.dock-field>span i{width:26px;height:16px;border-radius:12px}.drawing-dock .dock-pill button{min-height:26px;min-width:26px;display:grid;place-items:center;padding:0;border:0;box-shadow:none;border-radius:50%}.drawing-dock .dock-pill button[aria-pressed=true]{background:white;outline:3px solid #ffc800}
+@media(min-width:601px) and (max-width:1099px){.board-tools.drawing-dock{display:grid;grid-template-columns:auto 1fr auto;justify-items:center}.drawing-dock .dock-brushes{grid-column:span 2;justify-self:start}.drawing-dock .dock-actions{grid-column:3;grid-row:1}}
+@media(max-width:600px){.board-tools.drawing-dock{justify-content:flex-start}.drawing-dock .dock-brushes{width:100%}.drawing-dock .tool{flex:1}.drawing-dock .dock-actions{margin-left:auto}}
+.standard-dock .board-next{align-self:center;min-height:54px;margin:0;padding-inline:clamp(15px,2vw,32px)}
+@media(min-width:601px) and (max-width:1099px){.board-tools.standard-dock{grid-template-columns:1fr auto auto}.standard-dock .dock-brushes{grid-column:1}.standard-dock .board-colors{grid-column:2}.standard-dock .dock-field{grid-column:3}.standard-dock .dock-actions{grid-column:1 / 3;grid-row:2;justify-self:start}.standard-dock .board-next{justify-self:end}}
+
+/* Fit the canvas around the actual controls, including a wrapped toolbar. */
+@media (min-width: 601px) {
+  .drawing-board {
+    height: 100dvh;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .drawing-board > div:not([hidden]) { min-height: 0; }
+  .board-layout { height: 100%; grid-template-rows: minmax(0, 1fr); }
+  .board-frame { height: 100%; min-height: 0; display: flex; flex-direction: column; }
+  .board-frame > * { flex: none; }
+  .drawing-board .board-frame > .board-paper {
+    flex: 1 1 0;
+    min-height: 0;
+    height: auto;
+    max-height: none;
+  }
+}
+@media (min-width: 601px) and (max-width: 1000px) {
+  .board-layout:not(.free) { grid-template-rows: auto minmax(0, 1fr); }
+  .guide-list { flex-wrap: wrap; overflow: visible; }
+  .guide-list button { flex: 1 1 auto; justify-content: center; }
+}
+@media (min-width: 1001px) and (max-height: 730px) {
+  .guide-list button { margin-block: 2px; padding-block: 5px; }
+}
+.board-brand{padding-right:clamp(8px,1.4vw,22px);border-right:2px solid #cadff0}.board-brand img{width:clamp(95px,14vw,230px);height:auto}.board-heading>.board-switch{margin-left:auto}.class-chip,.star-count{padding:8px 15px;border-radius:20px;background:#fff;font-weight:900;white-space:nowrap}.star-count{background:#fff3c5}.exercise-icon{border-radius:16px;background:#b6e6ff;padding:10px}.guide-count{display:flex;align-items:center;gap:5px}.guide-count i{width:8px;height:8px;border-radius:50%;background:#b9d8f5}.guide-count i.current{background:#167aff}.practice-art{width:100%;margin-top:auto}.wave-tip{position:absolute;top:4%;left:50%;transform:translateX(-50%);width:max-content;max-width:90%;text-align:center;padding:6px 14px;border-radius:20px;background:#167452;color:white;font-weight:800;font-size:clamp(11px,1.1vw,16px);pointer-events:none}.board-paper.dark{background:radial-gradient(ellipse at center,#126443,#004539);color:#e0f6d9}
+.standard-dock :is(.dock-brushes,.board-colors,.dock-actions){position:relative;padding-top:21px}.standard-dock :is(.dock-brushes,.board-colors,.dock-actions)::before{position:absolute;top:0;left:3px;font-size:13px;font-weight:900}.standard-dock .dock-brushes::before{content:'Tools'}.standard-dock .board-colors::before{content:'Colour'}.standard-dock .dock-actions::before{content:'Actions'}.standard-dock .board-colors button[aria-pressed=true]::after{content:'✓';color:white;text-shadow:0 1px 2px #163450}.surface-selector button{font-size:13px}
+@media(min-width:1001px){.guide-list{display:flex;flex-direction:column}.practice-art{min-height:0;max-height:19vh;object-fit:contain}.drawing-board{padding-inline:clamp(12px,1.4vw,28px)}}
+@media(max-width:1000px){.practice-art,.exercise-icon{display:none}.class-chip{font-size:12px}.board-heading h1{font-size:clamp(20px,3vw,30px)}}
+@media(max-width:700px){.class-chip{display:none}.board-heading{flex-wrap:wrap}.board-heading>.board-switch{margin-left:0}}
+
+/* Give each group the same label row and centre its controls underneath. */
+.standard-dock {
+  --dock-label-height: 22px;
+  --dock-control-height: clamp(56px, 5.2vw, 84px);
+}
+.standard-dock :is(.dock-brushes, .board-colors, .dock-actions, .dock-field) {
+  position: relative;
+  box-sizing: border-box;
+  height: calc(var(--dock-label-height) + var(--dock-control-height));
+  padding: var(--dock-label-height) 0 0;
+  display: flex;
+  align-items: center;
+}
+.standard-dock :is(.dock-brushes, .board-colors, .dock-actions)::before,
+.standard-dock .dock-field > .dock-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 900;
+}
+.standard-dock .board-next { margin-top: var(--dock-label-height); }
+
+.standard-dock :is(.dock-brushes,.board-colors,.dock-actions)::before { content:none; }
+.standard-dock .dock-label {
+  position:absolute;top:0;left:0;display:flex;align-items:center;gap:5px;
+  font-size:13px;line-height:18px;font-weight:900;white-space:nowrap;
+}
+.standard-dock .dock-pill {padding:0;gap:0;border-radius:12px;overflow:hidden}
+.standard-dock .dock-pill button {width:clamp(32px,3vw,52px);height:clamp(36px,3vw,50px);border-radius:10px}
+.standard-dock .dock-pill button[aria-pressed=true] {background:#d4ebff;outline:0;box-shadow:inset 0 0 0 2px #167aff}
+.standard-dock .tool[aria-pressed=true] {border-color:#167aff}
+.standard-dock .board-next {min-height:var(--dock-control-height);background:#ffd321;box-shadow:0 3px 0 #efa816;font-size:clamp(16px,1.4vw,23px)}
+@media(min-width:1100px){
+  .board-tools.standard-dock {display:grid;grid-template-columns:auto auto auto auto;justify-content:space-between;column-gap:clamp(6px,.8vw,18px)}
+  .board-tools.standard-dock:has(.board-next){grid-template-columns:auto auto auto auto auto}
+  .standard-dock :is(.board-colors,.dock-field,.dock-actions){border-left:1px solid #c4d9ea;padding-left:clamp(6px,.85vw,18px)}
+  .standard-dock :is(.board-colors,.dock-field,.dock-actions)>.dock-label{left:clamp(6px,.85vw,18px)}
+  .standard-dock .tool,.standard-dock .dock-actions button{min-width:clamp(44px,4.25vw,78px)}
+  .standard-dock .board-colors button{width:clamp(28px,2.8vw,50px);height:clamp(28px,2.8vw,50px)}
+}

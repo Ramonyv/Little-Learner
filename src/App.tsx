@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { SessionProvider } from './context/SessionContext';
 import { SiteHeader } from './components/layout/SiteHeader';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
@@ -17,14 +17,10 @@ export const App: React.FC = () => {
     <SessionProvider>
       <BrowserRouter>
         <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-brand-ink selection:bg-brand-yellow selection:text-brand-ink">
-          {/* Main Top Header */}
-          <SiteHeader />
-
-          {/* Main Content Area */}
-          <main className="flex-1">
-            <Routes>
+          <Routes>
+            <Route path="/drawing-board" element={<main><DrawingBoard /></main>} />
+            <Route element={<><SiteHeader /><main className="flex-1"><Outlet /></main><MobileBottomNav /></>}>
               <Route path="/explore/seed" element={<SeedActivity />} />
-              <Route path="/drawing-board" element={<DrawingBoard />} />
               <Route path="/" element={<HomePage />} />
               <Route path="/topics/:subjectId" element={<TopicsPage />} />
               <Route path="/intro/:subjectId/:topicId" element={<ExamIntroPage />} />
@@ -32,11 +28,8 @@ export const App: React.FC = () => {
               <Route path="/progress" element={<ProgressPage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-
-          {/* Mobile Bottom Navigation Bar (Hidden during active exams) */}
-          <MobileBottomNav />
+            </Route>
+          </Routes>
         </div>
       </BrowserRouter>
     </SessionProvider>
