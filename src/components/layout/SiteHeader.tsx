@@ -31,23 +31,11 @@ export const SiteHeader: React.FC = () => {
           className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-blue/30 rounded-2xl"
           aria-label="Little Learner Home"
         >
-          {/* Logo Star SVG */}
-          <div className="w-9 h-9 sm:w-11 sm:h-11 flex-shrink-0 transition-transform group-hover:scale-105 active:scale-95">
-            <svg viewBox="0 0 48 48" className="w-full h-full drop-shadow-sm">
-              <polygon points="24,3 30.5,16.5 45,18.5 34.5,28.8 37,43.2 24,36.4 11,43.2 13.5,28.8 3,18.5 17.5,16.5" 
-                fill="#FFD329" stroke="#111827" strokeWidth="3.5" strokeLinejoin="round"/>
-              <ellipse cx="19" cy="24" rx="2" ry="2.6" fill="#111827"/>
-              <ellipse cx="29" cy="24" rx="2" ry="2.6" fill="#111827"/>
-              <circle cx="19.7" cy="23.2" r="0.7" fill="#FFFFFF"/>
-              <circle cx="29.7" cy="23.2" r="0.7" fill="#FFFFFF"/>
-              <path d="M 21 28 Q 24 32 27 28" fill="none" stroke="#111827" strokeWidth="2.5" strokeLinecap="round"/>
-              <circle cx="15.5" cy="27" r="1.8" fill="#FF8A7A"/>
-              <circle cx="32.5" cy="27" r="1.8" fill="#FF8A7A"/>
-            </svg>
-          </div>
-          <span className="text-xl sm:text-2xl font-black tracking-tight text-brand-ink">
-            Little <span className="text-brand-blue">Learner</span>
-          </span>
+          <img
+            src="/Logo.svg?v=38eadeef"
+            alt="Little Learner"
+            className="w-[170px] sm:w-[242px] h-auto flex-shrink-0 transition-transform group-hover:scale-105 active:scale-95"
+          />
         </Link>
 
         {/* Desktop Navigation Links */}
