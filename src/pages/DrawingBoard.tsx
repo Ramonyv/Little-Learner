@@ -17,6 +17,16 @@ export function DrawingBoard() {
   const [size,setSize] = useState(1);
   const redo = useRef(new Map<string, Stroke[][]>());
   const history = useRef(new Map<string, Stroke[][]>());
+  const [letterSize,setLetterSize] = useState(() => {
+    try {
+      const stored = Number(localStorage.getItem('drawing-board-letter-size'));
+      return stored >= 20 && stored <= 100 ? stored : 85;
+    } catch { return 85; }
+  });
+  function resizeLetters(value:number) {
+    setLetterSize(value);
+    try { localStorage.setItem('drawing-board-letter-size',String(value)); } catch { /* Session setting still works. */ }
+  }
   const drawings = useRef(new Map<string, Stroke[]>());
   const [,refresh] = useState(0);
   const key = trace ? category+index : 'free';
@@ -41,8 +51,18 @@ export function DrawingBoard() {
     <div hidden={mode==='Gods'}><div className={'board-layout '+(!trace?'free':'')}>
       {trace && <aside className="guide-list"><h2>Guides</h2>{categories.map(c=><button key={c} aria-pressed={c===category} onClick={()=>{setCategory(c);setIndex(0)}}><BoardIcon name={c}/>{c}</button>)}</aside>}
       <div className="board-frame"><div className="board-top"><div><h2>{trace?guide.title:'Free Draw'}</h2><p>{trace?'Follow the dotted outline.':'Draw anything you like!'}</p></div>{trace && <span className="guide-count">{index+1} of {guides[category].length}</span>}<div className="board-switch">{['Whiteboard','Chalkboard'].map((name,i)=><button key={name} aria-pressed={dark===(i===1)} onClick={()=>{setDark(i===1);if(i===1 || color==='#fff')setColor(i===1?'#fff':'#2563eb')}}>{name}</button>)}</div></div>
+      {trace && category==='Letters' && <label className="letter-size-control">Letter size
+        <input type="range" min="20" max="100" value={letterSize} onChange={e=>resizeLetters(Number(e.target.value))} />
+        <output>{letterSize}%</output>
+      </label>}
       <div className={'board-paper '+(dark?'dark':'')}>
-        {trace && <svg aria-hidden="true" viewBox="0 0 800 340" className="board-guide">{guide.path ? <><path d={guide.path} fill="none" stroke="currentColor" strokeWidth="5" strokeDasharray="6 12" strokeLinecap="round"/>{guide.start && <g transform={'translate('+guide.start.join(' ')+')'}><circle r="8" fill="#50cb72" stroke="#155f38" strokeWidth="2"/><text y="-15" textAnchor="middle" fill={dark?'#adf7bd':'#177446'} fontSize="17" fontWeight="900">Start</text></g>}</> : <text x="400" y="172" dominantBaseline="central" textAnchor="middle" fontSize={guide.text!.length>3?120:175} fontWeight="800" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="5 6">{guide.text}</text>}</svg>}
+        {trace && category==='Letters' && <svg aria-hidden="true" viewBox="0 0 400 400" className="board-guide">
+          <g transform={`translate(200 200) scale(${letterSize/100})`}>
+            {[-114,-35,100,165].map((y,i)=><line key={y} x1="-182" x2="182" y1={y} y2={y} stroke="currentColor" opacity={i===2?.5:.3} strokeDasharray={i===1?'6 8':undefined} vectorEffect="non-scaling-stroke"/>)}
+            <text x="0" y="100" textAnchor="middle" fontSize="294" fontWeight="800" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="5 6" vectorEffect="non-scaling-stroke">{guide.text}</text>
+          </g>
+        </svg>}
+        {trace && category!=='Letters' && <svg aria-hidden="true" viewBox="0 0 800 340" className="board-guide">{guide.path ? <><path d={guide.path} fill="none" stroke="currentColor" strokeWidth="5" strokeDasharray="6 12" strokeLinecap="round"/>{guide.start && <g transform={'translate('+guide.start.join(' ')+')'}><circle r="8" fill="#50cb72" stroke="#155f38" strokeWidth="2"/><text y="-15" textAnchor="middle" fill={dark?'#adf7bd':'#177446'} fontSize="17" fontWeight="900">Start</text></g>}</> : <text x="400" y="172" dominantBaseline="central" textAnchor="middle" fontSize={guide.text!.length>3?120:175} fontWeight="800" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="5 6">{guide.text}</text>}</svg>}
         <InkCanvas key={key} strokes={strokes} color={color} brush={brush} widthScale={size} onFinish={()=>change(strokes.slice(),[...back,strokes.slice(0,-1)],[])}/>
       </div>
       <div className="board-tools">{brushes.map(b=><button className="tool" key={b} aria-pressed={brush===b} onClick={()=>setBrush(b)}><BoardIcon name={b}/>{b}</button>)}<div className="board-colors">{palette.map(([name,value])=><button key={name} aria-label={name+' colour'} title={name} aria-pressed={color===value} style={{backgroundColor:value}} onClick={()=>{setColor(value);if(brush==='Eraser')setBrush('Marker')}}/>)}</div>
