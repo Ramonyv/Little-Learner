@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useSession } from '../context/SessionContext';
-import { ENGLISH_PRACTICE_SETS, ENGLISH_TOPICS, SUBJECTS, getPracticeSetQuestionCount, getTopicQuestionCount } from '../data/questionRepository';
+import { SUBJECTS, getPracticeSets, getTopics, getPracticeSetQuestionCount, getTopicQuestionCount } from '../data/questionRepository';
 import { TopicCard } from '../components/cards/TopicCard';
 import { SubjectId } from '../types';
 
@@ -12,7 +12,7 @@ export const TopicsPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const currentSubject = SUBJECTS.find((s) => s.id === subjectId) || SUBJECTS[0];
-  const topicPractice = ENGLISH_TOPICS.filter((topic) => topic.id !== 'mixed-practice');
+  const topicPractice = getTopics(subjectId as SubjectId).filter((topic) => topic.id !== 'mixed-practice');
 
   return (
     <div className="max-w-[1000px] mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-24 sm:pb-12 animate-in fade-in duration-200">
@@ -73,8 +73,8 @@ export const TopicsPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-          {ENGLISH_PRACTICE_SETS.map((set) => {
-            const count = getPracticeSetQuestionCount(set.id);
+          {getPracticeSets(subjectId as SubjectId).map((set) => {
+            const count = getPracticeSetQuestionCount(set.id, subjectId as SubjectId);
             return (
               <Link
                 key={set.id}
@@ -107,13 +107,13 @@ export const TopicsPage: React.FC = () => {
 
       <div className="mb-4">
         <h2 className="text-lg sm:text-xl font-black text-brand-ink">Practice by Topic</h2>
-        <p className="text-xs sm:text-sm font-bold text-slate-500 mt-1">Review one English skill at a time.</p>
+        <p className="text-xs sm:text-sm font-bold text-slate-500 mt-1">Review one {currentSubject.title} topic at a time.</p>
       </div>
 
       {/* Topics Rendering: List view on mobile by default or based on toggle */}
       <div className="block sm:hidden space-y-3">
         {topicPractice.map((topic) => {
-          const count = getTopicQuestionCount(selectedClass, 'english', topic.id);
+          const count = getTopicQuestionCount(selectedClass, subjectId as SubjectId, topic.id);
           return (
             <TopicCard
               key={topic.id}
@@ -131,7 +131,7 @@ export const TopicsPage: React.FC = () => {
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {topicPractice.map((topic) => {
-              const count = getTopicQuestionCount(selectedClass, 'english', topic.id);
+              const count = getTopicQuestionCount(selectedClass, subjectId as SubjectId, topic.id);
               return (
                 <TopicCard
                   key={topic.id}
@@ -146,7 +146,7 @@ export const TopicsPage: React.FC = () => {
         ) : (
           <div className="space-y-3 max-w-2xl mx-auto">
             {topicPractice.map((topic) => {
-              const count = getTopicQuestionCount(selectedClass, 'english', topic.id);
+              const count = getTopicQuestionCount(selectedClass, subjectId as SubjectId, topic.id);
               return (
                 <TopicCard
                   key={topic.id}

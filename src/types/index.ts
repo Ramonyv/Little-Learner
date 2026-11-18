@@ -13,7 +13,13 @@ export type TopicId =
   | 'numbers'
   | 'shapes'
   | 'living-things'
-  | 'our-body';
+  | 'our-body'
+  | 'plants'
+  | 'animals'
+  | 'health-and-hygiene'
+  | 'earth-and-sky'
+  | 'air-and-water'
+  | 'materials-and-safety';
 
 export interface Question {
   id: string;
@@ -31,7 +37,7 @@ export interface Question {
 
 export type ExamMode = 'practice' | 'exam';
 
-export type PracticeSetId = 'all' | 'paper-1' | 'paper-2';
+export type PracticeSetId = 'all' | 'paper-1' | 'paper-2' | 'paper-3' | 'paper-4';
 
 export interface PracticeSetMeta {
   id: PracticeSetId;

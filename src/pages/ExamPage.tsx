@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useSession } from '../context/SessionContext';
-import { ENGLISH_TOPICS, getPracticeSet, getQuestionsForTest } from '../data/questionRepository';
+import { getTopics, getPracticeSet, getQuestionsForTest } from '../data/questionRepository';
 import { Question, ExamMode, PracticeSetId, SubjectId, TopicId, ExamResultSummary, UserExamSession } from '../types';
 import { ExamProgress } from '../components/exam/ExamProgress';
 import { QuestionCard } from '../components/exam/QuestionCard';
@@ -24,11 +24,11 @@ export const ExamPage: React.FC = () => {
   const mode = (searchParams.get('mode') as ExamMode) || 'practice';
   const shuffleParam = searchParams.get('shuffle') !== 'false';
   const requestedSet = searchParams.get('set');
-  const practiceSetId: PracticeSetId = requestedSet === 'paper-1' || requestedSet === 'paper-2' ? requestedSet : 'all';
+  const practiceSetId: PracticeSetId = ['paper-1', 'paper-2', 'paper-3', 'paper-4'].includes(requestedSet || '') ? requestedSet as PracticeSetId : 'all';
 
   // Topic Metadata
-  const topic = ENGLISH_TOPICS.find((t) => t.id === topicId) || ENGLISH_TOPICS[0];
-  const practiceSet = getPracticeSet(practiceSetId);
+  const topic = getTopics(subjectId as SubjectId).find((t) => t.id === topicId) || getTopics(subjectId as SubjectId)[0];
+  const practiceSet = getPracticeSet(practiceSetId, subjectId as SubjectId);
   const displayTopic = topicId === 'mixed-practice'
     ? {
         ...topic,

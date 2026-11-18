@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useSession } from '../context/SessionContext';
-import { ENGLISH_TOPICS, SUBJECTS, getPracticeSet, getPracticeSetQuestionCount, getTopicQuestionCount } from '../data/questionRepository';
+import { getTopics, SUBJECTS, getPracticeSet, getPracticeSetQuestionCount, getTopicQuestionCount } from '../data/questionRepository';
 import { ExamMode, PracticeSetId, SubjectId, TopicId } from '../types';
 
 export const ExamIntroPage: React.FC = () => {
@@ -19,15 +19,15 @@ export const ExamIntroPage: React.FC = () => {
   const [shuffleQuestions, setShuffleQuestions] = useState<boolean>(true);
 
   const currentSubject = SUBJECTS.find((s) => s.id === subjectId) || SUBJECTS[0];
-  const currentTopic = ENGLISH_TOPICS.find((t) => t.id === topicId) || ENGLISH_TOPICS[0];
+  const currentTopic = getTopics(subjectId as SubjectId).find((t) => t.id === topicId) || getTopics(subjectId as SubjectId)[0];
   const requestedSet = searchParams.get('set');
-  const practiceSetId: PracticeSetId = requestedSet === 'paper-1' || requestedSet === 'paper-2' ? requestedSet : 'all';
-  const practiceSet = getPracticeSet(practiceSetId);
+  const practiceSetId: PracticeSetId = ['paper-1', 'paper-2', 'paper-3', 'paper-4'].includes(requestedSet || '') ? requestedSet as PracticeSetId : 'all';
+  const practiceSet = getPracticeSet(practiceSetId, subjectId as SubjectId);
   const isPracticePaper = topicId === 'mixed-practice';
   const displayTitle = isPracticePaper ? practiceSet.title : currentTopic.title;
   const displayDescription = isPracticePaper ? practiceSet.description : currentTopic.description;
   const totalQuestions = isPracticePaper
-    ? getPracticeSetQuestionCount(practiceSetId)
+    ? getPracticeSetQuestionCount(practiceSetId, subjectId as SubjectId)
     : getTopicQuestionCount(selectedClass, subjectId as SubjectId, topicId as TopicId);
 
   // Suggested time: ~1 minute per question for Exam Mode
