@@ -15,7 +15,7 @@ export const HomePage: React.FC = () => {
       
       {/* 1. Hero Banner matching Desktop UI Reference */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-4 sm:pt-8">
-        <div className="relative rounded-3xl sm:rounded-4xl bg-[#1479f7] text-white p-6 sm:p-10 lg:p-12 shadow-xl border-4 border-slate-900/10 overflow-hidden flex flex-col lg:block items-center gap-6 lg:min-h-[444px]">
+        <div className="relative rounded-3xl sm:rounded-4xl bg-[#3778f4] text-white p-6 sm:p-10 lg:p-12 shadow-xl border-4 border-slate-900/10 overflow-hidden flex flex-col lg:block items-center gap-6 lg:min-h-[444px]">
           
           {/* Decorative Clouds */}
           <div className="absolute top-4 left-10 opacity-30 pointer-events-none hidden lg:block">
@@ -60,10 +60,12 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Right Hero Illustration */}
-          <div className="relative z-10 w-full max-w-[690px] aspect-[690/323] mt-6 lg:mt-0 lg:absolute lg:w-[60%] lg:max-w-none lg:right-[-2%] lg:bottom-0" role="img" aria-label="Child reading with a globe, books, cat, and a rocket">
-            <img src="/hero-palm.svg" alt="" className="absolute left-0 top-[16.8%] w-[20.5%] h-auto" />
-            <img src="/hero-books.svg" alt="" className="absolute left-[63%] top-[42.5%] w-[13.2%] h-auto" />
-            <img src="/hero-scene.svg" alt="" className="absolute left-[1.8%] top-0 w-[98.2%] h-auto" />
+          <div className="relative z-10 w-full max-w-[665px] mt-6 lg:mt-0 lg:absolute lg:w-[59%] lg:max-w-none lg:right-0 lg:bottom-0">
+            <img
+              src="/hero-illustration-v2.svg"
+              alt="Child reading with a globe, books, cat, and a rocket"
+              className="block w-full h-auto"
+            />
           </div>
 
         </div>
