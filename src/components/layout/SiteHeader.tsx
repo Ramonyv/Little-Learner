@@ -12,6 +12,7 @@ export const SiteHeader: React.FC = () => {
   const navLinks = [
     { label: 'Home', path: '/' },
     { label: 'Practice', path: '/topics/english' },
+    { label: 'Drawing Board', path: '/drawing-board' },
     { label: 'Progress', path: '/progress' },
     { label: 'About', path: '/about' },
   ];

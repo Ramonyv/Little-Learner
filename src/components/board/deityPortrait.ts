@@ -1,0 +1,38 @@
+// Ordered from back to front. Each closed path is a separate colouring region.
+type Layer = [string,string];
+const halo:Layer=['Sun rays','M100 8l11 16 17-9 3 19 20-2-6 19 17 8-14 13 10 16-20 3 1 19-19-4-8 16-13-13-14 13-8-16-19 4 1-19-20-3 10-16-14-13 17-8-6-19 20 2 3-19 17 9Z'];
+const hair:Layer=['Long hair','M65 61Q62 34 100 32Q140 32 136 68Q132 85 145 98Q160 127 139 143Q125 151 103 133Q80 153 59 141Q43 129 55 109Q69 90 65 61Z'];
+const hands:Layer[]=[['Left arm','M78 113Q65 112 58 132Q53 146 69 149L97 146L96 135L72 135Z'],['Right arm','M122 113Q137 114 142 135Q145 149 129 149L103 146L104 135L128 135Z']];
+const shapes:Record<string,Layer[]>={
+ Ganesha:[['Left ear','M76 69Q47 38 29 61Q20 72 32 76Q39 78 42 94Q48 115 73 98Z'],['Right ear','M124 69Q153 38 171 61Q180 72 168 76Q161 78 158 94Q152 115 127 98Z']],
+ Krishna:[['Feather','M111 39Q101 11 142 6Q145 40 111 39Z'],['Feather eye','M117 31Q112 18 133 15Q135 32 117 31Z']],
+ Shiva:[['Trident','M34 175V79Q14 74 22 50Q24 67 33 67L38 41L43 67Q53 65 53 50Q64 73 42 79V175Z']],
+ Rama:[['Bow','M148 159Q169 123 149 68Q146 60 154 57Q182 113 154 160Z'],['String','M150 68L151 157L148 157Z'],['Quiver','M55 131L33 85L47 79L70 121Z'],['Arrows','M37 87L23 63L29 67L28 58L43 82L35 54L43 60L48 81Z']],
+ Hanuman:[['Curled tail','M131 155Q158 144 151 118Q139 83 162 79Q180 76 182 94Q181 108 169 105Q162 103 165 96Q171 101 173 94Q171 85 163 89Q151 93 161 117Q172 153 139 166Z']],
+ Kartikeya:[['Spear','M41 179L37 83Q21 77 39 48Q59 76 44 83L48 179Z']],
+ Surya:[halo]
+};
+const circle=(x:number,y:number,r:number)=>`M${x-r} ${y}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0Z`;
+export function portrait(name:string):Layer[]{
+ const layers:Layer[]=[...(shapes[name]||[])];
+ if(['Saraswati','Lakshmi','Durga','Parvati','Shiva'].includes(name))layers.push(hair);
+ layers.push(['Left foot and trouser','M99 150Q64 134 49 150Q34 169 54 180Q71 187 104 179L118 165Z'],['Right foot and trouser','M101 155Q136 134 151 151Q166 173 144 181Q125 184 91 181Q85 170 101 155Z'],['Tunic','M85 102Q67 105 63 125L74 132L72 148Q98 164 129 148L126 132L139 124Q132 105 115 102Z'],['Draped sash','M112 104Q105 128 73 142L75 152Q112 141 123 110Z'],['Neck','M87 99V108Q101 123 114 107V98Z']);
+ if(name!=='Ganesha')layers.push(['Left ear',circle(67,79,8)],['Right ear',circle(133,79,8)]);
+ layers.push(['Face','M66 69Q65 40 100 39Q136 40 134 70L131 87Q125 105 101 108Q78 107 70 89Z']);
+ if(['Shiva','Parvati'].includes(name))layers.push(['Hair bun',circle(100,28,15)],['Hairline','M65 72Q59 31 100 37Q142 31 135 72Q112 65 100 49Q87 64 65 72Z']);
+ else layers.push(['Crown tip','M89 32Q83 23 91 20L100 12L109 20Q118 24 111 32Z'],['Crown dome','M65 58Q67 30 100 28Q132 31 135 58L121 64H79Z'],['Crown band','M63 60Q100 35 137 60L133 70Q100 49 67 70Z'],['Crown jewel','M100 36Q88 46 100 52Q112 46 100 36Z']);
+ layers.push(...hands);
+ const accents:Record<string,Layer[]>={
+ Ganesha:[['Trunk','M91 84Q90 112 115 116Q137 120 137 105Q135 96 127 100Q133 108 123 108Q114 108 109 91'],['Sweet bowl','M119 135H152Q149 153 135 152Q122 151 119 135Z'],['Sweet',circle(135,130,6)]],
+ Krishna:[['Flute','M46 110L113 88Q118 87 119 93L49 117Z'],['Left hand',circle(69,106,7)],['Right hand',circle(91,100,7)]],
+ Shiva:[['Crescent','M109 32Q127 42 135 21Q139 50 116 47Z']],
+ Saraswati:[['Veena','M59 157Q47 143 62 133Q69 128 77 132L139 84L144 90L87 142Q91 156 78 161Q67 165 59 157Z'],['Resonator',circle(71,146,6)],['Tuning head',circle(144,84,7)]],
+ Lakshmi:[['Outer petals','M74 128Q92 125 100 141Q108 125 126 128Q122 151 100 150Q78 151 74 128Z'],['Lotus bud','M100 148Q83 134 100 116Q117 134 100 148Z']],
+ Hanuman:[['Muzzle','M82 90Q84 82 99 86Q116 81 119 91Q117 104 100 106Q85 104 82 90Z'],['Left palm','M83 135Q80 127 92 115Q98 107 100 116V134Q93 143 83 135Z'],['Right palm','M117 135Q120 127 108 115Q102 107 100 116V134Q107 143 117 135Z']],
+ Vishnu:[['Discus','M31 106Q30 96 50 96Q70 96 69 105Q67 113 50 113Q34 113 31 106Z'],['Discus centre',circle(50,104,3)],['Conch','M132 126Q122 112 135 100Q148 91 158 104Q167 119 148 124L138 134Z']],
+ Durga:[['Lion mane','M120 155Q113 144 126 140Q128 128 138 133Q149 123 156 134Q170 130 171 143Q185 149 176 159Q182 173 168 176Q161 188 150 181Q137 188 130 177Q115 178 120 165Q112 159 120 155Z'],['Lion face','M128 149Q123 135 138 141Q149 137 158 141Q174 135 167 151Q171 172 149 175Q128 174 128 149Z']],
+ Kartikeya:[['Peacock','M115 172Q140 157 144 140Q137 122 151 120Q160 116 166 127L174 132L160 133Q156 143 163 151Q172 173 148 179Q131 182 115 172Z']],
+ Parvati:[['Folded hands','M84 142Q87 134 100 138Q111 134 118 142Q114 150 101 147Q87 151 84 142Z']],
+ };
+ layers.push(...(accents[name]||[]));return layers;
+}

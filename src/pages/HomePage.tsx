@@ -71,6 +71,15 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
+      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-8">
+        <h2 className="text-2xl font-black mb-3">Explore</h2>
+        <Link to="/explore/seed" className="flex items-center gap-4 rounded-3xl bg-green-50 border-2 border-green-200 p-5 hover:border-green-500">
+          <span aria-hidden="true" className="text-4xl">🌱</span>
+          <span><strong className="block text-xl">Help a seed grow</strong><span>Trace a seed and discover its roots · 5 min</span></span>
+          <span aria-hidden="true" className="ml-auto text-xl">→</span>
+        </Link>
+      </section>
+
       {/* 2. Topic Cards Grid matching Desktop Reference (Mixed Practice, Vocabulary, etc.) */}
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-10 sm:pt-14">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6 sm:mb-8">

@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SessionProvider } from './context/SessionContext';
 import { SiteHeader } from './components/layout/SiteHeader';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
+import { SeedActivity } from './pages/SeedActivity';
+import { DrawingBoard } from './pages/DrawingBoard';
 import { HomePage } from './pages/HomePage';
 import { TopicsPage } from './pages/TopicsPage';
 import { ExamIntroPage } from './pages/ExamIntroPage';
@@ -21,6 +23,8 @@ export const App: React.FC = () => {
           {/* Main Content Area */}
           <main className="flex-1">
             <Routes>
+              <Route path="/explore/seed" element={<SeedActivity />} />
+              <Route path="/drawing-board" element={<DrawingBoard />} />
               <Route path="/" element={<HomePage />} />
               <Route path="/topics/:subjectId" element={<TopicsPage />} />
               <Route path="/intro/:subjectId/:topicId" element={<ExamIntroPage />} />

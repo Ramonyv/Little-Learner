@@ -8,6 +8,7 @@ export const MobileBottomNav: React.FC = () => {
   const tabs = [
     { label: 'Home', path: '/', icon: 'solar:home-smile-bold' },
     { label: 'Practice', path: '/topics/english', icon: 'solar:book-bookmark-bold' },
+    { label: 'Board', path: '/drawing-board', icon: 'solar:palette-bold' },
     { label: 'Progress', path: '/progress', icon: 'solar:chart-square-bold' },
   ];
 
