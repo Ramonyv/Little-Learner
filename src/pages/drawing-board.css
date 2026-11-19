@@ -283,3 +283,29 @@
   .letter-size-control input{flex:1;max-width:280px;min-width:80px}
   .toolbar-track{margin-top:12px}
 }
+
+/* Tool groups can exceed the canvas width at desktop sizes too. */
+.toolbar-track{min-width:0;max-width:100%}
+@media(min-width:1367px){
+  .toolbar-track{display:flex;align-items:center;gap:6px}
+  .toolbar-track :is(#drawing-tools,#gods-tools){
+    display:flex;flex:1 1 0;min-width:0;max-width:100%;
+    flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;
+    gap:16px;scrollbar-width:thin;padding-bottom:12px;
+  }
+  .toolbar-track :is(#drawing-tools,#gods-tools)>*{flex:none}
+  .drawing-board .track-arrow{
+    display:grid;place-items:center;flex:none;width:36px;height:36px;
+    min-height:36px;padding:0;border:0;border-radius:50%;
+  }
+}
+
+.focus-toggle{position:absolute;left:12px;bottom:12px;z-index:5;font-size:12px}
+.drawing-board.focus-mode .board-heading,.drawing-board.focus-mode .guide-list,.drawing-board.focus-mode .board-top,.drawing-board.focus-mode .letter-size-control{display:none}
+.drawing-board.focus-mode{grid-template-rows:minmax(0,1fr);padding:6px}
+.drawing-board.focus-mode .board-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
+
+.tracing-feedback{position:absolute;bottom:62px;left:12px;z-index:2;pointer-events:none;font-size:12px;background:#fff;color:#182954;padding:5px 10px;border-radius:99px}
+
+.drawing-board .focus-toggle{color:#182954;background:#fff;border:1px solid #b7cce3;min-height:40px}
+.tracing-feedback{max-width:calc(100% - 24px);box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;line-height:1.4}

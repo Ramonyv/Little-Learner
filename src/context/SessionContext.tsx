@@ -1,3 +1,4 @@
+import { readWork, saveWork } from '../utils/localWork';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { UserExamSession } from '../types';
 import { isSoundEnabled, setSoundEnabled } from '../utils/soundEffects';
@@ -17,7 +18,7 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedClass, setSelectedClass] = useState<number>(1);
-  const [completedSessions, setCompletedSessions] = useState<UserExamSession[]>([]);
+  const [completedSessions, setCompletedSessions] = useState<UserExamSession[]>(() => readWork('ll-results', []));
   const [soundOn, setSoundOnState] = useState<boolean>(isSoundEnabled());
   const [activeSession, setActiveSession] = useState<UserExamSession | null>(null);
 
@@ -27,7 +28,7 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const saveCompletedSession = (session: UserExamSession) => {
-    setCompletedSessions((prev) => [session, ...prev]);
+    setCompletedSessions((prev) => { const next=[session,...prev];saveWork('ll-results',next);return next; });
   };
 
   return (

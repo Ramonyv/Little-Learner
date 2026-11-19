@@ -1,3 +1,4 @@
+import { readWork } from '../utils/localWork';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useSession } from '../context/SessionContext';
@@ -63,7 +64,8 @@ export const ExamPage: React.FC = () => {
   // Initialize questions
   const initializeTest = useCallback(() => {
     const loaded = getQuestionsForTest(selectedClass, subjectId as SubjectId, topicId as TopicId, shuffleParam, practiceSetId);
-    setQuestions(loaded);
+    const revision=readWork<UserExamSession[]>('ll-results',[]).find(session=>session.sessionId===searchParams.get('mistakes'));
+    setQuestions(revision ? revision.questions.filter((question,index)=>revision.userAnswers[index]!==undefined && revision.userAnswers[index]!==question.correctAnswer) : loaded);
     setCurrentIndex(0);
     setUserAnswers({});
     setIsSubmitted(false);

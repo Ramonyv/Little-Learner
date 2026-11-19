@@ -1,3 +1,4 @@
+import { readWork, saveWork } from '../../utils/localWork';
 import { DownloadDrawing } from './DownloadDrawing';
 import { BrushPicker } from './BrushPicker';
 import { ToolbarTrack } from './ToolbarTrack';
@@ -46,19 +47,19 @@ function DeityCanvas({name,fills,onFill}:{name:string;fills:Record<string,string
  return <><canvas ref={ref} width={1000} height={1000} className="board-guide" style={{objectFit:'contain'}} aria-label={`${name} colouring page`} onClick={e=>{const rect=e.currentTarget.getBoundingClientRect(),side=Math.min(rect.width,rect.height),left=rect.left+(rect.width-side)/2,top=rect.top+(rect.height-side)/2,x=Math.floor((e.clientX-left)*1000/side),y=Math.floor((e.clientY-top)*1000/side);if(x>=0&&x<1000&&y>=0&&y<1000)onFill(`pixel-${x}-${y}`)}}/><img src={`/${name}.svg`} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/></>;
 }
 export function GodsStudio(){
- const [name,select]=useState('Ganesha'),[tool,setTool]=useState<Brush|'Fill'>('Fill'),[color,paint]=useState('#32a86c'),[size,resize]=useState(1);
+ const [name,select]=useState(() => new URLSearchParams(location.search).get('deity') || 'Ganesha'),[tool,setTool]=useState<Brush|'Fill'>('Fill'),[color,paint]=useState('#32a86c'),[size,resize]=useState(1);
  const [toolsOpen,setToolsOpen]=useState(false);
  const [cleared,setCleared]=useState(new Map<string,{sheet:Sheet;at:number}>());
- const sheets=useRef(new Map<string,Sheet>()); const [,update]=useState(0);const redraw=()=>update(v=>v+1);
+ const sheets=useRef(new Map<string,Sheet>(readWork<[string,Sheet][]>('ll-coloring',[]))); const [,update]=useState(0);const redraw=()=>{saveWork('ll-coloring',[...sheets.current]);update(v=>v+1)};
  if(!sheets.current.has(name))sheets.current.set(name,{fills:{},strokes:[],undo:[]});
  const sheet=sheets.current.get(name)!;
  function fill(id:string){if(tool!=='Fill'||sheet.fills[id]===color)return;sheet.undo.push([id,sheet.fills[id]]);sheet.fills[id]=color;redraw()}
  function region([id,d]:[string,string]){return <path key={id} d={d} fill={sheet.fills[id]||'white'} onClick={()=>fill(id)} role={tool==='Fill'?'button':undefined} aria-label={id} tabIndex={tool==='Fill'?0:undefined} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fill(id)}}}/>}
- function undo(){const saved=cleared.get(name);if(saved && saved.at===sheet.undo.length){sheets.current.set(name,saved.sheet);setCleared(m=>{const next=new Map(m);next.delete(name);return next});return}const action=sheet.undo.pop();if(!action)return;const [id,previous]=action;if(!id)sheet.strokes=sheet.strokes.slice(0,-1);else if(previous)sheet.fills[id]=previous;else delete sheet.fills[id];redraw()}
+ function undo(){const saved=cleared.get(name);if(saved && saved.at===sheet.undo.length){sheets.current.set(name,saved.sheet);setCleared(m=>{const next=new Map(m);next.delete(name);return next});redraw();return}const action=sheet.undo.pop();if(!action)return;const [id,previous]=action;if(!id)sheet.strokes=sheet.strokes.slice(0,-1);else if(previous)sheet.fills[id]=previous;else delete sheet.fills[id];redraw()}
 
  const actions = <div className="dock-actions"><span className="dock-label"><span aria-hidden="true">↶</span> Actions</span><button aria-label="Undo" disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}><BoardIcon name="Undo"/><span>Undo</span></button><button aria-label="Clear" disabled={!sheet.strokes.length && !Object.keys(sheet.fills).length} onClick={()=>{setCleared(m=>new Map(m).set(name,{sheet,at:0}));sheets.current.set(name,{fills:{},strokes:[],undo:[]});redraw()}}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
  return <div className="board-frame"><div className="board-top"><label className="font-black">Colour a deity <span className="deity-picker"><select value={name} onChange={e=>select(e.target.value)}>{names.map(n=><option key={n}>{n}</option>)}</select></span></label><span className="font-bold">{tool==='Fill'?'Tap a shape to colour it':'Draw on the page'}</span></div>
- <div className="board-paper"><DownloadDrawing/><div className="tablet-actions">{actions}</div>{(name==='Ganesha'||name==='Krishna')?<DeityCanvas name={name} fills={{...sheet.fills}} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+ <div className="board-paper"><DownloadDrawing/><div className="tablet-actions">{actions}</div>{(['Ganesha','Krishna','Shiva','Hanuman'].includes(name))?<DeityCanvas name={name} fills={{...sheet.fills}} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
  {portrait(name).map(region)}
  <g fill="none" pointerEvents="none" strokeWidth="2.8">
  <path d="M80 80q4-6 9 0m22 0q5-6 9 0"/>

@@ -1,3 +1,5 @@
+import { TracingFeedback } from '../components/board/TracingFeedback';
+import { readWork, saveWork } from '../utils/localWork';
 import { WorksheetGuide } from '../components/board/WorksheetGuide';
 import { DownloadDrawing } from '../components/board/DownloadDrawing';
 import { BrushPicker } from '../components/board/BrushPicker';
@@ -45,9 +47,11 @@ function TextGuide({ text, size, ruled }: { text: string; size: number; ruled: b
   </svg>;
 }
 export function DrawingBoard() {
-  const [category,setCategory] = useState(categories[0]), [index,setIndex] = useState(0);
-  const [mode,setMode] = useState('Trace');
+  const [category,setCategory] = useState(() => new URLSearchParams(location.search).get('category') || categories[0]), [index,setIndex] = useState(() => Number(new URLSearchParams(location.search).get('index')) || 0);
+  const [mode,setMode] = useState(() => new URLSearchParams(location.search).get('mode') || 'Trace');
   const [toolsOpen,setToolsOpen] = useState(false);
+  const [focus,setFocus]=useState(false);
+  const custom=new URLSearchParams(location.search).get('custom')?.slice(0,30);
   const worksheet = mode === 'Worksheet';
   const trace = mode === 'Trace' || worksheet;
   const [dark,setDark] = useState(true);
@@ -65,9 +69,9 @@ export function DrawingBoard() {
     setTextSize(value);
     try { localStorage.setItem('drawing-board-letter-size',String(value)); } catch { /* Session setting still works. */ }
   }
-  const drawings = useRef(new Map<string, Stroke[]>());
+  const drawings = useRef(new Map<string, Stroke[]>(readWork<[string,Stroke[]][]>('ll-drawings',[])));
   const [,refresh] = useState(0);
-  const key = trace ? mode+category+index : 'free';
+  const key = custom && worksheet ? 'WorksheetCustom:'+custom : trace ? mode+category+index : 'free';
   if (!drawings.current.has(key)) drawings.current.set(key,[]);
   const strokes = drawings.current.get(key)!;
   const back = history.current.get(key) ?? [];
@@ -76,10 +80,11 @@ export function DrawingBoard() {
     drawings.current.set(key,next);
     history.current.set(key,undoStack);
     redo.current.set(key,redoStack);
+    saveWork('ll-drawings',[...drawings.current]);
     refresh(v=>v+1);
   }
-  const guide = guides[category][index];
-  const practised = guides[category].filter((_,i)=>drawings.current.get(category+i)?.some(stroke=>stroke.brush!=="Eraser")).length;
+  const guide = custom && worksheet ? {title:'Trace '+custom,text:custom} : guides[category][index];
+  const practised = guides[category].filter((_,i)=>drawings.current.get(mode+category+i)?.some(stroke=>stroke.brush!=="Eraser")).length;
   const wave = trace && category===categories[0] && index===0;
   function next() {
     if(index+1<guides[category].length) setIndex(index+1);
@@ -89,8 +94,8 @@ export function DrawingBoard() {
       <button aria-label="Redo" disabled={!forward.length} onClick={()=>change(forward[forward.length-1],[...back,strokes],forward.slice(0,-1))}><BoardIcon name="Redo"/><span>Redo</span></button>
       <button aria-label="Clear" disabled={!strokes.length} onClick={()=>change([], [...back,strokes],[])}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
   const surface = <div className="board-switch surface-selector">{['Whiteboard','Chalkboard'].map((name,i)=><button key={name} aria-pressed={dark===(i===1)} onClick={()=>{setDark(i===1);if(i===1 || color==='#fff')setColor(i===1?'#fff':'#2563eb')}}>{name}</button>)}</div>;
-  return <section className="drawing-board">
-    <header className="board-heading"><div className="flex items-center gap-3"><Link to="/" aria-label="Little Learner home" className="board-brand"><picture><source media="(min-width:601px) and (max-width:1366px)" srcSet="/SVG%20Icons/Home.svg"/><img src="/Logo.svg" alt="Little Learner"/></picture></Link><details className="board-nav"><summary><BoardIcon name="Board"/>Drawing Board</summary><nav>{[['Home','/'],['Practice','/topics/english'],['Drawing Board','/drawing-board'],['Progress','/progress'],['About','/about']].map(([label,path])=><Link key={path} to={path} onClick={e=>e.currentTarget.closest('details')?.removeAttribute('open')}><BoardIcon name={label}/>{label}</Link>)}</nav></details></div><div className="board-switch">{['Trace','Free Draw','Gods','Worksheet'].map((name)=><button key={name} aria-pressed={mode===name} onClick={()=>{setMode(name)}}><BoardIcon name={name === 'Worksheet' ? 'Practice' : name}/> {name}</button>)}</div>{mode!=='Gods' && <div className="tablet-surface">{surface}</div>}<span className="class-chip">Class 1</span></header>
+  return <section className={'drawing-board'+(focus?' focus-mode':'')}>
+    <header className="board-heading"><div className="flex items-center gap-3"><Link to="/" aria-label="Little Learner home" className="board-brand"><picture><source media="(min-width:601px) and (max-width:1366px)" srcSet="/SVG%20Icons/Home.svg"/><img src="/Logo.svg" alt="Little Learner"/></picture></Link><details className="board-nav"><summary><BoardIcon name="Board"/>Drawing Board</summary><nav>{[['Home','/'],['My Work','/my-work'],['Learning tools','/learning-tools'],['Practice','/topics/english'],['Drawing Board','/drawing-board'],['Progress','/progress'],['About','/about']].map(([label,path])=><Link key={path} to={path} onClick={e=>e.currentTarget.closest('details')?.removeAttribute('open')}><BoardIcon name={label}/>{label}</Link>)}</nav></details></div><div className="board-switch">{['Trace','Free Draw','Gods','Worksheet'].map((name)=><button key={name} aria-pressed={mode===name} onClick={()=>{setMode(name)}}><BoardIcon name={name === 'Worksheet' ? 'Practice' : name}/> {name}</button>)}</div>{mode!=='Gods' && <div className="tablet-surface">{surface}</div>}<span className="class-chip">Class 1</span></header>
     <div hidden={mode!=='Gods'}><GodsStudio/></div>
     <div hidden={mode==='Gods'}><div className={'board-layout '+(!trace?'free':'')}>
       {trace && <aside className="guide-list"><h2>Practice</h2>{categories.map(c=><button key={c} aria-pressed={c===category} onClick={()=>{setCategory(c);setIndex(0)}}><BoardIcon name={c}/>{c}</button>)}</aside>}
@@ -99,7 +104,7 @@ export function DrawingBoard() {
         <input type="range" min="20" max="100" value={textSize} onChange={e=>resizeText(Number(e.target.value))} />
         <output>{textSize}%</output>
       </label>}
-      <div className={'board-paper '+(!worksheet && dark?'dark':'')}><DownloadDrawing/>
+      <div className={'board-paper '+(!worksheet && dark?'dark':'')}><DownloadDrawing/>{trace && !worksheet && guide.path && <TracingFeedback strokes={strokes}/>}<button className="focus-toggle" onClick={()=>setFocus(value=>!value)}>{focus?'Exit focus':'Focus'}</button>
         <div className="tablet-actions">{trace && <strong className="tablet-count">{index+1} of {guides[category].length}{guides[category].length <= 6 && guides[category].map((_, i) => <i key={i} aria-hidden="true" className={i === index ? "current" : ""}/>)}</strong>}{actions}{trace && <button className="tablet-next" aria-label="Next guide" onClick={next}>
           <svg aria-hidden="true" width="30" height="20" viewBox="0 0 32 20">
             <path fill="currentColor" d="M2 6h18V2a1.5 1.5 0 0 1 2.5-1.1l8 8a1.5 1.5 0 0 1 0 2.2l-8 8A1.5 1.5 0 0 1 20 18v-4H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/>
