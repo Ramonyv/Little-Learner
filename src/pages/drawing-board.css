@@ -94,6 +94,10 @@
 .standard-dock .dock-pill button {width:clamp(32px,3vw,52px);height:clamp(36px,3vw,50px);border-radius:10px}
 .standard-dock .dock-pill button[aria-pressed=true] {background:#d4ebff;outline:0;box-shadow:inset 0 0 0 2px #167aff}
 .standard-dock .tool[aria-pressed=true] {border-color:#167aff}
+.gods-dock .custom-colour{position:relative;display:grid;place-items:center;flex:none;width:clamp(28px,2.8vw,50px);height:clamp(28px,2.8vw,50px);border:2px solid white;border-radius:50%;box-shadow:inset 0 0 0 2px #61758f;cursor:pointer}
+.gods-dock .custom-colour::after{content:'+';color:white;font-size:20px;font-weight:900;text-shadow:0 1px 3px #152747}
+.gods-dock .custom-colour input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.mobile-board-bar{display:none}
 .standard-dock .board-next {min-height:var(--dock-control-height);background:#ffd321;box-shadow:0 3px 0 #efa816;font-size:clamp(16px,1.4vw,23px)}
 @media(min-width:1100px){
   .board-tools.standard-dock {display:grid;grid-template-columns:auto auto auto auto;justify-content:space-between;column-gap:clamp(6px,.8vw,18px)}
@@ -102,4 +106,36 @@
   .standard-dock :is(.board-colors,.dock-field,.dock-actions)>.dock-label{left:clamp(6px,.85vw,18px)}
   .standard-dock .tool,.standard-dock .dock-actions button{min-width:clamp(44px,4.25vw,78px)}
   .standard-dock .board-colors button{width:clamp(28px,2.8vw,50px);height:clamp(28px,2.8vw,50px)}
+}
+@media(max-width:600px){
+  .drawing-board{padding:8px 8px 16px;min-height:100svh}
+  .drawing-board .board-heading{gap:6px;margin-bottom:8px}
+  .board-brand img{width:100px}
+  .board-heading h1{font-size:21px}
+  .board-heading>.board-switch{width:100%}
+  .board-heading>.board-switch button{min-width:0;padding:8px 5px;font-size:12px}
+  .board-frame{padding:6px;border-radius:16px}
+  .board-top{padding:4px 6px 7px;gap:4px}
+  .board-top h2{font-size:18px}
+  .board-top p{font-size:12px}
+  .board-top .surface-selector{width:100%;justify-content:center}
+  .board-top .surface-selector button{flex:1;min-height:34px;padding:6px}
+  .guide-list{margin-bottom:5px;scrollbar-width:none}
+  .guide-list::-webkit-scrollbar{display:none}
+  .drawing-board .board-frame>.board-paper{height:max(330px,56svh);border-radius:12px}
+  .board-frame:has(.mobile-expanded)>.board-paper{height:max(270px,42svh)}
+  .mobile-board-bar{display:flex;align-items:center;gap:6px;margin-top:7px;padding:6px;border-radius:14px;background:#dceeff}
+  .mobile-board-bar button{min-height:42px;padding:7px 10px;white-space:nowrap}
+  .mobile-board-bar button:first-child{display:flex;align-items:center;gap:6px;flex:1;justify-content:space-between;min-width:0}
+  .mobile-board-bar .board-next{margin-left:0}
+  .mobile-colour-dot{width:19px;height:19px;flex:none;border:2px solid white;border-radius:50%;box-shadow:0 0 0 1px #829ab8}
+  .board-tools.standard-dock{display:none}
+  .board-tools.standard-dock.mobile-expanded{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;max-height:42svh;overflow:auto;padding:10px;margin-top:5px;align-items:start}
+  .standard-dock.mobile-expanded :is(.dock-brushes,.board-colors,.dock-actions,.dock-field){grid-column:auto;grid-row:auto;min-width:0;width:100%;height:auto;min-height:78px;padding-top:22px;justify-content:flex-start;flex-wrap:wrap;border:0}
+  .standard-dock.mobile-expanded .dock-brushes{grid-column:1/-1}
+  .standard-dock.mobile-expanded .dock-brushes .tool{flex:1;min-width:48px}
+  .standard-dock.mobile-expanded .board-colors{grid-column:1/-1;padding-left:0}
+  .standard-dock.mobile-expanded .dock-field>.dock-label,.standard-dock.mobile-expanded :is(.board-colors,.dock-actions)>.dock-label{left:0}
+  .standard-dock.mobile-expanded .dock-actions button{min-width:66px}
+  .standard-dock.mobile-expanded .board-next{display:none}
 }
