@@ -47,7 +47,7 @@ export const SiteHeader: React.FC = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2 rounded-full font-bold text-base transition-colors relative ${
+                className={`px-4 py-2 whitespace-nowrap rounded-full font-bold text-base transition-colors relative ${
                   active
                     ? 'text-brand-blue bg-brand-blue/10'
                     : 'text-slate-600 hover:text-brand-ink hover:bg-slate-100'
@@ -86,7 +86,7 @@ export const SiteHeader: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setClassDropdownOpen(!classDropdownOpen)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 font-extrabold text-xs sm:text-sm text-brand-ink transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-blue/30"
+              className="flex whitespace-nowrap items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 font-extrabold text-xs sm:text-sm text-brand-ink transition-colors focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-blue/30"
               aria-expanded={classDropdownOpen}
               aria-label="Select class"
             >

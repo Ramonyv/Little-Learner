@@ -60,12 +60,15 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Right Hero Illustration */}
-          <div className="relative z-10 w-full max-w-[665px] mt-6 lg:mt-0 lg:absolute lg:w-[59%] lg:max-w-none lg:right-0 lg:bottom-0">
-            <img
-              src="/hero-illustration-v2.svg"
-              alt="Child reading with a globe, books, cat, and a rocket"
-              className="block w-full h-auto"
-            />
+          <div className="relative z-10 w-full max-w-[440px] sm:max-w-[540px] lg:max-w-none mt-2 sm:mt-6 lg:mt-0 lg:absolute lg:w-[59%] lg:right-0 lg:bottom-0">
+            <picture>
+              <source media="(max-width: 1023px)" srcSet="/hero-illustration-mobile.svg" />
+              <img
+                src="/hero-illustration-v2.svg"
+                alt="Child reading with a globe, books, cat, and a rocket"
+                className="block w-full h-auto object-contain"
+              />
+            </picture>
           </div>
 
         </div>
