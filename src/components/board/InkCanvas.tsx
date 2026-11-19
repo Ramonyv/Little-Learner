@@ -12,7 +12,32 @@ export type Brush = 'Rainbow' | 'Pen' | 'Monoline' | 'Pencil' | 'Crayon' | 'Foun
 type Point = { x: number; y: number; pressure: number };
 export interface Stroke { widthScale?: number; brush: Brush; color: string; points: Point[] }
 
-function segment(ctx: CanvasRenderingContext2D, stroke: Stroke, a: Point, b: Point, w: number, h: number) {
+const textureCache = new Map<string, HTMLCanvasElement>();
+function texture(brush: string, color: string) {
+  const key = brush + color;
+  const cached = textureCache.get(key);
+  if (cached) return cached;
+  const stamp = document.createElement('canvas');
+  stamp.width = stamp.height = 96;
+  const context = stamp.getContext('2d')!;
+  context.fillStyle = color;
+  for (let grain = 0; grain < 1100; grain++) {
+    const seed = Math.sin(grain * 71.9 + 3.7) * 43758.5453;
+    const random = seed - Math.floor(seed);
+    const angle = grain * 2.39996;
+    const spread = Math.sqrt(random) * 45;
+    context.globalAlpha = 0.3 + random * 0.35;
+    context.beginPath();
+    context.ellipse(48 + Math.cos(angle)*spread,48 + Math.sin(angle)*spread,
+      0.6 + random*1.3,0.5 + random*0.7,angle,0,Math.PI*2);
+    context.fill();
+  }
+  if (textureCache.size >= 32) textureCache.delete(textureCache.keys().next().value!);
+  textureCache.set(key, stamp);
+  return stamp;
+}
+
+function segment(ctx: CanvasRenderingContext2D, stroke: Stroke, a: Point, b: Point, w: number, h: number, travel = 0) {
   const {brush,color} = stroke;
   ctx.globalCompositeOperation = brush === 'Eraser' ? 'destination-out' : 'source-over';
   ctx.strokeStyle = color;
@@ -20,13 +45,6 @@ function segment(ctx: CanvasRenderingContext2D, stroke: Stroke, a: Point, b: Poi
   const width = (stroke.widthScale ?? 1) * Math.max(0.65,w/800)
     * ({Rainbow:7, Pen:2+b.pressure*5, Monoline:4, Pencil:2, Crayon:9, 'Fountain Pen':2+b.pressure*10, Reed:8, Watercolor:18, Brush:4 + b.pressure*12, Marker:7, Chalk:7, Ink:2 + b.pressure*6, Eraser:28}[brush]);
   if (brush === 'Rainbow') {
-    const endIndex = stroke.points.indexOf(b);
-    let travel = 0;
-    const limit = endIndex < 0 ? stroke.points.length : endIndex;
-    for (let index = 1; index < limit; index++) {
-      const previous = stroke.points[index-1], point = stroke.points[index];
-      travel += Math.hypot((point.x-previous.x)*w,(point.y-previous.y)*h);
-    }
     const distance = Math.hypot((b.x-a.x)*w,(b.y-a.y)*h);
     const steps = Math.max(1,Math.ceil(distance));
     ctx.globalAlpha=1;
@@ -62,27 +80,15 @@ function segment(ctx: CanvasRenderingContext2D, stroke: Stroke, a: Point, b: Poi
   const distance = Math.hypot(endX-startX,endY-startY);
 
   if (brush === 'Chalk' || brush === 'Brush' || brush === 'Crayon' || brush === 'Pencil') {
-    // Overlapping irregular pigment stamps avoid parallel bristles and joins.
-    const radius = width/2;
-    const steps = Math.max(1,Math.ceil(distance/Math.max(0.6,width*0.045)));
-    ctx.fillStyle = color;
-    for (let step=0;step<=steps;step++) {
-      const x=startX+(endX-startX)*step/steps;
-      const y=startY+(endY-startY)*step/steps;
-      for (let grain=0;grain<42;grain++) {
-        const seed=Math.sin(x*13.7+y*29.3+grain*71.9)*43758.5453;
-        const random=seed-Math.floor(seed);
-        const angle=grain*2.39996+random;
-        const spread=Math.sqrt(random)*radius;
-        ctx.globalAlpha=(brush === 'Brush' ? 0.4 : 0.3)+random*0.35;
-        ctx.beginPath();
-        ctx.ellipse(x+Math.cos(angle)*spread,y+Math.sin(angle)*spread,
-          Math.max(0.4,width*(0.025+random*0.04)),
-          Math.max(0.3,width*(0.015+random*0.025)),angle,0,Math.PI*2);
-        ctx.fill();
-      }
+    const stamp = texture(brush, color);
+    const steps = Math.max(1, Math.ceil(distance / Math.max(1, width * 0.14)));
+    ctx.globalAlpha = 1;
+    for (let step = 1; step <= steps; step++) {
+      const t = step / steps;
+      const x = startX + (endX-startX)*t;
+      const y = startY + (endY-startY)*t;
+      ctx.drawImage(stamp, x-width/2, y-width/2, width, width);
     }
-    ctx.globalAlpha=1;
     return;
   }
   if (brush === 'Watercolor') {
@@ -139,6 +145,7 @@ function segment(ctx: CanvasRenderingContext2D, stroke: Stroke, a: Point, b: Poi
 export function InkCanvas({strokes,brush,color,widthScale=1,onFinish}:{strokes:Stroke[];brush:Brush;color:string;widthScale?:number;onFinish:()=>void}) {
   const ref = useRef<HTMLCanvasElement>(null);
   const pointer = useRef<number | null>(null);
+  const travel = useRef(0);
   const size = useRef({w:1,h:1});
   useLayoutEffect(() => {
     const canvas = ref.current!;
@@ -150,7 +157,14 @@ export function InkCanvas({strokes,brush,color,widthScale=1,onFinish}:{strokes:S
       size.current = {w,h};
       const ctx = canvas.getContext('2d')!;
       ctx.scale(canvas.width/w,canvas.height/h);
-      for (const stroke of strokes) stroke.points.forEach((p,i) => segment(ctx,stroke,stroke.points[Math.max(0,i-1)],p,w,h));
+      for (const stroke of strokes) {
+        let distance = 0;
+        stroke.points.forEach((point,index) => {
+          const previous = stroke.points[Math.max(0,index-1)];
+          segment(ctx,stroke,previous,point,w,h,distance);
+          distance += Math.hypot((point.x-previous.x)*w,(point.y-previous.y)*h);
+        });
+      }
     }
     render();
     const observer = new ResizeObserver(render); observer.observe(canvas);
@@ -164,12 +178,14 @@ export function InkCanvas({strokes,brush,color,widthScale=1,onFinish}:{strokes:S
       const rawPressure=e.pointerType==='pen' ? Math.max(0.03,e.pressure) : 0.5;
       const pressure=previous ? previous.pressure*0.65+rawPressure*0.35 : rawPressure;
       const point = {x:(e.clientX-rect.left)/rect.width,y:(e.clientY-rect.top)/rect.height,pressure};
-      segment(ctx,stroke,stroke.points[stroke.points.length-1] || point,point,size.current.w,size.current.h);
+      const start = previous || point;
+      segment(ctx,stroke,start,point,size.current.w,size.current.h,travel.current);
+      travel.current += Math.hypot((point.x-start.x)*size.current.w,(point.y-start.y)*size.current.h);
       stroke.points.push(point);
     }
   }
   return <canvas ref={ref} aria-label="Drawing surface" style={{position:'absolute',inset:0,width:'100%',height:'100%',touchAction:'none',cursor:'crosshair'}}
-    onPointerDown={e=>{if(pointer.current!==null || e.button!==0)return; pointer.current=e.pointerId; e.currentTarget.setPointerCapture(e.pointerId); const stroke:Stroke={brush,color,widthScale,points:[]}; strokes.push(stroke); draw(e.nativeEvent,stroke)}}
+    onPointerDown={e=>{if(pointer.current!==null || e.button!==0)return; pointer.current=e.pointerId; travel.current=0; e.currentTarget.setPointerCapture(e.pointerId); const stroke:Stroke={brush,color,widthScale,points:[]}; strokes.push(stroke); draw(e.nativeEvent,stroke)}}
     onPointerMove={e=>{if(pointer.current===e.pointerId)draw(e.nativeEvent,strokes[strokes.length-1])}}
     onLostPointerCapture={()=>{pointer.current=null;onFinish()}} />;
 }
