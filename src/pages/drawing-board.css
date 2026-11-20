@@ -469,3 +469,18 @@
   .drawing-tool-sidebar section>h3{font-size:clamp(14px,2.6cqh,18px);margin-bottom:.8cqh}
   .sidebar-sizes .bottom-size{min-height:0;height:5.5cqh;width:5.5cqh}
 }
+
+/* Prevent accidental selection on the drawing surface and mode tabs. */
+.board-paper,
+.board-paper *,
+.board-heading .board-switch,
+.board-heading .board-switch * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.board-paper img,
+.board-heading .board-switch img {
+  -webkit-user-drag: none;
+}

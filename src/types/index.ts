@@ -10,6 +10,8 @@ export type TopicId =
   | 'reading-comprehension'
   | 'sentence-formation'
   | 'opposites'
+  | 'community'
+  | 'world'
   | 'numbers'
   | 'shapes'
   | 'living-things'

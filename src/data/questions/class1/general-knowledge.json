@@ -1,0 +1,194 @@
+[
+  {
+    "id": "c1-general-knowledge-01",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "community",
+    "difficulty": "easy",
+    "question": "Who delivers letters to homes?",
+    "options": [
+      "Baker",
+      "Postal worker",
+      "Pilot",
+      "Tailor"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Postal workers collect and deliver letters."
+  },
+  {
+    "id": "c1-general-knowledge-02",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "world",
+    "difficulty": "easy",
+    "question": "Which tool shows where countries and oceans are?",
+    "options": [
+      "Clock",
+      "Thermometer",
+      "Globe",
+      "Ruler"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A globe is a round model of Earth."
+  },
+  {
+    "id": "c1-general-knowledge-03",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "community",
+    "difficulty": "easy",
+    "question": "Where can you borrow a storybook to take home?",
+    "options": [
+      "Bakery",
+      "Fire station",
+      "Post office",
+      "Library"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Libraries lend books to readers."
+  },
+  {
+    "id": "c1-general-knowledge-04",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "world",
+    "difficulty": "easy",
+    "question": "Which festival is often called the Festival of Lights?",
+    "options": [
+      "Diwali",
+      "Holi",
+      "Easter",
+      "Pongal"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Families light lamps called diyas during Diwali."
+  },
+  {
+    "id": "c1-general-knowledge-05",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "community",
+    "difficulty": "easy",
+    "question": "Which vehicle travels on railway tracks?",
+    "options": [
+      "Bus",
+      "Train",
+      "Ferry",
+      "Bicycle"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A train runs on rails that guide its wheels."
+  },
+  {
+    "id": "c1-general-knowledge-06",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "world",
+    "difficulty": "easy",
+    "question": "What is the name of the wheel at the centre of the Indian flag?",
+    "options": [
+      "Lotus",
+      "Compass",
+      "Ashoka Chakra",
+      "Sunflower"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The navy blue wheel on the white band is the Ashoka Chakra."
+  },
+  {
+    "id": "c1-general-knowledge-07",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "community",
+    "difficulty": "easy",
+    "question": "Who helps readers find books in a library?",
+    "options": [
+      "Dentist",
+      "Farmer",
+      "Librarian",
+      "Carpenter"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A librarian organises books and helps readers find them."
+  },
+  {
+    "id": "c1-general-knowledge-08",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "world",
+    "difficulty": "easy",
+    "question": "Which day comes just after Friday?",
+    "options": [
+      "Thursday",
+      "Sunday",
+      "Monday",
+      "Saturday"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Friday is followed by Saturday and then Sunday."
+  },
+  {
+    "id": "c1-general-knowledge-09",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "community",
+    "difficulty": "easy",
+    "question": "What should a driver do at a red traffic light?",
+    "options": [
+      "Stop",
+      "Speed up",
+      "Turn on the radio",
+      "Sound the horn"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A red traffic light tells drivers to stop."
+  },
+  {
+    "id": "c1-general-knowledge-10",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "world",
+    "difficulty": "easy",
+    "question": "Which instrument has black and white keys that you press to play notes?",
+    "options": [
+      "Drum",
+      "Piano",
+      "Flute",
+      "Violin"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Pressing the keys on a piano plays musical notes."
+  },
+  {
+    "id": "c1-general-knowledge-11",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "community",
+    "difficulty": "easy",
+    "question": "Who makes furniture by cutting and joining wood?",
+    "options": [
+      "Baker",
+      "Pilot",
+      "Carpenter",
+      "Potter"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Carpenters work with wood to make things like tables and chairs."
+  },
+  {
+    "id": "c1-general-knowledge-12",
+    "classNumber": 1,
+    "subjectId": "general-knowledge",
+    "topicId": "world",
+    "difficulty": "easy",
+    "question": "Which sport uses a bat, a ball and wickets?",
+    "options": [
+      "Swimming",
+      "Tennis",
+      "Football",
+      "Cricket"
+    ],
+    "correctAnswer": 3,
+    "explanation": "In cricket, the batter uses a bat and defends a wicket."
+  }
+]

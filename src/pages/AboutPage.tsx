@@ -26,7 +26,7 @@ export const AboutPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
             <div className="flex items-center gap-2 font-black text-brand-blue mb-1">
-              <Icon icon="solar:shield-check-bold" className="w-5 h-5" />
+              <img src="/SVG Icons/Zero Collection.svg" alt="" className="w-8 h-8 shrink-0 object-contain" />
               <span>Zero Data Collection</span>
             </div>
             <p className="text-xs sm:text-sm font-bold text-slate-500">
@@ -36,7 +36,7 @@ export const AboutPage: React.FC = () => {
 
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
             <div className="flex items-center gap-2 font-black text-brand-green mb-1">
-              <Icon icon="solar:lightning-bold" className="w-5 h-5" />
+              <img src="/SVG Icons/Instant Access.svg" alt="" className="w-8 h-8 shrink-0 object-contain" />
               <span>Instant Access</span>
             </div>
             <p className="text-xs sm:text-sm font-bold text-slate-500">
@@ -46,7 +46,7 @@ export const AboutPage: React.FC = () => {
 
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
             <div className="flex items-center gap-2 font-black text-amber-600 mb-1">
-              <Icon icon="solar:laptop-minimalistic-bold" className="w-5 h-5" />
+              <img src="/SVG Icons/Client Side Memory.svg" alt="" className="w-8 h-8 shrink-0 object-contain" />
               <span>Client-Side Memory</span>
             </div>
             <p className="text-xs sm:text-sm font-bold text-slate-500">
@@ -56,7 +56,7 @@ export const AboutPage: React.FC = () => {
 
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
             <div className="flex items-center gap-2 font-black text-brand-purple mb-1">
-              <Icon icon="solar:palette-round-bold" className="w-5 h-5" />
+              <img src="/SVG Icons/Childrens Book Design.svg" alt="" className="w-8 h-8 shrink-0 object-contain" />
               <span>Children's Book Design</span>
             </div>
             <p className="text-xs sm:text-sm font-bold text-slate-500">

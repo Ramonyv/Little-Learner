@@ -144,7 +144,7 @@ export const HomePage: React.FC = () => {
               key={sub.id}
               subject={sub}
               iconSrc={cardIcons[sub.id]}
-              questionCount={sub.id === 'english' ? englishQuestions.length : 0}
+              questionCount={getAllSubjectQuestions(selectedClass, sub.id).length}
             />
           ))}
         </div>

@@ -3,6 +3,9 @@ import class1EnglishData from './questions/class1/english.json';
 import class1EnglishPracticePaper2Data from './questions/class1/english-practice-paper-2.json';
 import { scienceQuestions } from './questions/class1/science';
 
+import mathData from './questions/class1/mathematics.json';
+import gkData from './questions/class1/general-knowledge.json';
+
 // Static metadata for all subjects
 export const SUBJECTS: SubjectMeta[] = [
   {
@@ -19,8 +22,7 @@ export const SUBJECTS: SubjectMeta[] = [
     shortDesc: 'Master numbers, shapes, addition, and playful word puzzles.',
     icon: 'solar:calculator-minimalistic-bold',
     badgeColor: 'yellow',
-    isAvailable: false,
-    comingSoonText: 'Coming soon for Class 1',
+    isAvailable: true,
   },
   {
     id: 'science',
@@ -36,8 +38,7 @@ export const SUBJECTS: SubjectMeta[] = [
     shortDesc: 'Discover the world, flags, festivals, seasons, and fun facts.',
     icon: 'solar:globus-bold',
     badgeColor: 'purple',
-    isAvailable: false,
-    comingSoonText: 'Coming soon for Class 1',
+    isAvailable: true,
   },
 ];
 
@@ -132,11 +133,36 @@ export const SCIENCE_PRACTICE_SETS: PracticeSetMeta[] = [
   { id: 'all', title: 'All 100 Questions', description: 'Every science question in one practice set.', icon: 'solar:shuffle-bold', iconBgColor: '#F4EFFF', iconColor: '#9256F5' },
 ];
 
+function topic(subjectId: SubjectId, id: TopicId, title: string, description: string, icon: string): TopicMeta {
+  return { subjectId, id, title, description, icon, estimatedMinutes: 6, iconBgColor: '#EBF4FE', iconColor: '#087CF7' };
+}
+
+const mathTopics = [
+  topic('mathematics', 'mixed-practice', 'Mixed Practice', 'Practise numbers and shapes together.', 'solar:shuffle-bold'),
+  topic('mathematics', 'numbers', 'Numbers', 'Count, compare and solve number stories.', 'solar:calculator-minimalistic-bold'),
+  topic('mathematics', 'shapes', 'Shapes & Patterns', 'Explore shapes, corners and repeating patterns.', 'solar:square-bold'),
+];
+const gkTopics = [
+  topic('general-knowledge', 'mixed-practice', 'Mixed Practice', 'Explore your community and the world.', 'solar:shuffle-bold'),
+  topic('general-knowledge', 'community', 'Our Community', 'Discover helpers, places and transport.', 'solar:home-bold'),
+  topic('general-knowledge', 'world', 'Around the World', 'Explore festivals, symbols, music and sport.', 'solar:globus-bold'),
+];
+
+const starterPapers: PracticeSetMeta[] = [1, 2].map(number => ({
+  id: `paper-${number}` as PracticeSetId, title: `Practice Paper ${number}`,
+  description: 'Six questions across both topics.', icon: 'solar:document-text-bold',
+  iconBgColor: '#EBF4FE', iconColor: '#087CF7',
+}));
+starterPapers.push({ ...starterPapers[0], id: 'all', title: 'Mixed Practice', description: 'Try both papers together.', icon: 'solar:shuffle-bold' });
+
 export function getTopics(subjectId: SubjectId): TopicMeta[] {
+  if (subjectId === 'mathematics') return mathTopics;
+  if (subjectId === 'general-knowledge') return gkTopics;
   return subjectId === 'science' ? SCIENCE_TOPICS : ENGLISH_TOPICS;
 }
 
 export function getPracticeSets(subjectId: SubjectId): PracticeSetMeta[] {
+  if (subjectId === 'mathematics' || subjectId === 'general-knowledge') return starterPapers;
   return subjectId === 'science' ? SCIENCE_PRACTICE_SETS : ENGLISH_PRACTICE_SETS;
 }
 
@@ -172,6 +198,8 @@ const rawQuestions: Question[] = [
   ...(class1EnglishData as Question[]),
   ...(class1EnglishPracticePaper2Data as Question[]),
   ...scienceQuestions,
+  ...(mathData as Question[]),
+  ...(gkData as Question[]),
 ];
 
 const questionsBySet: Record<Exclude<PracticeSetId, 'all'>, Question[]> = {
@@ -187,8 +215,7 @@ export function getPracticeSet(setId: PracticeSetId, subjectId: SubjectId = 'eng
 }
 
 export function getPracticeSetQuestionCount(setId: PracticeSetId, subjectId: SubjectId = 'english'): number {
-  if (subjectId === 'science') return setId === 'all' ? 100 : 25;
-  return setId === 'all' ? 120 : questionsBySet[setId].length;
+  return getQuestionsForTest(1, subjectId, 'mixed-practice', false, setId).length;
 }
 
 /**
@@ -226,12 +253,16 @@ export function getQuestionsForTest(
 ): Question[] {
   let list: Question[] = [];
   if (topicId === 'mixed-practice') {
-    const source = subjectId === 'science'
-      ? (practiceSetId === 'all' ? scienceQuestions : scienceQuestions.slice((Number(practiceSetId.slice(-1)) - 1) * 25, Number(practiceSetId.slice(-1)) * 25))
-      : (practiceSetId === 'all' ? rawQuestions : questionsBySet[practiceSetId]);
-    list = source.filter(
-      (q) => q.classNumber === classNumber && q.subjectId === subjectId
-    );
+    list = getAllSubjectQuestions(classNumber, subjectId);
+    if (practiceSetId !== 'all') {
+      if (subjectId === 'english') {
+        list = questionsBySet[practiceSetId].filter(q => q.classNumber === classNumber);
+      } else {
+        const paperSize = subjectId === 'science' ? 25 : 6;
+        const start = (Number(practiceSetId.slice(-1)) - 1) * paperSize;
+        list = list.slice(start, start + paperSize);
+      }
+    }
   } else {
     list = rawQuestions.filter(
       (q) => q.classNumber === classNumber && q.subjectId === subjectId && q.topicId === topicId

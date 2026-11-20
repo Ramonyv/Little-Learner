@@ -1,0 +1,194 @@
+[
+  {
+    "id": "c1-mathematics-01",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "numbers",
+    "difficulty": "easy",
+    "question": "Which number comes just before 30?",
+    "options": [
+      "28",
+      "29",
+      "31",
+      "39"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Count up one from 29 and you reach 30."
+  },
+  {
+    "id": "c1-mathematics-02",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "shapes",
+    "difficulty": "easy",
+    "question": "Which flat shape has three straight sides?",
+    "options": [
+      "Circle",
+      "Square",
+      "Triangle",
+      "Rectangle"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A triangle has three sides and three corners."
+  },
+  {
+    "id": "c1-mathematics-03",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "numbers",
+    "difficulty": "easy",
+    "question": "Mira has 7 beads and gets 5 more. How many does she have?",
+    "options": [
+      "2",
+      "10",
+      "11",
+      "12"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Count five steps after 7: 8, 9, 10, 11, 12."
+  },
+  {
+    "id": "c1-mathematics-04",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "shapes",
+    "difficulty": "easy",
+    "question": "Which solid shape is a ball most like?",
+    "options": [
+      "Sphere",
+      "Cube",
+      "Cone",
+      "Cylinder"
+    ],
+    "correctAnswer": 0,
+    "explanation": "A sphere is round all over, like a ball."
+  },
+  {
+    "id": "c1-mathematics-05",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "numbers",
+    "difficulty": "easy",
+    "question": "Which number has 4 tens and 2 ones?",
+    "options": [
+      "24",
+      "42",
+      "40",
+      "44"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Four tens make 40. Add two ones to get 42."
+  },
+  {
+    "id": "c1-mathematics-06",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "shapes",
+    "difficulty": "easy",
+    "question": "The tiles repeat: circle, square, square, circle, square, square. Which tile comes next?",
+    "options": [
+      "Square",
+      "Triangle",
+      "Circle",
+      "Oval"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Each group starts with a circle followed by two squares."
+  },
+  {
+    "id": "c1-mathematics-07",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "numbers",
+    "difficulty": "easy",
+    "question": "There are 15 birds on a fence. Four fly away. How many stay?",
+    "options": [
+      "9",
+      "10",
+      "11",
+      "19"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Count back four from 15 to reach 11."
+  },
+  {
+    "id": "c1-mathematics-08",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "shapes",
+    "difficulty": "easy",
+    "question": "How many corners does a square have?",
+    "options": [
+      "3",
+      "5",
+      "6",
+      "4"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Four straight sides meet at four corners."
+  },
+  {
+    "id": "c1-mathematics-09",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "numbers",
+    "difficulty": "easy",
+    "question": "What comes next: 5, 10, 15, __?",
+    "options": [
+      "20",
+      "16",
+      "25",
+      "30"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The numbers go up by five each time."
+  },
+  {
+    "id": "c1-mathematics-10",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "shapes",
+    "difficulty": "easy",
+    "question": "Which object is shaped most like a cube?",
+    "options": [
+      "A coin",
+      "A playing die",
+      "A ball",
+      "A party hat"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A standard playing die has six equal square faces."
+  },
+  {
+    "id": "c1-mathematics-11",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "numbers",
+    "difficulty": "easy",
+    "question": "Two trays each hold 6 cups. How many cups are there altogether?",
+    "options": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Six cups plus six more cups make twelve."
+  },
+  {
+    "id": "c1-mathematics-12",
+    "classNumber": 1,
+    "subjectId": "mathematics",
+    "topicId": "shapes",
+    "difficulty": "easy",
+    "question": "A square card is cut along a straight line from one corner to the opposite corner. What are the two pieces?",
+    "options": [
+      "Two circles",
+      "Two squares",
+      "Two rectangles",
+      "Two triangles"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The cut makes two pieces, each with three straight sides."
+  }
+]
