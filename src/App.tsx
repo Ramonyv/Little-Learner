@@ -19,12 +19,15 @@ import { ExamPage } from './pages/ExamPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { AboutPage } from './pages/AboutPage';
 
+const BrushGallery = import.meta.env.DEV ? React.lazy(() => import('./pages/BrushGallery')) : null;
+
 export const App: React.FC = () => {
   return (
     <SessionProvider>
       <BrowserRouter><PageMetadata/><LocalSaveNotice/>
         <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-brand-ink selection:bg-brand-yellow selection:text-brand-ink">
           <Routes>
+            {BrushGallery && <Route path="/dev/brushes" element={<React.Suspense><BrushGallery/></React.Suspense>}/> }
             <Route path="/drawing-board" element={<main><DrawingBoard /></main>} />
             <Route element={<><SiteHeader /><main className="flex-1"><Outlet /></main><SiteFooter/><MobileBottomNav /></>}>
               <Route path="/explore/seed" element={<SeedActivity />} />
