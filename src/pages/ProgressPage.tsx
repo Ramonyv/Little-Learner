@@ -92,9 +92,7 @@ export const ProgressPage: React.FC = () => {
         
         {/* Total Questions Attempted */}
         <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
-            <Icon icon="solar:chart-square-bold" className="w-6 h-6" />
-          </div>
+          <img src="/SVG Icons/Progress.svg" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
           <div>
             <span className="block text-2xl font-black text-brand-ink leading-tight">
               {totalQuestionsAttempted}
@@ -105,9 +103,7 @@ export const ProgressPage: React.FC = () => {
 
         {/* Practice Sets Completed */}
         <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-brand-green flex items-center justify-center flex-shrink-0">
-            <Icon icon="solar:medal-star-bold" className="w-6 h-6" />
-          </div>
+          <img src="/SVG Icons/Medal.svg" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
           <div>
             <span className="block text-2xl font-black text-brand-ink leading-tight">
               {completedSessions.length}
@@ -118,9 +114,7 @@ export const ProgressPage: React.FC = () => {
 
         {/* Overall Accuracy */}
         <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-brand-blue flex items-center justify-center flex-shrink-0">
-            <Icon icon="solar:cup-star-bold" className="w-6 h-6" />
-          </div>
+          <img src="/SVG Icons/Trophy.svg" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
           <div>
             <span className="block text-2xl font-black text-brand-ink leading-tight">
               {completedSessions.length > 0 ? `${averagePercentage}%` : '—'}

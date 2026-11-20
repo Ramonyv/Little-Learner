@@ -6,6 +6,8 @@ import { TopicCard } from '../components/cards/TopicCard';
 import { SubjectCard } from '../components/cards/SubjectCard';
 import { ENGLISH_TOPICS, SUBJECTS, getTopicQuestionCount, getAllSubjectQuestions } from '../data/questionRepository';
 
+import { cardIcons } from '../data/cardIcons';
+
 export const HomePage: React.FC = () => {
   const { selectedClass } = useSession();
   const englishQuestions = getAllSubjectQuestions(selectedClass, 'english');
@@ -116,8 +118,8 @@ export const HomePage: React.FC = () => {
 
           {/* More Subjects Card */}
           <div className="flex flex-col items-center justify-center text-center p-5 sm:p-6 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-300">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center mb-3 sm:mb-4">
-              <Icon icon="solar:widget-add-bold" className="w-7 h-7 sm:w-8 sm:h-8" />
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-3 sm:mb-4">
+              <img src={cardIcons['more-subjects']} alt="" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
             </div>
             <h3 className="font-extrabold text-base sm:text-lg text-brand-ink mb-1">More Subjects</h3>
             <span className="text-xs sm:text-sm font-bold text-slate-400">Maths, Science & GK</span>
@@ -141,6 +143,7 @@ export const HomePage: React.FC = () => {
             <SubjectCard
               key={sub.id}
               subject={sub}
+              iconSrc={cardIcons[sub.id]}
               questionCount={sub.id === 'english' ? englishQuestions.length : 0}
             />
           ))}

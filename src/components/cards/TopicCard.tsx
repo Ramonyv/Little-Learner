@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { TopicMeta } from '../../types';
 
+import { cardIcons } from '../../data/cardIcons';
+
 interface TopicCardProps {
   topic: TopicMeta;
   questionCount: number;
@@ -16,6 +18,7 @@ export const TopicCard: React.FC<TopicCardProps> = ({
   classNumber,
   variant = 'grid',
 }) => {
+  const iconSrc = cardIcons[topic.id];
   const linkTo = `/intro/${topic.subjectId}/${topic.id}`;
 
   if (variant === 'list') {
@@ -28,9 +31,9 @@ export const TopicCard: React.FC<TopicCardProps> = ({
         <div className="flex items-center gap-3.5">
           <div
             className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105"
-            style={{ backgroundColor: topic.iconBgColor, color: topic.iconColor }}
+            style={{ backgroundColor: iconSrc ? undefined : topic.iconBgColor, color: topic.iconColor }}
           >
-            <Icon icon={topic.icon} className="w-6 h-6" />
+            {iconSrc ? <img src={iconSrc} alt="" className="w-9 h-9 object-contain" /> : <Icon icon={topic.icon} className="w-6 h-6" />}
           </div>
           <div>
             <h3 className="font-extrabold text-base text-brand-ink group-hover:text-brand-blue transition-colors">
@@ -57,10 +60,10 @@ export const TopicCard: React.FC<TopicCardProps> = ({
     >
       {/* Icon Bubble */}
       <div
-        className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-3 sm:mb-4 transition-transform group-hover:scale-110 shadow-sm"
-        style={{ backgroundColor: topic.iconBgColor, color: topic.iconColor }}
+        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl flex items-center justify-center mb-3 sm:mb-4 transition-transform group-hover:scale-110 ${iconSrc ? '' : 'shadow-sm'}`}
+        style={{ backgroundColor: iconSrc ? undefined : topic.iconBgColor, color: topic.iconColor }}
       >
-        <Icon icon={topic.icon} className="w-7 h-7 sm:w-8 sm:h-8" />
+        {iconSrc ? <img src={iconSrc} alt="" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" /> : <Icon icon={topic.icon} className="w-7 h-7 sm:w-8 sm:h-8" />}
       </div>
 
       {/* Topic Title */}

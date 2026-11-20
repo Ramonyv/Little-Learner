@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useSession } from '../context/SessionContext';
 import { SUBJECTS, getPracticeSets, getTopics, getPracticeSetQuestionCount, getTopicQuestionCount } from '../data/questionRepository';
+import { cardIcons } from '../data/cardIcons';
 import { TopicCard } from '../components/cards/TopicCard';
 import { SubjectId } from '../types';
 
@@ -74,6 +75,7 @@ export const TopicsPage: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           {getPracticeSets(subjectId as SubjectId).map((set) => {
+            const iconSrc = set.id === 'all' ? cardIcons['mixed-practice'] : undefined;
             const count = getPracticeSetQuestionCount(set.id, subjectId as SubjectId);
             return (
               <Link
@@ -83,9 +85,9 @@ export const TopicsPage: React.FC = () => {
               >
                 <div
                   className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center flex-shrink-0 sm:mb-4 transition-transform group-hover:scale-105"
-                  style={{ backgroundColor: set.iconBgColor, color: set.iconColor }}
+                  style={{ backgroundColor: iconSrc ? undefined : set.iconBgColor, color: set.iconColor }}
                 >
-                  <Icon icon={set.icon} className="w-6 h-6 sm:w-7 sm:h-7" />
+                  {iconSrc ? <img src={iconSrc} alt="" className="w-9 h-9 sm:w-10 sm:h-10 object-contain" /> : <Icon icon={set.icon} className="w-6 h-6 sm:w-7 sm:h-7" />}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">

@@ -360,7 +360,6 @@
   .bottom-tool-actions{width:100%;justify-content:flex-end}
 }
 .drawing-board:has(.bottom-tool-menu) .mobile-board-bar{display:none}
-.drawing-board:has(.bottom-tool-menu) .tablet-actions .dock-actions{display:none}
 .drawing-board.focus-mode .board-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
 
 .tracing-feedback{position:absolute;bottom:62px;left:12px;z-index:2;pointer-events:none;font-size:12px;background:#fff;color:#182954;padding:5px 10px;border-radius:99px}
@@ -381,12 +380,16 @@
 .bottom-tool-choice img,.bottom-tool-choice svg{width:34px;height:34px}
 .bottom-tool-popup.color .bottom-tool-choices,.bottom-tool-popup.size .bottom-tool-choices{height:auto}
 .drawing-board .tablet-actions{position:absolute;inset:12px 12px auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;z-index:5;pointer-events:none}
-.drawing-board:has(.bottom-tool-menu) .tablet-actions .dock-actions{display:flex;align-items:center;grid-column:2;background:white;border:1px solid #cfdfef;border-radius:14px;padding:3px;pointer-events:auto}
+.drawing-board .tablet-actions .dock-actions{display:flex;align-items:center;grid-column:2;background:white;border:1px solid #cfdfef;border-radius:14px;padding:3px;pointer-events:auto}
 .tablet-actions .dock-label,.tablet-actions button span{display:none}
 .tablet-actions .dock-actions button{display:grid;place-items:center;width:40px;height:40px;min-height:40px;padding:6px;border:0;background:transparent}
 .tablet-actions .dock-actions button+button{border-left:1px solid #cfdfef;border-radius:0}
 .tablet-actions .board-symbol{width:24px;height:24px}
-.drawing-board .tablet-actions>.tablet-next{grid-column:3;justify-self:end;pointer-events:auto;background:#ffd321;border-radius:99px;padding:8px 16px}
+.drawing-board .tablet-actions>.tablet-next{
+  grid-column:3;justify-self:end;align-self:center;pointer-events:auto;
+  display:grid;place-items:center;box-sizing:border-box;width:68px;height:44px;min-height:44px;padding:0;
+  border:1.5px solid #e4b743;border-radius:99px;background:#f8d54f;box-shadow:inset 0 -3px #dfad3b;
+}
 .board-paper .wave-tip{top:68px}
 .board-top .surface-selector{margin-left:auto;width:auto}
 .board-top .surface-selector button{padding:4px}
@@ -406,4 +409,63 @@
   .guide-list button:nth-of-type(1){order:6}.guide-list button:nth-of-type(2){order:4}.guide-list button:nth-of-type(6){order:5}
   .board-top{justify-content:flex-start}.board-top .exercise-icon{display:block}
   .board-top .guide-count{margin-left:auto;margin-right:0}.board-top .star-count+.surface-selector{margin-left:0}
+}
+.bottom-tool-heading img.bottom-tool-arrow{width:15px;height:15px;flex:none}
+
+.board-frame:has(>.drawing-tool-sidebar){
+  display:grid;grid-template-columns:clamp(365px,28vw,476px) minmax(0,1fr);
+  grid-template-rows:auto auto minmax(0,1fr);gap:0 16px;
+}
+.board-frame:has(>.drawing-tool-sidebar)>.board-top{grid-area:1/2}
+.board-frame:has(>.drawing-tool-sidebar)>.letter-size-control{grid-area:2/2}
+.board-frame:has(>.drawing-tool-sidebar)>.board-paper{grid-area:3/2}
+.board-frame:has(>.drawing-tool-sidebar)>.mobile-board-bar{display:none}
+/* At full size the Figma panel has a 436px content column and 18px insets. */
+.drawing-tool-sidebar{grid-area:1/1/4/2;min-height:0;overflow:auto;scrollbar-width:thin;container-type:size;padding:clamp(8px,1.2dvh,18px);border:2px solid white;border-radius:26px;background:linear-gradient(122deg,#fafcff 6%,#e3effd 94%);box-shadow:0 5px 16px #3f689514;display:flex;flex-direction:column;gap:clamp(6px,1.3dvh,22px)}
+/* Distribute spare panel height between the three tool groups. */
+.drawing-tool-sidebar{justify-content:space-evenly}
+.drawing-tool-sidebar .ll-picker{position:static;inset:auto;width:100%;max-height:none;overflow:visible;padding:6cqw;flex:none}
+.drawing-tool-sidebar .ll-picker-tabs{margin-bottom:3.2cqw}
+.drawing-tool-sidebar .ll-picker-tabs button{width:9cqw;height:9cqw}
+.drawing-tool-sidebar .ll-picker-current{min-height:13.75cqw;gap:2.3cqw}
+.drawing-tool-sidebar .ll-picker-current b{width:11.2cqw;height:11.2cqw}
+.drawing-tool-sidebar .ll-picker-current strong{font-size:4.55cqw}
+.drawing-tool-sidebar .ll-picker h3{font-weight:850;font-size:3.25cqw;margin:5cqw 0 3.7cqw}
+.drawing-tool-sidebar .ll-swatches{gap:2cqw;padding-bottom:5cqw}
+.drawing-tool-sidebar .ll-swatches button{height:7.55cqw;border-radius:2.5cqw}
+.drawing-tool-sidebar section>h3{font-size:4.58cqw;color:black;font-weight:850;line-height:1.1;margin:0 0 4.58cqw}
+.sidebar-brushes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3.67cqw 2.98cqw}
+.drawing-tool-sidebar .bottom-tool-choice{width:100%;min-width:0;height:auto;aspect-ratio:76.846/73.832;padding:2px;gap:0;font-size:2.92cqw;line-height:1.2;border-width:1.5px;border-radius:4.15cqw}
+.sidebar-brushes img{width:8.88cqw;height:8.88cqw;object-fit:contain}
+.sidebar-brushes .bottom-tool-choice[aria-pressed=true]{background:#ffdc4b;border-color:#ffb200}
+.sidebar-sizes{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2.29cqw;padding:2.29cqw 2.75cqw;border:2px solid #d5deeb;border-radius:4.58cqw;background:white}
+.sidebar-sizes .bottom-size{width:100%;height:auto;aspect-ratio:1;min-height:0;padding:1.5cqw}
+
+/* Budget vertical space against the actual panel, including when the guide header grows. */
+.drawing-tool-sidebar .ll-picker{padding:min(6cqw,1.8cqh) 5cqw}
+.drawing-tool-sidebar .ll-picker-tabs{margin-bottom:min(3.2cqw,1cqh)}
+.drawing-tool-sidebar .ll-picker-tabs button{height:min(9cqw,5cqh);width:min(9cqw,5cqh)}
+.drawing-tool-sidebar .ll-picker-tabs img{max-height:100%;max-width:100%}
+.drawing-tool-sidebar .ll-picker-current{min-height:0}
+.drawing-tool-sidebar .ll-picker-current b{width:min(11.2cqw,5cqh);height:min(11.2cqw,5cqh)}
+.drawing-tool-sidebar .ll-picker h3{margin:min(5cqw,1.3cqh) 0 min(3.7cqw,.8cqh)}
+.drawing-tool-sidebar .ll-swatches{row-gap:min(2cqw,.8cqh);padding-bottom:min(5cqw,1.3cqh)}
+.drawing-tool-sidebar .ll-swatches button{height:min(7.55cqw,3.8cqh)}
+.drawing-tool-sidebar .ll-wheel{max-width:39cqh}
+.drawing-tool-sidebar section>h3{margin-bottom:min(4.58cqw,1.2cqh)}
+.sidebar-brushes{row-gap:min(3.67cqw,1cqh)}
+.drawing-tool-sidebar .bottom-tool-choice{max-height:8.4cqh}
+.sidebar-brushes img{width:min(8.88cqw,4.6cqh);height:min(8.88cqw,4.6cqh)}
+.sidebar-sizes{padding-block:min(2.29cqw,1cqh)}
+.sidebar-sizes .bottom-size{max-width:6cqh;justify-self:center}
+@container (max-height: 760px){
+  .drawing-tool-sidebar .ll-picker{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-items:center}
+  .drawing-tool-sidebar .ll-picker>*{grid-column:1/-1}
+  .drawing-tool-sidebar .ll-picker:has(.ll-picker-current) .ll-picker-tabs{grid-column:1;margin:0}
+  .drawing-tool-sidebar .ll-picker-current{grid-column:2}
+  .drawing-tool-sidebar .ll-picker h3{margin:1cqh 0 .5cqh}
+  .drawing-tool-sidebar .ll-swatches{padding-bottom:.6cqh}
+  .drawing-tool-sidebar .bottom-tool-choice{min-height:0;max-height:7.9cqh}
+  .drawing-tool-sidebar section>h3{font-size:clamp(14px,2.6cqh,18px);margin-bottom:.8cqh}
+  .sidebar-sizes .bottom-size{min-height:0;height:5.5cqh;width:5.5cqh}
 }

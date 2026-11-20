@@ -1,0 +1,19 @@
+.ll-picker{position:fixed;inset:auto;margin:0;width:min(360px,calc(100vw - 16px));max-height:calc(100dvh - 16px);overflow:auto;padding:18px 23px;background:white;color:#19294e;border:2px solid #d3deec;border-radius:24px;box-shadow:0 5px 18px #25456824;font-family:Nunito,sans-serif}
+.ll-picker-tabs{display:flex;justify-content:center;gap:3px;width:fit-content;margin:0 auto 14px;padding:3px;border:1px solid #bbcbe1;border-radius:99px}
+.ll-picker .ll-picker-tabs button{display:grid;place-items:center;padding:0;width:36px;height:36px;min-height:0;border:1.5px solid transparent;border-radius:50%;background:white}
+.ll-picker-tabs img{width:30px;height:30px}
+.ll-picker .ll-picker-tabs button[aria-pressed=true]{background:#ffdc53;border-color:#111}
+.ll-picker-current{display:flex;align-items:center;gap:8px;padding:4px;border:1px solid #d3deec;border-radius:12px}
+.ll-picker-current b{width:38px;height:38px;border-radius:8px}
+.ll-picker-current code{font-size:12px;padding:5px 9px;border-radius:20px;background:#e3eefb}
+.ll-picker h3{font-size:14px;font-weight:850;margin:12px 0 8px}
+.ll-swatches{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;border-bottom:2px solid #d3deec;padding-bottom:14px}
+.ll-swatches.shades{grid-template-columns:repeat(7,minmax(0,1fr))}
+.ll-picker .ll-swatches button{width:100%;height:29px;min-height:0;padding:0;border:1px solid #0001;border-radius:9px;font-weight:900}
+.ll-picker .ll-swatches button[aria-pressed=true]{outline:2px solid #3461ea;outline-offset:1px}
+.ll-hue{width:100%;appearance:none;height:18px;border-radius:20px;background:linear-gradient(to right,red,yellow,lime,cyan,blue,magenta,red)}
+.ll-hue::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--picked);border:2px solid white;box-shadow:0 1px 4px #0005}
+.ll-wheel{position:relative;margin:auto;width:100%;aspect-ratio:1;border-radius:50%;touch-action:none;background:conic-gradient(cyan,#0f0,yellow,red,magenta,blue,cyan)}
+.ll-wheel-center{position:absolute;inset:17%;border:3px solid white;border-radius:50%}
+.ll-wheel canvas{width:100%;height:100%;border-radius:50%;touch-action:none}
+.ll-wheel i{pointer-events:none;position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;border:3px solid white;border-radius:50%;box-shadow:0 2px 5px #0004}

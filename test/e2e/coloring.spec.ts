@@ -43,7 +43,7 @@ test('vector coloring pages keep outlines above brush strokes', async ({ page })
 });
 
 test('Gods toolbar exposes the supplied brush icons and working choices', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.setViewportSize({ width: 1366, height: 900 });
   await page.goto('/drawing-board?deity=Ganesha');
   await page.getByRole('button', { name: 'Gods', exact: true }).click();
   await page.getByRole('button', { name: 'Brush Types', exact: true }).click();
@@ -53,4 +53,61 @@ test('Gods toolbar exposes the supplied brush icons and working choices', async 
   await page.getByRole('button', { name: 'Brush Types', exact: true }).click();
   await expect(rainbow).toHaveAttribute('aria-pressed', 'true');
   await expect(rainbow.locator('img')).toHaveAttribute('src', /Bottom%20Toolbar\/Brush Types\/Rainbow\.svg/);
+});
+
+test('a new fill covers earlier ink only inside the tapped region and undo restores it', async ({page})=>{
+  await page.addInitScript(()=>{
+    localStorage.setItem('ll-coloring',JSON.stringify([['Ganesha',{
+      fills:{},undo:[[]],strokes:[{brush:'Marker',color:'#795548',widthScale:3,points:[
+        {x:.5,y:.15,pressure:.6},{x:.5,y:.5,pressure:.6}
+      ]}]
+    }]]));
+  });
+  await page.goto('/drawing-board?mode=Gods&deity=Ganesha');
+  await page.getByRole('button',{name:'Gods',exact:true}).click();
+  const paper=page.locator('.board-frame:has(.deity-picker)');
+  const ink=paper.locator('canvas[aria-label="Drawing surface"]');
+  const region=paper.locator('canvas[aria-label="Ganesha colouring page"]');
+  const sample=(y:number)=>ink.evaluate((node,fraction)=>{
+    const c=node as HTMLCanvasElement;
+    return c.getContext('2d')!.getImageData(c.width/2,c.height*fraction,1,1).data[3];
+  },y);
+  const rect=(await region.boundingBox())!,side=Math.min(rect.width,rect.height);
+  const y=.5-.1*side/rect.height;
+  await expect.poll(()=>sample(y)).toBe(255);
+  await region.click({position:{x:rect.width/2,y:rect.height*y}});
+  await expect.poll(()=>sample(y)).toBe(0);
+  await expect.poll(()=>sample(.16)).toBe(255);
+  await paper.getByRole('button',{name:'Undo',exact:true}).click();
+  await expect.poll(()=>sample(y)).toBe(255);
+});
+
+test('PDF keeps the colouring layer aligned with the square outline on a portrait board', async ({page}, testInfo)=>{
+  await page.setViewportSize({width:820,height:1250});
+  await page.goto('/drawing-board?mode=Gods&deity=Ganesha');
+  const art=page.getByLabel('Ganesha colouring page');
+  await expect.poll(()=>art.evaluate(node=>(node as HTMLCanvasElement).getContext('2d')!.getImageData(500,400,1,1).data[3])).toBe(255);
+  await art.click({position:{x:(await art.boundingBox())!.width/2,y:(await art.boundingBox())!.height/2}});
+  const paper=page.locator('.board-paper:visible');
+  await paper.locator('summary').click();
+  const download=page.waitForEvent('download');
+  await paper.getByRole('button',{name:'Save PDF'}).click();
+  const path=testInfo.outputPath('portrait.pdf');
+  await (await download).saveAs(path);
+  const {readFile}=await import('node:fs/promises');
+  const pdf=await readFile(path);
+  const jpeg=pdf.subarray(pdf.indexOf(Buffer.from([255,216])),pdf.lastIndexOf(Buffer.from([255,217]))+2);
+  const mismatch=await art.evaluate(async(node,data)=>{
+    const img=new Image();img.src='data:image/jpeg;base64,'+data;await img.decode();
+    const c=document.createElement('canvas');c.width=c.height=300;
+    const ctx=c.getContext('2d')!,side=Math.min(img.width,img.height);
+    ctx.drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,300,300);
+    const actual=ctx.getImageData(0,0,300,300).data;
+    ctx.drawImage(node as HTMLCanvasElement,0,0,300,300);
+    const expected=ctx.getImageData(0,0,300,300).data;
+    let different=0;
+    for(let i=0;i<actual.length;i+=4)if(Math.abs(actual[i]-expected[i])>90)different++;
+    return different/(300*300);
+  },jpeg.toString('base64'));
+  expect(mismatch).toBeLessThan(.018);
 });

@@ -1,3 +1,4 @@
+/// <reference lib="es2022.intl" />
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { readWork } from '../utils/localWork';
@@ -9,18 +10,30 @@ export function LearningToolsPage() {
   function printPack() {
     const entries=words.split(/[,\n]/).map(word=>word.trim()).filter(Boolean).slice(0,30);
     if(!entries.length){setError('Enter at least one word or letter.');return;}
+    const segmenter=new Intl.Segmenter(undefined,{granularity:'grapheme'});
+    const letters=entries.flatMap(entry=>Array.from(segmenter.segment(entry),part=>part.segment).filter(letter=>letter.trim()));
+    setError('');
     const page=window.open('','_blank');
     if(!page){setError('Allow a new tab to open the printable pack.');return;}
     page.document.title='Little Learner activity pack';
     const style=page.document.createElement('style');
-    style.textContent='body{font-family:sans-serif}section{break-after:page;padding:20px}h1{font-size:24px}.row{border-top:1px solid #9bb2c5;border-bottom:1px solid #9bb2c5;margin:30px 0;padding:10px;display:flex;justify-content:space-around;font-size:48px}.trace{color:white;-webkit-text-stroke:1px #777}@media print{button{display:none}}';
+    style.textContent=`
+      @page{size:A4 portrait;margin:0}
+      *{box-sizing:border-box}
+      body{margin:0;background:#edf1f5;font-family:sans-serif}
+      section{width:210mm;height:297mm;margin:12px auto;padding:16mm;background:white;display:grid;grid-template-rows:auto repeat(6,1fr);gap:7mm}
+      h1{font-size:20pt;margin:0}
+      .row{border-block:1px solid #9bb2c5;display:flex;align-items:center;justify-content:space-around;font-size:44pt}
+      .trace{color:white;-webkit-text-stroke:1px #777}
+      @media print{button{display:none}body{background:white}section{margin:0;break-inside:avoid}section+section{break-before:page}}
+    `;
     page.document.head.append(style);
-    entries.forEach(word=>{
+    letters.forEach(letter=>{
       const section=page.document.createElement('section');
-      const heading=page.document.createElement('h1');heading.textContent='Trace '+word;section.append(heading);
+      const heading=page.document.createElement('h1');heading.textContent='Trace '+letter;section.append(heading);
       for(let row=0;row<6;row++){
         const line=page.document.createElement('div');line.className='row';
-        for(let col=0;col<(word.length>5?2:3);col++){const text=page.document.createElement('span');text.textContent=word;text.className=col?'trace':'';line.append(text);}
+        for(let col=0;col<3;col++){const text=page.document.createElement('span');text.textContent=letter;text.className=col?'trace':'';line.append(text);}
         section.append(line);
       }
       page.document.body.append(section);
@@ -40,7 +53,7 @@ export function LearningToolsPage() {
       <button className="rounded-xl border p-3 font-bold" onClick={printPack}>Create printable pack</button>
     </div>
     <p role="alert">{error}</p>
-    <p className="mt-3 text-slate-600">The drawing worksheet uses the first entry. Printable packs include up to 30 entries, one practice page each. Use the print dialog to print or save as PDF.</p>
+    <p className="mt-3 text-slate-600">The drawing worksheet uses the first entry. Printable packs use up to 30 entries and give each letter or digit its own A4 practice page. Use the print dialog to print or save as PDF.</p>
     <h2 className="text-xl font-bold mt-10 mb-4">Practice mistakes again</h2>
     {!mistakes.length && <p>Complete a quiz to build a revision session from incorrect answers.</p>}
     {mistakes.map(session=><Link key={session.sessionId} className="block border rounded-xl p-4 mb-3" to={'/exam/'+session.subjectId+'/'+session.topicId+'?mode=practice&mistakes='+encodeURIComponent(session.sessionId)}>Retry mistakes · {session.topicTitle}</Link>)}

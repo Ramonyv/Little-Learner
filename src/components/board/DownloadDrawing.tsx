@@ -60,7 +60,13 @@ export function DownloadDrawing() {
         const bounds = layer.getBoundingClientRect();
         const x = bounds.left - rect.left, y = bounds.top - rect.top;
         if (layer instanceof HTMLCanvasElement) {
-          context.drawImage(layer, x, y, bounds.width, bounds.height);
+          if (getComputedStyle(layer).objectFit === 'contain') {
+            const fit = Math.min(bounds.width / layer.width, bounds.height / layer.height);
+            const width = layer.width * fit, height = layer.height * fit;
+            context.drawImage(layer, x + (bounds.width - width) / 2, y + (bounds.height - height) / 2, width, height);
+          } else {
+            context.drawImage(layer, x, y, bounds.width, bounds.height);
+          }
         } else {
           const image = new Image();
           let source: string;

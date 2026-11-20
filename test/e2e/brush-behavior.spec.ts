@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('all featured brushes can draw strokes without interrupting pointer input', async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.setViewportSize({ width: 1366, height: 1000 });
   await page.goto('/drawing-board');
   await page.getByRole('button', { name: 'Free Draw', exact: true }).click();
   await page.getByRole('button', { name: 'Brush Types', exact: true }).click();

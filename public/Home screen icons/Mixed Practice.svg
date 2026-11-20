@@ -1,0 +1,12 @@
+<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="8" y="6.69312" width="36" height="38" rx="7" fill="#F3F6FC" style="fill:#F3F6FC;fill:color(display-p3 0.9529 0.9647 0.9882);fill-opacity:1;"/>
+<rect x="8" y="6.69312" width="36" height="38" rx="7" stroke="black" style="stroke:black;stroke-opacity:1;" stroke-width="2"/>
+<rect x="14.3062" y="12.3303" width="7.1521" height="7.1521" rx="2" fill="#A8E381" style="fill:#A8E381;fill:color(display-p3 0.6588 0.8902 0.5059);fill-opacity:1;stroke:#A8E381;stroke:color(display-p3 0.6588 0.8902 0.5059);stroke-opacity:1;" stroke-width="2" stroke="#A8E381"/>
+<rect x="14.3062" y="22.1738" width="7.1521" height="7.1521" rx="2" fill="white" style="fill:white;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="2" stroke="black"/>
+<rect x="14.3062" y="31.9038" width="7.1521" height="7.1521" rx="2" fill="white" style="fill:white;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="2" stroke="black"/>
+<path d="M22.4585 13.3303L19.3699 16.4188C18.9794 16.8093 18.3462 16.8093 17.9557 16.4188L16.9082 15.3713" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<path d="M25.9443 25.5967H36.5913" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<path d="M25.9443 35.48H31.268" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<path d="M25.9443 17.126H36.5913" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<path d="M38.4151 35.1218C38.8312 34.0088 40.4055 34.0088 40.8216 35.1218L41.382 36.6204C41.5625 37.1032 42.0142 37.4314 42.5292 37.4539L44.1276 37.5237C45.3147 37.5756 45.8012 39.0728 44.8713 39.8125L43.6192 40.8085C43.2158 41.1294 43.0433 41.6604 43.181 42.1572L43.6085 43.6989C43.926 44.8439 42.6524 45.7693 41.6615 45.1135L40.3274 44.2305C39.8975 43.946 39.3392 43.946 38.9093 44.2305L37.5751 45.1135C36.5843 45.7693 35.3107 44.8439 35.6282 43.6989L36.0557 42.1572C36.1934 41.6604 36.0209 41.1294 35.6175 40.8085L34.3654 39.8125C33.4355 39.0728 33.922 37.5756 35.1091 37.5237L36.7075 37.4539C37.2225 37.4314 37.6742 37.1032 37.8547 36.6204L38.4151 35.1218Z" fill="#F6D35A" style="fill:#F6D35A;fill:color(display-p3 0.9647 0.8275 0.3529);fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="2" stroke="black"/>
+</svg>

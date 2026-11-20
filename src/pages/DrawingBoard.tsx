@@ -96,16 +96,14 @@ export function DrawingBoard() {
     <div hidden={mode!=='Gods'}><GodsStudio/></div>
     <div hidden={mode==='Gods'}><div className={'board-layout '+(!trace?'free':'')}>
       {trace && <aside className="guide-list"><h2>Practice</h2>{categories.map(c=><button key={c} aria-pressed={c===category} onClick={()=>{setCategory(c);setIndex(0)}}><BoardIcon name={c}/>{c}</button>)}</aside>}
-      <div className="board-frame"><div className="board-top"><span className="exercise-icon"><BoardIcon name={trace ? "Trace" : "Lines & curves"}/></span><div><h2>{trace?guide.title:'Free Draw'}</h2><p>{wave?'Follow the dotted outline to complete the wave.':trace?'Follow the dotted outline.':'Draw anything you like!'}</p></div>{trace && <span className="guide-count">{index+1} of {guides[category].length} {guides[category].length<=6 && guides[category].map((_,i)=><i key={i} className={i===index?'current':''}/>)}</span>}{trace && <span className="star-count" title="Guides practised in this category" aria-label={practised+' guides practised'}>⭐ {practised} / {guides[category].length}</span>}{surface}</div>
+      <div className="board-frame"><div className="board-top"><span className="exercise-icon"><BoardIcon name={trace ? "Trace" : "Free Draw"}/></span><div><h2>{trace?guide.title:'Free Draw'}</h2><p>{wave?'Follow the dotted outline to complete the wave.':trace?'Follow the dotted outline.':'Draw anything you like!'}</p></div>{trace && <span className="guide-count">{index+1} of {guides[category].length} {guides[category].length<=6 && guides[category].map((_,i)=><i key={i} className={i===index?'current':''}/>)}</span>}{trace && <span className="star-count" title="Guides practised in this category" aria-label={practised+' guides practised'}>⭐ {practised} / {guides[category].length}</span>}{surface}</div>
       {trace && !worksheet && guide.text && <label className="letter-size-control">{category === 'Numbers' ? 'Number' : category === 'Words' ? 'Word' : 'Letter'} size
         <input type="range" min="20" max="100" value={textSize} onChange={e=>resizeText(Number(e.target.value))} />
         <output>{textSize}%</output>
       </label>}
       <div className={'board-paper '+(!worksheet && dark?'dark':'')}><DownloadDrawing/>{trace && !worksheet && guide.path && <TracingFeedback strokes={strokes}/>}<button className="focus-toggle" onClick={()=>setFocus(value=>!value)}>{focus?'Exit focus':'Focus'}</button>
         <div className="tablet-actions">{actions}{trace && <button className="tablet-next" aria-label="Next guide" onClick={next}>
-          <svg aria-hidden="true" width="30" height="20" viewBox="0 0 32 20">
-            <path fill="currentColor" d="M2 6h18V2a1.5 1.5 0 0 1 2.5-1.1l8 8a1.5 1.5 0 0 1 0 2.2l-8 8A1.5 1.5 0 0 1 20 18v-4H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/>
-          </svg>
+          <img src="/SVG%20Icons/Next%20Guide.svg" width="30" height="20" alt="" />
         </button>}</div>
         {wave && !worksheet && <span className="wave-tip">☝ Start at the green dot and trace along the dotted line.</span>}
         {worksheet && <WorksheetGuide guide={guide} category={category}/>}

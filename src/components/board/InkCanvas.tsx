@@ -11,9 +11,10 @@ export const brushSizes = [
 import { renderStroke, strokeRenderer, type Brush, type Stroke } from './brushEngine';
 export type { Brush, Stroke } from './brushEngine';
 
-export function InkCanvas({strokes,brush,color,widthScale=1,onFinish}:{strokes:Stroke[];brush:Brush;color:string;widthScale?:number;onFinish:()=>void}) {
+export function InkCanvas({strokes,brush,color,widthScale=1,onFinish,afterStroke}:{strokes:Stroke[];brush:Brush;color:string;widthScale?:number;onFinish:()=>void;afterStroke?:(ctx:CanvasRenderingContext2D,index:number,w:number,h:number)=>void}) {
   const ref = useRef<HTMLCanvasElement>(null);
   const active = useRef<{id: number; stroke: Stroke; renderer: ReturnType<typeof strokeRenderer>} | null>(null);
+  const lastOverlay=useRef(afterStroke);
   const painted = useRef<Stroke[]>([]);
   const size = useRef({w:0,h:0});
   const backing = useRef<HTMLCanvasElement | null>(null);
@@ -33,7 +34,7 @@ export function InkCanvas({strokes,brush,color,widthScale=1,onFinish}:{strokes:S
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       const pixels = [Math.round(w * ratio), Math.round(h * ratio)];
       const resized = canvas.width !== pixels[0] || canvas.height !== pixels[1] || size.current.w !== w || size.current.h !== h;
-      if (!resized && painted.current.length === strokes.length && strokes.every((s,i) => s === painted.current[i])) return;
+      if (!resized && lastOverlay.current===afterStroke && painted.current.length === strokes.length && strokes.every((s,i) => s === painted.current[i])) return;
       if (resized) {
         canvas.width = pixels[0];
         canvas.height = pixels[1];
@@ -42,7 +43,8 @@ export function InkCanvas({strokes,brush,color,widthScale=1,onFinish}:{strokes:S
       const ctx = canvas.getContext('2d')!;
       ctx.setTransform(canvas.width/w,0,0,canvas.height/h,0,0);
       ctx.clearRect(0,0,w,h);
-      strokes.forEach(stroke => renderStroke(ctx,stroke,w,h));
+      strokes.forEach((stroke,i) => {renderStroke(ctx,stroke,w,h);afterStroke?.(ctx,i,w,h)});
+      lastOverlay.current=afterStroke;
       painted.current = strokes.slice();
       if (active.current) {
         const current = active.current;
@@ -55,7 +57,7 @@ export function InkCanvas({strokes,brush,color,widthScale=1,onFinish}:{strokes:S
     const observer = new ResizeObserver(render);
     observer.observe(canvas);
     return () => observer.disconnect();
-  },[strokes]);
+  },[strokes,afterStroke]);
 
   function draw(event: PointerEvent) {
     const current = active.current;
