@@ -1,3 +1,4 @@
+import { useRecentColors } from './recentColors';
 import {useId, useLayoutEffect, type CSSProperties, useRef, useState, type KeyboardEvent, type PointerEvent} from 'react';
 import './color-picker.css';
 
@@ -16,6 +17,9 @@ function rgb(hex:string) {
   return [0,2,4].map(i=>parseInt(full.slice(i,i+2),16));
 }
 const hexColor=(channels:number[])=>'#'+channels.map(x=>Math.round(x).toString(16).padStart(2,'0')).join('');
+export function colorShades(hex: string) {
+  return [.85,.65,.43,.2,0,-.2,-.48].map(weight=>hexColor(rgb(hex).map(c=>weight>=0?c+(255-c)*weight:c*(1+weight))));
+}
 function hsv(hex:string) {
   const [r,g,b]=rgb(hex).map(x=>x/255);
   const v=Math.max(r,g,b), delta=v-Math.min(r,g,b);
@@ -44,6 +48,7 @@ function selectPointer(e:PointerEvent<HTMLElement>,pick:(x:number,y:number)=>voi
   pick(2*(e.clientX-rect.left)/rect.width-1,2*(e.clientY-rect.top)/rect.height-1);
 }
 export function ColorPicker({color,onColor,inline=false}:{inline?:boolean;color:string;onColor:(hex:string)=>void}) {
+  const recent = useRecentColors();
   const id=useId();
   const panel=useRef<HTMLDivElement>(null), trigger=useRef<HTMLButtonElement>(null), disk=useRef<HTMLCanvasElement>(null);
   const [opened,setOpened]=useState(false),[wheel,setWheel]=useState(false);
@@ -98,14 +103,14 @@ export function ColorPicker({color,onColor,inline=false}:{inline?:boolean;color:
     else apply(h,clamp(s+(e.key==='ArrowRight'||e.key==='ArrowLeft'?step*.025:0)),clamp(v+(e.key==='ArrowUp'||e.key==='ArrowDown'?step*.025:0)));
   }
   const angle=(180-h)*Math.PI/180, x=2*s-1,y=1-2*v,ratio=Math.max(Math.abs(x),Math.abs(y))/(Math.hypot(x,y)||1);
-  const shades=[.85,.65,.43,.2,0,-.2,-.48].map(weight=>hexColor(rgb(base.hex).map(c=>weight>=0?c+(255-c)*weight:c*(1+weight))));
+  const shades=colorShades(base.hex);
   function swatch(hex:string,label:string,select:()=>void) {
     const chosen=hex.toLowerCase()===color.toLowerCase();
     return <button key={label} type="button" aria-label={label} aria-pressed={chosen} style={{background:hex,color:hsv(hex).v<.7||hsv(hex).s>.5?'white':'#16274a'}} onClick={select}>{chosen?'✓':''}</button>;
   }
   return <>
-    {!inline && <button ref={trigger} type="button" className="bottom-color custom-color" aria-label="Custom drawing colour" aria-haspopup="dialog" aria-expanded={opened} {...{popovertarget:id}} onClick={()=>{if(!opened){setBase(nearest(color));setWheel(false)}}}/>}
-    <div id={id} {...(inline ? {} : {popover:"auto"})} role={inline ? "group" : "dialog"} aria-label="Custom drawing colour" className="ll-picker" ref={panel}>
+    {!inline && <button ref={trigger} type="button" className="bottom-color custom-color" style={{"--chosen-colour":color} as CSSProperties} aria-label="Custom drawing colour" aria-haspopup="dialog" aria-expanded={opened} {...{popovertarget:id}} onClick={()=>{if(!opened){setBase(nearest(color));setWheel(false)}}}/>}
+    <div id={id} {...(inline ? {} : {popover:"auto"})} role={inline ? "group" : "dialog"} style={{"--chosen-colour":color} as CSSProperties} aria-label="Custom drawing colour" className="ll-picker" ref={panel}>
       <div className="ll-picker-tabs">{['Palette','Wheel'].map((name,i)=><button key={name} aria-label={name} aria-pressed={wheel===Boolean(i)} onClick={()=>setWheel(Boolean(i))}><img alt="" src={'/Bottom%20Toolbar/Colors/'+name+'.svg'}/></button>)}</div>
       {wheel ? <div className="ll-wheel" onPointerDown={ringPointer} onPointerMove={ringPointer} tabIndex={0} role="slider" aria-label="Hue" aria-valuemin={0} aria-valuemax={360} aria-valuenow={Math.round(h)} onKeyDown={e=>{if(e.target===e.currentTarget)keys(e,true)}}>
         <i style={{left:50+41*Math.sin(angle)+'%',top:50-41*Math.cos(angle)+'%',background:hexColor(pigment(h,1,1))}}/>
@@ -115,6 +120,15 @@ export function ColorPicker({color,onColor,inline=false}:{inline?:boolean;color:
         <h3>Shades</h3><div className="ll-swatches shades">{shades.map((hex,i)=>swatch(hex,base.name+' shade '+(i+1),()=>onColor(hex)))}</div>
         <h3>All Colors</h3><div className="ll-swatches">{palette.map(p=>swatch(p.hex,p.name,()=>{setBase(p);onColor(p.hex)}))}</div>
         <h3>Custom</h3><input className="ll-hue" style={{"--picked":color} as CSSProperties} type="range" aria-label="Custom hue" min="0" max="359" value={Math.round(h)%360} onChange={e=>apply(+e.target.value,s||1,v||1)}/>
+      </>}
+      {recent.length > 0 && <>
+        <h3>Recently used colours</h3>
+        <div className="ll-swatches recent">
+          {recent.map(hex => swatch(hex, 'Reuse ' + hex.toUpperCase(), () => {
+            setBase(nearest(hex));
+            onColor(hex);
+          }))}
+        </div>
       </>}
     </div>
   </>;

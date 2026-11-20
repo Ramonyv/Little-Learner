@@ -1,3 +1,4 @@
+import { rememberColor } from './recentColors';
 import { readWork, saveWork } from '../../utils/localWork';
 import { DownloadDrawing } from './DownloadDrawing';
 import { BottomToolMenu, drawingBrushes } from './BottomToolMenu';
@@ -119,6 +120,7 @@ export function GodsStudio(){
   if(tool!=='Fill')return;
   // Different taps in one raster region share one fill entry.
   if(page){const mask=page.mask(id);id=Object.keys(sheet.fills).reverse().find(key=>page.mask(key)===mask)??id}
+  rememberColor(color);
   sheet.undo.push([id,sheet.fills[id]]);
   sheet.fills={...sheet.fills,[id]:color};redraw();
  }

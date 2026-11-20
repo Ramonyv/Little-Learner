@@ -1,5 +1,5 @@
-import { ColorPicker } from './ColorPicker';
-import { useState, useSyncExternalStore, type ReactNode } from 'react';
+import { ColorPicker, colorShades } from './ColorPicker';
+import { type CSSProperties, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { BoardIcon } from './BoardIcon';
 import { brushSizes, type Brush } from './InkCanvas';
 
@@ -33,34 +33,34 @@ type Props = {
   onColor: (value: string) => void;
   size: number;
   onSize: (value: number) => void;
-  actions?: ReactNode;
+
 };
 
-export function BottomToolMenu({ brushes, brush, onBrush, colors, color, onColor, size, onSize, actions }: Props) {
+export function BottomToolMenu({ brushes, brush, onBrush, color, onColor, size, onSize }: Props) {
   const sidebar = useSyncExternalStore(subscribeLayout, () => desktop.matches);
-  const [open, setOpen] = useState<'brush' | 'color' | 'size' | null>(null);
-  const [moreBrushes, setMoreBrushes] = useState(false);
-  const toggle = (section: 'brush' | 'color' | 'size') => {
-    setMoreBrushes(false);
-    setOpen(current => current === section ? null : section);
-  };
-  const primaryBrushes = brushes.filter(value => value === 'Fill' || ['Chalk','Pen','Marker','Rainbow','Monoline','Crayon','Fountain Pen','Watercolor'].includes(value));
-  const extraBrushes = brushes.filter(value => !primaryBrushes.includes(value));
+  const rail = useRef<HTMLElement>(null);
+  const [railHeight, setRailHeight] = useState(0);
+  useLayoutEffect(() => {
+    const element = rail.current;
+    if (!element) return;
+    const measure = () => setRailHeight(element.clientHeight);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [sidebar]);
+  const [shadeBase, setShadeBase] = useState(color);
+  const shades = colorShades(shadeBase);
+  function chooseColor(value: string) {
+    setShadeBase(value);
+    onColor(value);
+  }
   const brushOption = (value: Brush | 'Fill') =>
-    <button key={value} type="button" className="bottom-tool-choice" aria-pressed={brush === value} onClick={() => {onBrush(value);setOpen(null);setMoreBrushes(false)}}>
+    <button key={value} type="button" className="bottom-tool-choice" aria-pressed={brush === value} aria-label={value} title={value} onClick={() => onBrush(value)}>
       <BrushIcon brush={value}/>
       <span>{value === 'Fountain Pen' ? 'Fountain' : value === 'Watercolor' ? 'Water' : value}</span>
     </button>;
-  const section = (id: 'brush' | 'color' | 'size', title: string, icon: string) =>
-    <div className={'bottom-tool-section' + (open === id ? ' expanded' : '')}>
-      <button type="button" className="bottom-tool-heading" aria-expanded={open === id} aria-label={title} onClick={() => toggle(id)}>
-        <img src={asset + icon} alt="" />
-        <span>{title}</span>
-        <img className="bottom-tool-arrow" src={asset + (open === id ? 'Expand.svg' : 'Collapse.svg')} alt="" />
-      </button>
-    </div>;
-
-  const visibleSizes = sidebar ? [...brushSizes, {scale:1.5,label:"Medium wide"}, {scale:3.5,label:"Extra broad"}].sort((a,b)=>a.scale-b.scale) : brushSizes;
+  const visibleSizes = [...brushSizes, {scale:1.5,label:"Medium wide"}, {scale:3.5,label:"Extra broad"}].sort((a,b)=>a.scale-b.scale);
   const sizeChoices = visibleSizes.map(({ scale, label }) =>
           <button key={scale} type="button" className="bottom-size" aria-label={label} title={label} aria-pressed={size === scale} onClick={() => onSize(scale)}><svg viewBox="-7 -7 46 36" aria-hidden="true"><path d="M2 10 Q8 1 15 10 T30 8" fill="none" stroke="currentColor" strokeWidth={Math.max(1.5, scale * 2.5)} strokeLinecap="round"/></svg></button>);
   if (sidebar) return <aside className="drawing-tool-sidebar" aria-label="Drawing tools">
@@ -69,25 +69,24 @@ export function BottomToolMenu({ brushes, brush, onBrush, colors, color, onColor
     <section><h3>Brush Size</h3><div className="sidebar-sizes">{sizeChoices}</div></section>
   </aside>;
 
-  return <div className="bottom-tool-menu" aria-label="Drawing tools">
-    {open && <div className={'bottom-tool-popup ' + open + (moreBrushes ? ' extra' : '')}>
-      <div className="bottom-tool-choices">
-        {open === 'brush' && <>
-          {(moreBrushes ? extraBrushes : primaryBrushes).map(brushOption)}
-          {extraBrushes.length > 0 && <button type="button" className="bottom-tool-choice" aria-label={moreBrushes ? 'Previous brushes' : 'More brushes'} onClick={() => setMoreBrushes(value => !value)}>{moreBrushes ? 'Back' : 'More'}</button>}
-        </>}
-        {open === 'color' && <>
-          {colors.map(([label, value]) => <button key={value} type="button" className="bottom-color" aria-label={label + ' colour'} aria-pressed={color === value} style={{ backgroundColor: value }} onClick={() => onColor(value)}>{color === value && <span aria-hidden="true">✓</span>}</button>)}
-          <ColorPicker color={color} onColor={onColor}/>
-        </>}
-        {open === 'size' && sizeChoices}
-      </div>
-    </div>}
-    <div className="bottom-tool-sections">
-      {section('brush', 'Brush Types', 'Brush Types/Brush.svg')}
-      {section('color', 'Colors', 'Colors/Brush.svg')}
-      {section('size', 'Brush Size', 'Brush Size/Brush Size.svg')}
+  // Allow 56px for group padding, borders and the two gaps between groups.
+  const counts = [1 + shades.length, brushes.length, visibleSizes.length];
+  const rows = (columns: number) => counts.reduce((sum, count) => sum + Math.ceil(count / columns), 0);
+  const cellSize = (columns: number) => Math.floor((railHeight - 56 - (rows(columns) - 3) * 3) / rows(columns));
+  const columns = [1, 2, 3].find(count => cellSize(count) >= 28) ?? 3;
+  const cell = Math.min(34, Math.max(24, cellSize(columns)));
+  return <aside ref={rail} className="drawing-rail" style={{
+    '--rail-columns': columns,
+    '--rail-cell': cell + 'px',
+    width: Math.max(48, columns * cell + (columns - 1) * 3 + 8)
+  } as CSSProperties} aria-label="Drawing tools">
+    <div className="rail-group" role="group" aria-label="Colors">
+      <ColorPicker color={color} onColor={chooseColor}/>
+      {shades.map((value, index) => <button key={index} type="button" className="rail-shade"
+        style={{backgroundColor: value}} aria-label={`Shade ${index + 1}`} aria-pressed={value.toLowerCase() === color.toLowerCase()}
+        onClick={() => onColor(value)}>{value.toLowerCase() === color.toLowerCase() && '✓'}</button>)}
     </div>
-    {actions && <div className="bottom-tool-actions">{actions}</div>}
-  </div>;
+    <div className="rail-group" role="group" aria-label="Brush Types">{brushes.map(brushOption)}</div>
+    <div className="rail-group" role="group" aria-label="Brush Size">{sizeChoices}</div>
+  </aside>;
 }

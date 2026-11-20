@@ -1,3 +1,4 @@
+import { rememberColor } from './recentColors';
 import { useLayoutEffect, useRef } from 'react';
 
 export const brushSizes = [
@@ -85,6 +86,9 @@ export function InkCanvas({strokes,brush,color,widthScale=1,onFinish,afterStroke
     current.renderer.finish();
     active.current = null;
     strokes.push(current.stroke);
+    if (current.stroke.brush !== 'Eraser' && current.stroke.brush !== 'Rainbow') {
+      rememberColor(current.stroke.color);
+    }
     // The final pass resolves end tapers. Other materials are already complete.
     if (['Pen','Brush','Fountain Pen'].includes(current.stroke.brush)) {
       const ctx = ref.current!.getContext('2d')!;
