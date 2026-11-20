@@ -2,7 +2,7 @@ import { rememberColor } from './recentColors';
 import { readWork, saveWork } from '../../utils/localWork';
 import { DownloadDrawing } from './DownloadDrawing';
 import { BottomToolMenu, drawingBrushes } from './BottomToolMenu';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BoardIcon } from './BoardIcon';
 import { Brush, InkCanvas, Stroke } from './InkCanvas';
 
@@ -81,7 +81,7 @@ function DeityCanvas({name,page,fills,onFill}:{name:string;page?:ReturnType<type
   }
  }}/>;
 }
-export function GodsStudio(){
+export function GodsStudio({focusControl}: {focusControl: ReactNode}){
  const [name,select]=useState(() => new URLSearchParams(location.search).get('deity') || 'Ganesha'),[tool,setTool]=useState<Brush|'Fill'>('Fill'),[color,paint]=useState('#32a86c'),[size,resize]=useState(1);
  const [toolsOpen,setToolsOpen]=useState(false);
  const [cleared,setCleared]=useState(new Map<string,{sheet:Sheet;at:number}>());
@@ -129,7 +129,7 @@ export function GodsStudio(){
 
  const actions = <div className="dock-actions"><span className="dock-label"><span aria-hidden="true">↶</span> Actions</span><button aria-label="Undo" disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}><BoardIcon name="Undo"/><span>Undo</span></button><button aria-label="Clear" disabled={!sheet.strokes.length && !Object.keys(sheet.fills).length} onClick={()=>{setCleared(m=>new Map(m).set(name,{sheet,at:0}));sheets.current.set(name,{fills:{},strokes:[],undo:[]});redraw()}}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
  return <div className="board-frame"><div className="board-top"><label className="font-black">Colour a deity <span className="deity-picker"><select value={name} onChange={e=>select(e.target.value)}>{names.map(n=><option key={n}>{n}</option>)}</select></span></label><span className="font-bold">{tool==='Fill'?'Tap a shape to colour it':'Draw on the page'}</span></div>
- <div className="board-paper"><DownloadDrawing/><div className="tablet-actions">{actions}</div>{imagePages.includes(name)?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+ <div className="board-paper">{focusControl}<DownloadDrawing/><div className="tablet-actions">{actions}</div>{imagePages.includes(name)?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
  {portrait(name).map(region)}
  </svg>}<div className="absolute inset-0" style={{pointerEvents:tool==='Fill'?'none':'auto'}}><InkCanvas key={name} afterStroke={afterStroke} brush={tool==='Fill'?'Marker':tool} color={color} widthScale={size} strokes={sheet.strokes} onFinish={()=>{sheet.undo.push([]);redraw()}}/></div>{imagePages.includes(name)?<img src={`/${name}.svg`} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-hidden="true" style={{pointerEvents:'none'}} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
  {portrait(name).map(([id,d])=><path key={id} d={d}/>)}
