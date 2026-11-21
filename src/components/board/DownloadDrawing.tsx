@@ -1,3 +1,4 @@
+import { playEffect } from '../../utils/soundEffects';
 import { useState } from 'react';
 
 function save(blob: Blob, filename: string) {
@@ -88,6 +89,7 @@ export function DownloadDrawing() {
       const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(result => result ? resolve(result) : reject(new Error('Export failed')), 'image/jpeg', .95));
       const filename = 'little-learner-drawing';
       save(format === 'pdf' ? pdf(new Uint8Array(await blob.arrayBuffer()), canvas.width, canvas.height) : blob, filename + '.' + format);
+      void playEffect('work-saved');
     } catch {
       setError('Could not download. Please try again.');
     } finally { setBusy(false); }

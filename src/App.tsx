@@ -27,13 +27,14 @@ export const App: React.FC = () => {
     <SessionProvider>
       <BrowserRouter><PageMetadata/><LocalSaveNotice/>
         <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-brand-ink selection:bg-brand-yellow selection:text-brand-ink">
+          <SiteHeader />
           <Routes>
             {BrushGallery && <Route path="/dev/brushes" element={<React.Suspense><BrushGallery/></React.Suspense>}/> }
+            <Route path="/games" element={<main><Games /></main>} />
             <Route path="/games/sliding-puzzle" element={<main><Puzzle /></main>} />
             <Route path="/drawing-board" element={<main><DrawingBoard /></main>} />
-            <Route element={<><SiteHeader /><main className="flex-1"><Outlet /></main><SiteFooter/><MobileBottomNav /></>}>
+            <Route element={<><main className="flex-1"><Outlet /></main><SiteFooter/><MobileBottomNav /></>}>
               <Route path="/explore/seed" element={<SeedActivity />} />
-              <Route path="/games" element={<Games />} />
               <Route path="/" element={<HomePage />} />
               <Route path="/topics/:subjectId" element={<TopicsPage />} />
               <Route path="/intro/:subjectId/:topicId" element={<ExamIntroPage />} />

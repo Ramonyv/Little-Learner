@@ -1,9 +1,9 @@
+import { playEffect } from '../utils/soundEffects';
 import { TracingFeedback } from '../components/board/TracingFeedback';
 import { readWork, saveWork } from '../utils/localWork';
 import { WorksheetGuide } from '../components/board/WorksheetGuide';
 import { DownloadDrawing } from '../components/board/DownloadDrawing';
 import { BottomToolMenu, drawingBrushes } from '../components/board/BottomToolMenu';
-import { Link } from 'react-router-dom';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { InkCanvas, Brush, Stroke } from '../components/board/InkCanvas';
 import { GodsStudio } from '../components/board/GodsStudio';
@@ -93,7 +93,7 @@ export function DrawingBoard() {
   const surface = <div className="board-switch surface-selector">{['Whiteboard','Chalkboard'].map((name,i)=><button key={name} aria-pressed={dark===(i===1)} onClick={()=>{setDark(i===1);if(i===1 || color==='#fff')setColor(i===1?'#fff':'#2563eb')}} aria-label={name} title={name}><BoardIcon name={name}/></button>)}</div>;
   const focusControl = <button type="button" className="focus-toggle" onClick={()=>setFocus(value=>!value)}>{focus?'Exit focus':'Focus'}</button>;
   return <section className={'drawing-board'+(focus?' focus-mode':'')}>
-    <header className="board-heading"><div className="flex items-center gap-3"><Link to="/" aria-label="Little Learner home" className="board-brand"><picture><source media="(min-width:601px) and (max-width:1366px)" srcSet="/SVG%20Icons/Home.svg"/><img src="/Logo.svg" alt="Little Learner"/></picture></Link><details className="board-nav"><summary><BoardIcon name="Board"/>Drawing Board</summary><nav>{[['Home','/'],['My Work','/my-work'],['Learning tools','/learning-tools'],['Practice','/topics/english'],['Drawing Board','/drawing-board'],['Progress','/progress'],['About','/about']].map(([label,path])=><Link key={path} to={path} onClick={e=>e.currentTarget.closest('details')?.removeAttribute('open')}><BoardIcon name={label}/>{label}</Link>)}</nav></details></div><div className="board-switch">{['Trace','Free Draw','Gods','Worksheet'].map((name)=><button key={name} aria-pressed={mode===name} onClick={()=>{setMode(name)}}><BoardIcon name={name === 'Worksheet' ? 'Practice' : name}/> {name}</button>)}</div>{mode!=='Gods' && <div className="tablet-surface">{surface}</div>}<span className="class-chip">Class 1</span></header>
+    <header className="board-heading"><h1 className="board-page-title"><BoardIcon name="Board"/>Drawing Board</h1><div className="board-switch">{['Trace','Free Draw','Gods','Worksheet'].map((name)=><button key={name} aria-pressed={mode===name} onClick={()=>{setMode(name)}}><BoardIcon name={name === 'Worksheet' ? 'Practice' : name}/> {name}</button>)}</div>{mode!=='Gods' && <div className="tablet-surface">{surface}</div>}<span className="class-chip">Class 1</span></header>
     <div hidden={mode!=='Gods'}><GodsStudio focusControl={focusControl}/></div>
     <div hidden={mode==='Gods'}><div className={'board-layout '+(!trace?'free':'')}>
       {trace && <aside className="guide-list"><h2>Practice</h2>{categories.map(c=><button key={c} aria-pressed={c===category} onClick={()=>{setCategory(c);setIndex(0)}}><BoardIcon name={c}/>{c}</button>)}</aside>}
@@ -112,7 +112,7 @@ export function DrawingBoard() {
         {trace && !worksheet && !guide.text && <svg aria-hidden="true" viewBox="0 0 800 340" className="board-guide">{guide.path ? <><path d={guide.path} fill="none" stroke="currentColor" strokeWidth="5" strokeDasharray="6 12" strokeLinecap="round"/>{wave && <g transform="translate(740 170)"><circle r="8" fill="white" stroke="#579ecc"/><rect x="-26" y="13" width="52" height="20" rx="10" fill="#e0f4ff"/><text y="28" textAnchor="middle" fontWeight="900" fontSize="13" fill="#152747">Finish</text></g>}{guide.start && <g transform={'translate('+guide.start.join(' ')+')'}><circle r="8" fill="#50cb72" stroke="#155f38" strokeWidth="2"/><text y="-15" textAnchor="middle" fill={dark?'#adf7bd':'#177446'} fontSize="17" fontWeight="900">Start</text></g>}</> : <text x="400" y="172" dominantBaseline="central" textAnchor="middle" fontSize={Math.min(300, 900 / guide.text!.length) * textSize / 100} vectorEffect="non-scaling-stroke" fontWeight="800" fill="none" stroke="currentColor" strokeWidth="2.5" strokeDasharray="5 6">{guide.text}</text>}</svg>}
         <InkCanvas key={key} strokes={strokes} color={color} brush={brush} widthScale={size} onFinish={()=>change(strokes.slice(),[...back,strokes.slice(0,-1)],[])}/>
       </div>
-      <BottomToolMenu brushes={drawingBrushes} brush={brush} onBrush={value=>setBrush(value as Brush)} colors={palette} color={color} onColor={value=>{setColor(value);if(brush==='Eraser')setBrush('Marker')}} size={size} onSize={setSize}/>
+      <BottomToolMenu brushes={drawingBrushes} brush={brush} onBrush={value=>{void playEffect("ui-tap");setBrush(value as Brush)}} colors={palette} color={color} onColor={value=>{void playEffect("ui-tap");setColor(value);if(brush==='Eraser')setBrush('Marker')}} size={size} onSize={setSize}/>
 </div>
     </div></div></section>
 }

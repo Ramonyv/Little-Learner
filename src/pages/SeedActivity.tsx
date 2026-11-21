@@ -1,3 +1,4 @@
+import { playEffect } from '../utils/soundEffects';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { InkCanvas, Stroke } from '../components/board/InkCanvas';
@@ -31,10 +32,10 @@ export function SeedActivity(){
   const message=feedback || prompts[step] || 'You found the roots of two different plants!';
   function speak(words:string){window.speechSynthesis.cancel();const speech=new SpeechSynthesisUtterance(words);speech.lang='en-IN';speech.rate=.85;window.speechSynthesis.speak(speech)}
   useEffect(()=>{if(voice && available)speak(message);return ()=>{if(available)window.speechSynthesis.cancel()}},[voice,message,available]);
-  function advance(){setStep(step+1);setCorrect(false);setFeedback('')}
+  function advance(){if(step===3 && !voice)void playEffect("activity-complete");setStep(step+1);setCorrect(false);setFeedback('')}
   function answer(part:Part){
     if(correct)return;
-    const right=part==='Roots';setCorrect(right);
+    const right=part==='Roots';if(!voice)void playEffect(right?'answer-correct':'try-again');setCorrect(right);
     setFeedback(right?(step===2?'Yes! Roots take in water from the soil and the stem carries it up.':'You found the roots! See how they branch out in the soil.'):(step===3?'Look for the thin strands below the grass. Try again.':'Look below the soil. Try again.'));
   }
   const button='rounded-full px-5 py-3 font-black bg-brand-blue text-white';

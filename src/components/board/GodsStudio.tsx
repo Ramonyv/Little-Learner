@@ -1,3 +1,4 @@
+import { playEffect } from '../../utils/soundEffects';
 import { rememberColor } from './recentColors';
 import { readWork, saveWork } from '../../utils/localWork';
 import { DownloadDrawing } from './DownloadDrawing';
@@ -149,6 +150,6 @@ export function GodsStudio({focusControl}: {focusControl: ReactNode}){
  </g>
  </svg>}</div>
  <div className="mobile-board-bar"><button aria-expanded={toolsOpen} aria-controls="gods-tools" onClick={()=>setToolsOpen(v=>!v)}><span className="mobile-colour-dot" style={{backgroundColor:color}}/> {tool} tools <span aria-hidden="true">{toolsOpen?'⌄':'⌃'}</span></button><button disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}>Undo</button></div>
- <BottomToolMenu brushes={['Fill',...drawingBrushes]} brush={tool} onBrush={value=>setTool(value)} colors={colours} color={color} onColor={paint} size={size} onSize={resize}/>
+ <BottomToolMenu brushes={['Fill',...drawingBrushes]} brush={tool} onBrush={value=>{void playEffect("ui-tap");setTool(value)}} colors={colours} color={color} onColor={value=>{void playEffect("ui-tap");paint(value)}} size={size} onSize={resize}/>
 </div>
 }

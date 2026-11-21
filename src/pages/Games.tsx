@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './games.css';
+import { useSession } from '../context/SessionContext';
+import { playEffect } from '../utils/soundEffects';
 
 const pictures = [
   {
-    "name": "Lord Ganesha",
+    "name": "Ganesha",
     "src": "/ganesha-puzzle.webp"
   },
   {
@@ -16,11 +18,11 @@ const pictures = [
     "src": "/Slide Puzzle Game/Chibi Hanuman with Golden Gada.webp"
   },
   {
-    "name": "Krishna and the Calf",
+    "name": "Krishna",
     "src": "/Slide Puzzle Game/Chibi Krishna and Happy Calf.webp"
   },
   {
-    "name": "Lord Ram",
+    "name": "Shri Ram",
     "src": "/Slide Puzzle Game/Chibi Lord Ram with Golden Bow.webp"
   },
   {
@@ -48,14 +50,22 @@ const pictures = [
     "src": "/Slide Puzzle Game/Joyful Deities Beneath the Flowering Tree.webp"
   },
   {
-    "name": "Shiva and Nandi",
+    "name": "Shiva",
     "src": "/Slide Puzzle Game/Kawaii Shiva with Nandi and Lingam.webp"
   }
 ];
 
 export function Games() {
-  return <section className="games-library"><h1>Games</h1>
-    <Link className="game-cover" to="/games/sliding-puzzle"><img src={pictures[0].src} alt="Ganesha sitting on a pink lotus" /><strong>Sliding Puzzle <span aria-hidden="true">↗</span></strong></Link>
+  return <section className="games-catalog">
+    <nav className="catalog-crumb" aria-label="Breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">❯</span><b aria-current="page">Games</b></nav>
+    <h1 className="catalog-title">Games for kids</h1>
+    <Link className="catalog-card" to="/games/sliding-puzzle" aria-label="Play Sliding Puzzle">
+      <div className="catalog-tools"><span>Puzzles <img src="/puzzle-ui/category.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
+      <div className="catalog-preview">
+        <img className="catalog-thumbnail" src="/Slide Puzzle Game/Ganesha Card Thumnail.svg" alt="Ganesha sliding puzzle" width="178" height="197" />
+      </div>
+      <h2>Sliding Puzzle</h2><p>Slide the tiles to complete the picture!</p>
+    </Link>
   </section>;
 }
 
@@ -78,25 +88,54 @@ function shuffle(size: number) {
   return tiles;
 }
 
+const order = [0, 3, 4, 11, 2, 6, 7, 9, 10, 5, 1, 8];
+const ordered = (n: number) => Array.from({length:n*n}, (_, i) => i);
+function icon(asset: string) {
+  return <img className="p-icon" alt="" src={'/puzzle-ui/img' + asset + '.svg'} />;
+}
+
 export function Puzzle() {
   const [pictureIndex, setPictureIndex] = useState(0);
   const { name, src: art } = pictures[pictureIndex];
   const [size, setSize] = useState(3);
-  const [initial, setInitial] = useState(() => shuffle(3));
+  const [initial, setInitial] = useState(() => ordered(3));
   const [tiles, setTiles] = useState(initial);
   const [slidingTile, setSlidingTile] = useState<number | null>(null);
   const [moves, setMoves] = useState(0);
   const [started, setStarted] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [hint, setHint] = useState(false);
-  const solved = tiles.every((tile, i) => tile === i);
+  const {soundOn, setSoundOn} = useSession();
+  const [hints,setHints] = useState(3);
+  const { puzzleWins: wins, recordPuzzleWin } = useSession();
+  const solved = moves > 0 && tiles.every((tile, i) => tile === i);
   const empty = tiles.indexOf(tiles.length - 1);
+  const last = tiles.length - 1;
+  const oneMoveAway = neighbors(empty, size).includes(last) && tiles[last] === empty &&
+    tiles.every((tile, slot) => slot === last || slot === empty || tile === slot);
+  const [showNudge, setShowNudge] = useState(false);
+  const [nudged, setNudged] = useState(false);
+  useEffect(() => {
+    if (oneMoveAway && !nudged && moves > 0) {
+      setNudged(true);
+      setShowNudge(true);
+    }
+  }, [oneMoveAway, nudged, moves]);
+  useEffect(() => {
+    if (!showNudge) return;
+    const timeout = window.setTimeout(() => setShowNudge(false), 2400);
+    return () => window.clearTimeout(timeout);
+  }, [showNudge]);
   useEffect(() => {
     if (!started || solved) return;
     const timer = window.setInterval(() => setSeconds(Math.floor((Date.now() - started) / 1000)), 250);
     return () => window.clearInterval(timer);
   }, [started, solved]);
-  function restart(n: number, board: number[]) {
+  function restart(n: number, board: number[], cue: "ui-tap" | "puzzle-shuffle" = "ui-tap") {
+    void playEffect(cue);
+    setNudged(false);
+    setShowNudge(false);
+    setHints(3);
     setSlidingTile(null);
     setSize(n); setInitial(board); setTiles(board); setMoves(0);
     setStarted(0); setSeconds(0); setHint(false);
@@ -106,12 +145,32 @@ export function Puzzle() {
     const next = [...tiles];
     [next[empty], next[slot]] = [next[slot], next[empty]];
     setSlidingTile(tiles[slot]);
+    void playEffect("tile-slide");
+    if (next.every((tile,i) => tile === i)) {
+      recordPuzzleWin();
+      window.setTimeout(() => void playEffect("activity-complete"), 190);
+    }
     setTiles(next); setMoves(moves + 1);
     if (!started) setStarted(Date.now());
   }
-  return <section className="puzzle"><Link to="/games">← Games</Link><div className="puzzle-layout">
-    <header><h1>Sliding Puzzle</h1><p>Tap a tile beside the empty space to complete the picture.</p></header>
-    <div className="puzzle-board" aria-label={name + ' sliding puzzle'}>
+  function choosePicture(index: number) {
+    setPictureIndex(index);
+    restart(size, ordered(size));
+  }
+  const sizes = [3,4,5];
+  const stars = Math.min(3,wins);
+  return <section className="puzzle">
+    <nav className="crumb" aria-label="Breadcrumb"><Link to="/">Home</Link> › <Link to="/games">Games</Link> › <u>Sliding Puzzle</u></nav>
+    <header className="p-heading"><Link to="/games" aria-label="Back to Games">{icon('Frame8')}</Link>
+      {[false,true].map((on,i)=><button key={i} className="p-sound" aria-label={on?'Enable sound':'Mute sound'} aria-pressed={soundOn===on} onClick={()=>setSoundOn(on)}>{icon('Frame'+(9+i))}</button>)}
+      <span className="p-symbol">{icon('SlidingPuzzle')}</span><div><h1>Sliding Puzzle</h1><p>Slide the tiles into place to complete the picture</p></div>
+      <div className="p-status"><b>Level {size-2}</b><b aria-label={stars+' stars'}>{'★'.repeat(stars)}{'☆'.repeat(3-stars)}</b><b>{icon('Frame11')}{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</b></div></header>
+    <div className="p-stage"><div className="p-columns">
+    <section className="p-picker"><h2>Choose Picture</h2><div>{order.map((index,i)=><button key={index} aria-pressed={pictureIndex===index} onClick={()=>choosePicture(index)}>
+      <img loading="lazy" src={i<4?'/puzzle-ui/imgChibiGaneshaOnAPinkLotus'+(i+1)+'.webp':pictures[index].src} alt=""/>{pictures[index].name}{pictureIndex===index && icon('Frame')}</button>)}</div></section>
+    <div className="p-frame">
+      {showNudge && oneMoveAway && !hint && <div className="p-nudge" role="status">{icon('RewardBadge')} One more slide!</div>}    <div className="puzzle-board" aria-label={name + ' sliding puzzle'}>
+      {!solved && <span className="p-empty" aria-hidden="true" style={{left:(empty%size)*100/size+'%',top:Math.floor(empty/size)*100/size+'%',width:100/size+'%',height:100/size+'%'}} />}
       {/* Keep each tile mounted in image order while its position changes. */}
       {Array.from({ length: tiles.length }, (_, id) => {
         const slot = tiles.indexOf(id);
@@ -123,20 +182,27 @@ export function Puzzle() {
       })}
       {hint && <img src={art} alt={'Completed picture of ' + name} />}
     </div>
-    <aside>
-      {solved && <h2 role="status">★ You did it!</h2>}
-      <label className="puzzle-picture">Picture
-        <select value={pictureIndex} onChange={event => {
-          setPictureIndex(Number(event.target.value));
-          restart(size, shuffle(size));
-        }}>
-          {pictures.map((picture, index) => <option key={picture.src} value={index}>{picture.name}</option>)}
-        </select>
-      </label>
-      <label>Difficulty <select value={size} onChange={e => {const n=Number(e.target.value); restart(n,shuffle(n));}}><option value="3">3 × 3</option><option value="4">4 × 4</option></select></label>
-      <p>{moves} moves · {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</p>
-      <button onClick={() => restart(size,shuffle(size))}>Shuffle</button>
-      <button aria-pressed={hint} onClick={() => setHint(!hint)}>{hint ? 'Back to tiles' : 'Picture hint'}</button>
-      <button onClick={() => restart(size,initial)}>Reset</button>
-    </aside></div></section>;
+</div>
+    <aside className="p-panel"><div className="p-desktop-level"><h2>Difficulty</h2><div>{sizes.map(n=><button key={n} aria-pressed={size===n} onClick={()=>restart(n,ordered(n))}>{icon('Frame'+(n-2))}{n}×{n}</button>)}</div></div>
+      <div className="p-mobile-select"><label>Difficulty: <select value={size} onChange={e=>{const n=Number(e.target.value);restart(n,ordered(n));}}>{sizes.map(n=><option value={n} key={n}>{n}×{n}</option>)}</select></label>
+      <label>Picture: <select value={pictureIndex} onChange={e=>choosePicture(Number(e.target.value))}>{order.map(i=><option key={i} value={i}>{pictures[i].name}</option>)}</select></label></div>
+      <div className="p-actions"><button onClick={()=>restart(size,shuffle(size),"puzzle-shuffle")}>{icon('Frame4')}Shuffle</button>
+      <button disabled={!hint && hints===0} onClick={()=>{void playEffect(hint?"ui-tap":"hint-reveal");if(!hint)setHints(hints-1);setHint(!hint);}}>{icon('Frame5')}{hint?'Hide hint':'Hint ('+hints+')'}</button>
+      <button onClick={()=>restart(size,initial)}>{icon('Frame6')}Reset</button></div>
+      <div className="p-moves">{icon('Frame7')}{solved?'Puzzle complete!':'Moves: '+moves}</div>
+    </aside></div></div>
+    <section className="p-guide" aria-labelledby="play-guide-title">
+      <h2 id="play-guide-title">How to play</h2>
+      <div className="p-guide-answers">
+        <div>
+          <h3>How do you play the sliding picture puzzle?</h3>
+          <p>Choose a picture and tap Shuffle. Tap a tile beside the empty space to slide it in. Keep going until the picture is complete. Tap Hint for a peek.</p>
+        </div>
+        <div>
+          <h3>Which puzzle size should my child start with?</h3>
+          <p>Start with 3×3. It has eight movable tiles and one empty space. When that feels easy, try 4×4 or 5×5.</p>
+        </div>
+      </div>
+    </section>
+  </section>;
 }

@@ -4,6 +4,8 @@ import { UserExamSession } from '../types';
 import { isSoundEnabled, setSoundEnabled } from '../utils/soundEffects';
 
 interface SessionContextType {
+  puzzleWins: number;
+  recordPuzzleWin: () => void;
   selectedClass: number;
   setSelectedClass: (cls: number) => void;
   completedSessions: UserExamSession[];
@@ -17,6 +19,11 @@ interface SessionContextType {
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [puzzleWins, setPuzzleWins] = useState(() => readWork<number>("ll-puzzle-wins", 0));
+  const recordPuzzleWin = () => {
+    saveWork("ll-puzzle-wins", puzzleWins + 1);
+    setPuzzleWins(puzzleWins + 1);
+  };
   const [selectedClass, setSelectedClass] = useState<number>(1);
   const [completedSessions, setCompletedSessions] = useState<UserExamSession[]>(() => readWork('ll-results', []));
   const [soundOn, setSoundOnState] = useState<boolean>(isSoundEnabled());
@@ -34,6 +41,7 @@ export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children })
   return (
     <SessionContext.Provider
       value={{
+        puzzleWins, recordPuzzleWin,
         selectedClass,
         setSelectedClass,
         completedSessions,
