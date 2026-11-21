@@ -7,6 +7,7 @@ export const MobileBottomNav: React.FC = () => {
 
   const tabs = [
     { label: 'Home', path: '/', icon: 'solar:home-smile-bold' },
+    { label: 'Games', path: '/games', icon: 'solar:gamepad-bold' },
     { label: 'Practice', path: '/topics/english', icon: 'solar:book-bookmark-bold' },
     { label: 'Board', path: '/drawing-board', icon: 'solar:palette-bold' },
     { label: 'Progress', path: '/progress', icon: 'solar:chart-square-bold' },
@@ -31,7 +32,7 @@ export const MobileBottomNav: React.FC = () => {
           <Link
             key={tab.path}
             to={tab.path}
-            className={`flex flex-col items-center gap-1 py-1 px-4 rounded-2xl transition-all ${
+            className={`flex flex-col items-center gap-1 py-1 px-1 rounded-2xl transition-all ${
               active
                 ? 'text-brand-blue font-black'
                 : 'text-slate-500 font-bold hover:text-slate-700'

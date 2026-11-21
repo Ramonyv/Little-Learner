@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "images:optimize": "python3 scripts/optimize-images.py",
+    "prebuild": "npm run images:optimize",
+    "predev": "npm run images:optimize"
   },
   "dependencies": {
     "@iconify/react": "^5.2.0",

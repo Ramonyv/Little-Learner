@@ -33,7 +33,7 @@ test('Ganesha fill stays in the chosen shape and outlines remain above drawing',
 });
 
 test('vector coloring pages keep outlines above brush strokes', async ({ page }) => {
-  await page.goto('/drawing-board?deity=Saraswati');
+  await page.goto('/drawing-board?deity=Vishnu');
   await page.getByRole('button', { name: 'Gods', exact: true }).click();
   const paper = page.locator('.board-frame:has(.deity-picker) .board-paper');
   await expect(paper.locator('svg.board-guide')).toHaveCount(2);

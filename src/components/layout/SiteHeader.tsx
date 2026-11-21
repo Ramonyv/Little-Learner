@@ -11,6 +11,7 @@ export const SiteHeader: React.FC = () => {
 
   const navLinks = [
     { label: 'Home', path: '/' },
+    { label: 'Games', path: '/games', icon: 'solar:gamepad-bold' },
     { label: 'Practice', path: '/topics/english' },
     { label: 'Drawing Board', path: '/drawing-board' },
     { label: 'Progress', path: '/progress' },
@@ -40,7 +41,7 @@ export const SiteHeader: React.FC = () => {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 sm:gap-2" aria-label="Main navigation">
+        <nav className="hidden xl:flex items-center gap-1 sm:gap-2" aria-label="Main navigation">
           {navLinks.map((link) => {
             const active = isActive(link.path);
             return (
@@ -134,7 +135,7 @@ export const SiteHeader: React.FC = () => {
           {/* Mobile Menu Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-full hover:bg-slate-100 border border-slate-200 text-slate-700 focus:outline-none"
+            className="xl:hidden p-2 rounded-full hover:bg-slate-100 border border-slate-200 text-slate-700 focus:outline-none"
             aria-label="Toggle mobile menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -146,7 +147,7 @@ export const SiteHeader: React.FC = () => {
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b-2 border-slate-900 px-4 pt-2 pb-5 space-y-1 shadow-lg animate-in slide-in-from-top-2">
+        <div className="xl:hidden bg-white border-b-2 border-slate-900 px-4 pt-2 pb-5 space-y-1 shadow-lg animate-in slide-in-from-top-2">
           {navLinks.map((link) => {
             const active = isActive(link.path);
             return (

@@ -1,0 +1,64 @@
+.games-library,.puzzle {color:#182044;background:#fff9ef;padding:clamp(16px,4vw,56px);min-height:80svh}
+.games-library h1,.puzzle h1 {font-size:clamp(2rem,4.5vw,4.6rem);font-weight:900;line-height:1.04;letter-spacing:-.045em}
+.game-cover {display:block;width:min(100%,320px);margin:2rem 0;border-radius:24px;overflow:hidden;background:white;box-shadow:0 6px 24px #542c1412}
+.game-cover img {width:100%}.game-cover strong {display:flex;justify-content:space-between;padding:16px 22px;font-size:1.35rem}
+.puzzle {min-height:100svh}.puzzle>a {display:inline-block;padding:10px 18px;background:white;border-radius:24px;font-weight:800}
+.puzzle-layout {max-width:1440px;margin:3vh auto;display:grid;grid-template-columns:minmax(130px,.65fr) minmax(0,2fr) minmax(180px,.8fr);align-items:center;gap:clamp(14px,2vw,36px)}
+.puzzle header p {margin-top:1em}.puzzle-board {position:relative;width:min(100%,70svh);justify-self:center;aspect-ratio:1;background:#ecdcca;border:6px solid white;border-radius:18px;overflow:hidden;box-shadow:0 6px 25px #593a1b20}
+.puzzle-board button {position:absolute;top:0;left:0;border:1px solid white;border-radius:7px;background-repeat:no-repeat}
+.puzzle-board button:focus-visible {outline:4px solid #2854ab;outline-offset:-5px;z-index:1}
+.puzzle-board img {position:absolute;inset:0;width:100%;height:100%}
+.puzzle aside {display:grid;gap:10px;text-align:center}.puzzle h2 {font-size:1.5rem;font-weight:900}.puzzle aside button,.puzzle select {background:white;border:1px solid #ddcfbc;border-radius:18px;padding:10px;font-weight:800;min-height:44px}.puzzle aside button:first-of-type {background:#ffd548}
+@media(max-width:900px){.puzzle-layout {grid-template-columns:minmax(0,1fr) minmax(170px,.45fr)}.puzzle header {grid-column:1/-1}.puzzle header p {margin-top:4px}}
+@media(max-width:600px){.puzzle-layout {display:flex;flex-direction:column;align-items:stretch;margin:12px auto;gap:12px}.puzzle-board {align-self:center;width:min(100%,52svh)}.puzzle aside {grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:6px}.puzzle h2 {font-size:1rem}.puzzle select {padding:4px}.puzzle aside label {font-size:.85rem}}
+@media (prefers-reduced-motion: no-preference) {
+  .puzzle-board .sliding-tile {
+    transition: transform 190ms cubic-bezier(.24,.08,.22,1);
+    z-index: 1;
+  }
+}
+.puzzle-board img {z-index:2}
+
+/* A molded frame and a consistent upper-left light give the board depth. */
+.puzzle {
+  background:
+    radial-gradient(ellipse 60% 18% at 92% 108%, #9ad765 98%, transparent 100%),
+    radial-gradient(ellipse 76% 16% at 0 105%, #c5ed88 98%, transparent 100%),
+    radial-gradient(ellipse 9% 3% at 83% 9%, #ffffffad 94%, transparent),
+    radial-gradient(ellipse 5% 4% at 82% 8%, #ffffffad 94%, transparent),
+    linear-gradient(155deg, #7ad6fa, #b7edff 59%, #e9fcfa);
+  color: #172751;
+}
+.puzzle h1 {text-shadow:0 3px white, 0 6px 0 #4482a52b}
+.puzzle-board {
+  border: clamp(6px, 1vw, 14px) solid #fffdf5;
+  border-radius: clamp(20px, 2.4vw, 38px);
+  background: linear-gradient(135deg, #c576a0, #ffbad3);
+  box-shadow: inset 0 4px 10px #71315e55, 0 5px 0 #b7dbe6, 0 9px 0 #65a6bd, 0 16px 25px #295e7e38;
+}
+.puzzle-board button {
+  border: clamp(1px, .15vw, 2px) solid #50394a;
+  border-radius: clamp(8px, 1.2vw, 18px);
+  box-shadow: inset 2px 3px 2px #ffffffdf, inset -2px -5px 3px #64351750;
+}
+.puzzle-board button:enabled:active {filter:brightness(.94)}
+.puzzle aside,.puzzle>a {
+  background:#fffdf7;
+  border:2px solid white;
+  box-shadow:0 4px 0 #a2d3de,0 9px 16px #31577a24;
+}
+.puzzle aside {padding:clamp(12px,1.6vw,24px);border-radius:26px}
+.puzzle aside p {background:#e0f5ff;border-radius:14px;padding:7px;font-weight:800;font-variant-numeric:tabular-nums}
+.puzzle aside button {
+  --cap:#ffd45b;
+  background:linear-gradient(to bottom,#ffffff68,transparent 48%),var(--cap);
+  border:2px solid #323054;
+  box-shadow:inset 0 3px 0 #ffffff97,inset 0 -3px 0 #34204323,0 3px 0 #323054;
+}
+.puzzle aside button:first-of-type {background:linear-gradient(#ba82ff,#874ae1);color:white}
+.puzzle aside button:last-of-type {--cap:#ffa1bb}
+.puzzle aside button:active {translate:0 3px;box-shadow:inset 0 2px 3px #33224935}
+@media(max-width:600px){.puzzle-layout{gap:18px}.puzzle aside{padding:10px 8px 14px}.puzzle aside button{padding:6px 2px}}
+.puzzle-picture {grid-column:1/-1;display:flex;align-items:center;gap:8px}
+.puzzle-picture select {min-width:0;flex:1;text-overflow:ellipsis}
+@media(max-width:600px){.puzzle aside p{grid-column:span 2}}

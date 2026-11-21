@@ -9,8 +9,9 @@ import { Brush, InkCanvas, Stroke } from './InkCanvas';
 import { portrait } from './deityPortrait';
 const colours = [['Yellow','#ffc800'],['Orange','#ff911c'],['Pink','#ed519a'],['Blue','#4878ec'],['Green','#32a86c'],['Brown','#795548']] as const;
 const names = ['Ganesha','Krishna','Shiva','Saraswati','Lakshmi','Hanuman','Rama','Vishnu','Durga','Parvati','Kartikeya','Surya'];
-const imagePages = ['Ganesha','Krishna','Shiva','Hanuman'];
-type Sheet={fills:Record<string,string>;strokes:Stroke[];undo:(string|undefined)[][]};
+const originalImagePages = ['Ganesha','Krishna','Shiva','Hanuman'];
+const addedArtwork: Record<string, string | undefined> = { Saraswati: 'Saraswati', Lakshmi: 'Laxmi', Rama: 'Ram', Durga: 'Durga' };
+type Sheet={artwork?: "svg";fills:Record<string,string>;strokes:Stroke[];undo:(string|undefined)[][]};
 type Mask = {canvas:HTMLCanvasElement;x:number;y:number};
 const extent=1000;
 function surface(width=extent,height=width){
@@ -86,14 +87,19 @@ export function GodsStudio({focusControl}: {focusControl: ReactNode}){
  const [toolsOpen,setToolsOpen]=useState(false);
  const [cleared,setCleared]=useState(new Map<string,{sheet:Sheet;at:number}>());
  const sheets=useRef(new Map<string,Sheet>(readWork<[string,Sheet][]>('ll-coloring',[]))); const [,update]=useState(0);const redraw=()=>{saveWork('ll-coloring',[...sheets.current]);update(v=>v+1)};
- if(!sheets.current.has(name))sheets.current.set(name,{fills:{},strokes:[],undo:[]});
+ if(!sheets.current.has(name))sheets.current.set(name,{artwork:"svg",fills:{},strokes:[],undo:[]});
  const sheet=sheets.current.get(name)!;
+ const addedImage = addedArtwork[name];
+ const hasMarks = sheet.strokes.length > 0 || sheet.undo.length > 0 || Object.keys(sheet.fills).length > 0;
+ const useImagePage = originalImagePages.includes(name) || Boolean(addedImage && (sheet.artwork || !hasMarks));
+ const imageUrl = '/' + (addedImage ?? name) + '.svg';
+ if (addedImage && useImagePage) sheet.artwork = "svg";
  const [art,setArt]=useState<{name:string;page:ReturnType<typeof rasterRegions>}>();
  useEffect(()=>{
-  if(!imagePages.includes(name))return;
-  const image=new Image();image.onload=()=>setArt({name,page:rasterRegions(image)});image.src='/'+name+'.svg';
+  if(!useImagePage)return;
+  const image=new Image();image.onload=()=>setArt({name,page:rasterRegions(image)});image.src=imageUrl;
   return ()=>{image.onload=null};
- },[name]);
+ },[name,useImagePage,imageUrl]);
  const page=art?.name===name?art.page:undefined;
  // Each fill clears only older ink within its visible region. Replay the same
  // masks between strokes after undo, reload or a canvas resize.
@@ -103,9 +109,9 @@ export function GodsStudio({focusControl}: {focusControl: ReactNode}){
   for(const [id] of sheet.undo){
    if(!id){count++;continue}
    if(!count)continue;
-   const mask=imagePages.includes(name)?page?.mask(id):vectors.get(id)??vectorMask(name,id);
+   const mask=useImagePage?page?.mask(id):vectors.get(id)??vectorMask(name,id);
    if(!mask)continue;
-   if(!imagePages.includes(name))vectors.set(id,mask);
+   if(!useImagePage)vectors.set(id,mask);
    const list=masks.get(count)??[];list.push(mask);masks.set(count,list);
   }
   return (ctx:CanvasRenderingContext2D,index:number,w:number,h:number)=>{
@@ -115,7 +121,7 @@ export function GodsStudio({focusControl}: {focusControl: ReactNode}){
    for(const mask of list)ctx.drawImage(mask.canvas,mask.x,mask.y);
    ctx.restore();
   };
- },[sheet.fills,name,page]);
+ },[sheet.fills,name,page,useImagePage]);
  function fill(id:string){
   if(tool!=='Fill')return;
   // Different taps in one raster region share one fill entry.
@@ -127,11 +133,11 @@ export function GodsStudio({focusControl}: {focusControl: ReactNode}){
  function region([id,d]:[string,string]){return <path key={id} d={d} fill={sheet.fills[id]||'white'} onClick={()=>fill(id)} role={tool==='Fill'?'button':undefined} aria-label={id} tabIndex={tool==='Fill'?0:undefined} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fill(id)}}}/>}
  function undo(){const saved=cleared.get(name);if(saved && saved.at===sheet.undo.length){sheets.current.set(name,saved.sheet);setCleared(m=>{const next=new Map(m);next.delete(name);return next});redraw();return}const action=sheet.undo.pop();if(!action)return;const [id,previous]=action;if(!id)sheet.strokes=sheet.strokes.slice(0,-1);else {sheet.fills={...sheet.fills};if(previous)sheet.fills[id]=previous;else delete sheet.fills[id]}redraw()}
 
- const actions = <div className="dock-actions"><span className="dock-label"><span aria-hidden="true">↶</span> Actions</span><button aria-label="Undo" disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}><BoardIcon name="Undo"/><span>Undo</span></button><button aria-label="Clear" disabled={!sheet.strokes.length && !Object.keys(sheet.fills).length} onClick={()=>{setCleared(m=>new Map(m).set(name,{sheet,at:0}));sheets.current.set(name,{fills:{},strokes:[],undo:[]});redraw()}}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
+ const actions = <div className="dock-actions"><span className="dock-label"><span aria-hidden="true">↶</span> Actions</span><button aria-label="Undo" disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}><BoardIcon name="Undo"/><span>Undo</span></button><button aria-label="Clear" disabled={!sheet.strokes.length && !Object.keys(sheet.fills).length} onClick={()=>{setCleared(m=>new Map(m).set(name,{sheet,at:0}));sheets.current.set(name,{artwork:"svg",fills:{},strokes:[],undo:[]});redraw()}}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
  return <div className="board-frame"><div className="board-top"><label className="font-black">Colour a deity <span className="deity-picker"><select value={name} onChange={e=>select(e.target.value)}>{names.map(n=><option key={n}>{n}</option>)}</select></span></label><span className="font-bold">{tool==='Fill'?'Tap a shape to colour it':'Draw on the page'}</span></div>
- <div className="board-paper">{focusControl}<DownloadDrawing/><div className="tablet-actions">{actions}</div>{imagePages.includes(name)?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+ <div className="board-paper">{focusControl}<DownloadDrawing/><div className="tablet-actions">{actions}</div>{useImagePage?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
  {portrait(name).map(region)}
- </svg>}<div className="absolute inset-0" style={{pointerEvents:tool==='Fill'?'none':'auto'}}><InkCanvas key={name} afterStroke={afterStroke} brush={tool==='Fill'?'Marker':tool} color={color} widthScale={size} strokes={sheet.strokes} onFinish={()=>{sheet.undo.push([]);redraw()}}/></div>{imagePages.includes(name)?<img src={`/${name}.svg`} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-hidden="true" style={{pointerEvents:'none'}} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
+ </svg>}<div className="absolute inset-0" style={{pointerEvents:tool==='Fill'?'none':'auto'}}><InkCanvas key={name} afterStroke={afterStroke} brush={tool==='Fill'?'Marker':tool} color={color} widthScale={size} strokes={sheet.strokes} onFinish={()=>{sheet.undo.push([]);redraw()}}/></div>{useImagePage?<img src={imageUrl} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-hidden="true" style={{pointerEvents:'none'}} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
  {portrait(name).map(([id,d])=><path key={id} d={d}/>)}
  <g strokeWidth="2.8">
  <path d="M80 80q4-6 9 0m22 0q5-6 9 0"/>

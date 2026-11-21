@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
-import confetti from 'canvas-confetti';
+import './result-badge.css';
 import { ExamResultSummary, TopicMeta } from '../../types';
-import { ResultCelebrationIllustration } from '../illustrations/Illustrations';
 import { playCelebrationFanfare } from '../../utils/soundEffects';
 
 interface ResultSummaryProps {
@@ -22,22 +21,12 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({
 }) => {
   const [animatedScore, setAnimatedScore] = useState(0);
 
+  const [badgeReady, setBadgeReady] = useState(false);
+
   // Trigger celebration effects on mount
   useEffect(() => {
     // Sound fanfare
     playCelebrationFanfare();
-
-    // Fire lightweight confetti
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#087CF7', '#FFD329', '#20C86B', '#FF6656', '#9256F5'],
-      });
-    } catch {
-      // Confetti fallback
-    }
 
     // Smooth count-up animation for score
     let start = 0;
@@ -61,10 +50,10 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({
 
   // Encouragement text
   const getEncouragement = (pct: number) => {
-    if (pct >= 90) return { title: 'Awesome Champion!', desc: 'Outstanding score! You mastered this Olympiad set!' };
-    if (pct >= 75) return { title: 'Super Work!', desc: 'You are doing fantastic! Keep shining bright!' };
-    if (pct >= 50) return { title: 'Great Effort!', desc: 'Well done! A little more practice and you will score 100%!' };
-    return { title: 'Good Try!', desc: 'Every attempt makes your brain stronger! Let’s practice again!' };
+    if (pct >= 90) return { title: 'Awesome Champion!', badge: 'Super Work!-1.webp', desc: 'Outstanding score! You mastered this Olympiad set!' };
+    if (pct >= 75) return { title: 'Super Work!', badge: 'Super Work!.webp', desc: 'You are doing fantastic! Keep shining bright!' };
+    if (pct >= 50) return { title: 'Great Effort!', badge: 'Great Effort!.webp', desc: 'Well done! A little more practice and you will score 100%!' };
+    return { title: 'Good Try!', badge: 'Good Try!.webp', desc: 'Every attempt makes your brain stronger! Let’s practice again!' };
   };
 
   const encouragement = getEncouragement(summary.scorePercentage);
@@ -96,15 +85,19 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8">
           
           {/* Left Text & Illustration */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
-            <div className="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0">
-              <ResultCelebrationIllustration className="w-full h-full drop-shadow-md" />
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className={`result-badge ${badgeReady ? 'revealed' : ''} ${summary.scorePercentage >= 90 ? 'champion' : ''}`} aria-hidden="true">
+              <img src={'/Practice Achievement Badges/' + encouragement.badge} alt="" onLoad={() => setBadgeReady(true)} />
+              {Array.from({length: 8}, (_, index) => <i key={index} style={{
+                '--angle': `${index * 45 + 12}deg`,
+                backgroundColor: ['#ffda45', '#ff97bc', '#9ff1bc', '#fff'][index % 4],
+              } as React.CSSProperties} />)}
             </div>
             <div>
               <span className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-xs font-black uppercase tracking-wider mb-2">
                 {topic.title} Completed
               </span>
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">
+              <h1 className={badgeReady ? "sr-only" : "text-3xl font-black mb-2"}>
                 {encouragement.title}
               </h1>
               <p className="text-white/90 font-bold text-sm sm:text-base max-w-sm">
