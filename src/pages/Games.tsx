@@ -1,3 +1,4 @@
+import { GameDetailHeader } from '../components/layout/GameDetailHeader';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './games.css';
@@ -59,6 +60,7 @@ export function Games() {
   return <section className="games-catalog">
     <nav className="catalog-crumb" aria-label="Breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">❯</span><b aria-current="page">Games</b></nav>
     <h1 className="catalog-title">Games for kids</h1>
+    <div className="catalog-list">
     <Link className="catalog-card" to="/games/sliding-puzzle" aria-label="Play Sliding Puzzle">
       <div className="catalog-tools"><span>Puzzles <img src="/puzzle-ui/category.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
       <div className="catalog-preview">
@@ -66,6 +68,12 @@ export function Games() {
       </div>
       <h2>Sliding Puzzle</h2><p>Slide the tiles to complete the picture!</p>
     </Link>
+    <Link className="catalog-card" to="/games/hanuman-runner" aria-label="Play Hanuman Runner">
+      <div className="catalog-tools"><span>Adventure</span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
+      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Hanuman Run/Hanuman Ji - 5 Movement Steps/08 FLy GLide.svg" alt="" width="178" height="150" /></div>
+      <h2>Hanuman Runner</h2><p>Leap over obstacles and collect Ram Coins!</p>
+    </Link>
+    </div>
   </section>;
 }
 
@@ -160,11 +168,9 @@ export function Puzzle() {
   const sizes = [3,4,5];
   const stars = Math.min(3,wins);
   return <section className="puzzle">
-    <nav className="crumb" aria-label="Breadcrumb"><Link to="/">Home</Link> › <Link to="/games">Games</Link> › <u>Sliding Puzzle</u></nav>
-    <header className="p-heading"><Link to="/games" aria-label="Back to Games">{icon('Frame8')}</Link>
+    <GameDetailHeader title="Sliding Puzzle" description="Slide the tiles into place to complete the picture" icon="/puzzle-ui/imgSlidingPuzzle.svg">
       {[false,true].map((on,i)=><button key={i} className="p-sound" aria-label={on?'Enable sound':'Mute sound'} aria-pressed={soundOn===on} onClick={()=>setSoundOn(on)}>{icon('Frame'+(9+i))}</button>)}
-      <span className="p-symbol">{icon('SlidingPuzzle')}</span><div><h1>Sliding Puzzle</h1><p>Slide the tiles into place to complete the picture</p></div>
-      <div className="p-status"><b>Level {size-2}</b><b aria-label={stars+' stars'}>{'★'.repeat(stars)}{'☆'.repeat(3-stars)}</b><b>{icon('Frame11')}{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</b></div></header>
+      <div className="p-status"><b>Level {size-2}</b><b aria-label={stars+' stars'}>{'★'.repeat(stars)}{'☆'.repeat(3-stars)}</b><b>{icon('Frame11')}{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</b></div></GameDetailHeader>
     <div className="p-stage"><div className="p-columns">
     <section className="p-picker"><h2>Choose Picture</h2><div>{order.map((index,i)=><button key={index} aria-pressed={pictureIndex===index} onClick={()=>choosePicture(index)}>
       <img loading="lazy" src={i<4?'/puzzle-ui/imgChibiGaneshaOnAPinkLotus'+(i+1)+'.webp':pictures[index].src} alt=""/>{pictures[index].name}{pictureIndex===index && icon('Frame')}</button>)}</div></section>

@@ -20,6 +20,7 @@ import { ExamPage } from './pages/ExamPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { AboutPage } from './pages/AboutPage';
 
+const Runner = React.lazy(() => import('./runner/Runner'));
 const BrushGallery = import.meta.env.DEV ? React.lazy(() => import('./pages/BrushGallery')) : null;
 
 export const App: React.FC = () => {
@@ -31,6 +32,7 @@ export const App: React.FC = () => {
           <Routes>
             {BrushGallery && <Route path="/dev/brushes" element={<React.Suspense><BrushGallery/></React.Suspense>}/> }
             <Route path="/games" element={<main><Games /></main>} />
+            <Route path="/games/hanuman-runner" element={<React.Suspense><Runner /></React.Suspense>} />
             <Route path="/games/sliding-puzzle" element={<main><Puzzle /></main>} />
             <Route path="/drawing-board" element={<main><DrawingBoard /></main>} />
             <Route element={<><main className="flex-1"><Outlet /></main><SiteFooter/><MobileBottomNav /></>}>

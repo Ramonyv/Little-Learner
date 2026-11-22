@@ -7,7 +7,7 @@
 .p-nav,.p-heading,.p-status,.p-nav div,.crumb,.p-actions button,.p-desktop-level button,.p-moves,.p-badge,.p-badge span {display:flex;align-items:center}
 .p-nav {background:#f7faff;border-radius:18px;padding:12px 18px;gap:12px}.p-nav>a:first-child img{width:clamp(140px,16vw,230px)}.p-nav div{margin:auto;gap:6px}.p-nav div a{padding:9px 12px;color:#516587}.p-nav .active{background:#1676ed;color:white;border-radius:28px}.p-nav>a:nth-last-child(2){display:flex;gap:8px;align-items:center;border:2px solid #aec8df;border-radius:24px;padding:6px 14px;background:white}.p-nav>a:last-child img{width:44px;height:44px}
 .crumb{font-size:12px;font-weight:500;gap:15px;margin:2.3vw 0 3.3vw}.crumb u{color:#1474dc}
-.p-heading{gap:10px;margin-bottom:2.4vw}.p-heading>a,.p-heading>button,.p-symbol{display:grid;place-items:center;width:clamp(40px,3.75vw,54px);aspect-ratio:1;background:white;border:2px solid #e1e8ed;border-radius:16px;flex:none}.p-heading .p-symbol{background:#b8e8ff;border-color:#56caff}.puzzle h1{font-size:clamp(20px,1.7vw,26px);letter-spacing:-.02em}.p-heading p{color:#536787;font-size:clamp(12px,1.15vw,16px)}.p-icon{width:22px;height:22px;object-fit:contain;flex:none}
+.p-heading{gap:10px;margin-bottom:2.4vw}.p-heading>a,.p-heading>button,.p-symbol{display:grid;place-items:center;width:clamp(40px,3.75vw,54px);aspect-ratio:1;background:white;border:2px solid #e1e8ed;border-radius:16px;flex:none}.p-heading .p-symbol{background:#b8e8ff;border-color:#56caff}.p-heading .game-heading-copy h1{font-size:clamp(20px,1.7vw,26px);letter-spacing:-.02em;font-weight:900;line-height:1.1}.game-heading-copy{min-width:0}.game-heading-copy p{font-weight:700}.p-heading p{color:#536787;font-size:clamp(12px,1.15vw,16px)}.p-icon{width:22px;height:22px;object-fit:contain;flex:none}
 .p-status{margin-left:auto;gap:14px}.p-status b{display:flex;align-items:center;gap:5px;padding:9px 14px;background:#fff;border:2px solid #b4cde2;border-radius:30px;color:#161920}.p-status b:first-child,.p-desktop-level button[aria-pressed=true]{background:#ffe45c;border-color:#c98719}.p-status b:nth-child(2){color:#d29813;font-size:22px;line-height:1.15}.p-status b:last-child{border-color:#c98719}
 .p-stage{background:#f7faff;border:1px solid #aac8e1;border-radius:20px;padding:4.55vw 4.15vw 2.6vw}.p-columns{display:grid;grid-template-columns:minmax(0,352fr) minmax(0,479fr) minmax(0,352fr);gap:1.55vw}
 .p-picker,.p-panel{min-height:0;background:white;border-radius:26px;box-shadow:0 4px 14px #25385910;padding:clamp(12px,1.65vw,24px);display:flex;flex-direction:column}
@@ -80,3 +80,5 @@
 .p-guide p {margin-top:10px;font-size:14px;line-height:1.45;font-weight:500;color:#516587}
 @media(max-width:900px){.p-guide{max-width:580px}}
 @media(max-width:600px){.p-guide-answers{grid-template-columns:1fr;gap:20px}.p-guide h2{margin-bottom:16px}}
+
+.catalog-list{display:flex;flex-wrap:wrap;gap:18px}

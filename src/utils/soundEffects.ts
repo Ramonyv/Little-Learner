@@ -7,6 +7,8 @@ let context: AudioContext | undefined;
 let sequence = 0;
 const clips = new Map<Effect, Promise<AudioBuffer>>();
 
+export const getEnabledAudioContext = () => enabled ? context : undefined;
+
 export const isSoundEnabled = () => enabled;
 
 export function setSoundEnabled(value: boolean) {

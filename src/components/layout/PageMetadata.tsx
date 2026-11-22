@@ -5,6 +5,7 @@ import { informationPages } from '../../pages/InformationPage';
 const pages: Record<string, [string,string]> = {
   '/': ['Class 1 Practice, Tracing & Drawing', 'Practice Class 1 questions, trace letters, numbers and words, and explore creative drawing with Little Learner.'],
   '/games': ['Games for Kids', 'Explore picture puzzles for kids. Choose a game and slide the tiles to complete the picture.'],
+  '/games/hanuman-runner': ['Hanuman Runner', 'Run, jump and fly through an endless adventure while collecting Ram Coins.'],
   '/games/sliding-puzzle': ['Sliding Picture Puzzle for Kids – 3×3, 4×4 & 5×5', 'Choose from 12 pictures, including Ganesha, Krishna, and Shiva. Shuffle the tiles, tap to slide, and use a picture hint when you need one.'],
   '/about': ['About Little Learner', 'Learn about Little Learner’s independent practice activities for young learners.'],
   '/contact': ['Contact Little Learner', 'Report an activity problem, suggest improvements, or raise a content concern.'],
