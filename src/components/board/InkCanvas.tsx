@@ -12,7 +12,7 @@ export const brushSizes = [
 import { renderStroke, strokeRenderer, type Brush, type Stroke } from './brushEngine';
 export type { Brush, Stroke } from './brushEngine';
 
-export function InkCanvas({strokes,brush,color,widthScale=1,onFinish,afterStroke}:{strokes:Stroke[];brush:Brush;color:string;widthScale?:number;onFinish:()=>void;afterStroke?:(ctx:CanvasRenderingContext2D,index:number,w:number,h:number)=>void}) {
+export function InkCanvas({strokes,brush,color,widthScale=1,onFinish,afterStroke,disabled=false}:{strokes:Stroke[];brush:Brush;color:string;widthScale?:number;onFinish:()=>void;afterStroke?:(ctx:CanvasRenderingContext2D,index:number,w:number,h:number)=>void;disabled?:boolean}) {
   const ref = useRef<HTMLCanvasElement>(null);
   const active = useRef<{id: number; stroke: Stroke; renderer: ReturnType<typeof strokeRenderer>} | null>(null);
   const lastOverlay=useRef(afterStroke);
@@ -102,7 +102,7 @@ export function InkCanvas({strokes,brush,color,widthScale=1,onFinish,afterStroke
     painted.current = strokes.slice();
     onFinish();
   }
-  return <canvas ref={ref} aria-label="Drawing surface" style={{position:'absolute',inset:0,width:'100%',height:'100%',touchAction:'none',cursor:'crosshair'}}
+  return <canvas ref={ref} aria-label="Drawing surface" aria-disabled={disabled} style={{position:'absolute',inset:0,width:'100%',height:'100%',touchAction:'none',cursor:disabled?'not-allowed':'crosshair',pointerEvents:disabled?'none':'auto'}}
     onPointerDown={e=>{
       if(active.current || e.button!==0) return;
       const stroke: Stroke = {brush,color,widthScale,points:[]};

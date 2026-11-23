@@ -204,7 +204,7 @@
     display: none;
   }
 }
-.run-modal button[aria-expanded] {
+.run-modal .run-guide-title {
   border: 0;
   background: transparent;
   color: #546281;
@@ -278,3 +278,78 @@
 }
 .runner .p-guide {width:min(100%,1360px)}
 .run-distance {flex:1;text-align:center}
+.run-stage{height:auto;display:flex;flex-direction:column;border-color:#141414}
+.run-arena{position:relative;height:clamp(400px,52vw,740px);min-height:0}
+.run-stage canvas:focus-visible{outline:none}
+.run-stage:has(canvas:focus-visible){outline:2px solid #446d93;outline-offset:2px}
+.run-hud{position:static;display:grid;grid-template-columns:1fr auto 1fr auto;gap:12px;padding:8px 14px;background:#f6efe3;border-bottom:2px solid #131313;color:black;pointer-events:auto}
+.run-health{width:143px;height:64px;gap:4px;padding-left:6px}
+.run-health img:first-child{width:50px}.run-health img{width:19px}
+.run-stats,.run-stats b{display:flex;align-items:center;justify-content:center}
+.run-stats b{gap:7px;padding:0 clamp(10px,1.8vw,30px);font-size:clamp(14px,1.3vw,18px);line-height:1.2;white-space:nowrap}
+.run-stats b+b{border-left:2px solid}.run-stats img{width:clamp(24px,2.7vw,40px);height:35px;object-fit:contain}
+.run-counter{justify-self:end;height:42px;min-width:86px;justify-content:center}
+.run-counter img{width:27px}.run-counter img+span{font-weight:800}.run-counter::before{content:'×';order:1;color:#983a0c}.run-counter img{order:-1}.run-counter>span{order:2}
+.run-powers{top:10px}.run-overlay{background:#14263255;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:10px 8px;overflow:auto}
+.run-modal{position:relative;margin:auto;flex:none;max-height:none;overflow:visible;justify-items:center;gap:9px;width:min(314px,92%);padding:25px 15px 15px;background:transparent;border:0;border-radius:0;box-shadow:none}
+.run-popup-art{width:100%;height:123px;position:relative;display:grid;place-items:center}
+.run-popup-art .run-illustration{height:99px;z-index:1}.help-cloud,.help-coin{position:absolute;object-fit:contain}.help-cloud.left{width:76px;left:4%;bottom:7%}.help-cloud.right{width:48px;right:13%;bottom:7%}.help-coin{width:28px}.coin-0{left:31%;top:10%}.coin-1{right:15%;top:38%}
+
+.run-modal h2{font-size:22px}.run-modal>p{font-size:14px;max-width:23ch}.run-modal .run-primary{margin-top:7px;border-radius:12px}
+.run-modal .run-guide-title{text-decoration:none}
+.run-guide{width:100%;display:grid;gap:7px}.run-keys{display:flex;align-items:center;text-align:left;gap:10px;padding:9px;border:1px solid #cbd2ff;background:white;border-radius:12px}.run-keys>div{display:flex;gap:2px}.run-keys kbd{font:800 10px inherit;font-size:10px;font-weight:800;border:1px solid #d9dce6;border-radius:4px;padding:3px;color:#354170}.run-guide .run-keys p{font-size:11px}
+.run-guide ul{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:0;margin:0;padding:8px 4px;border:1px solid #ffc889;border-radius:12px;background:#fffaf1}
+.run-guide li{grid-column:span 3;display:flex;flex-direction:column;justify-content:center;gap:5px;font-size:11px;line-height:1.2;text-align:center;padding:8px 4px;border-right:1px solid #ffcd91}
+.run-guide li:nth-child(n+5){grid-column:span 4;border-top:1px solid #ffcd91}.run-guide li:nth-child(4),.run-guide li:last-child{border-right:0}
+@media(max-width:760px){.run-hud{grid-template-columns:1fr auto auto;gap:3px 8px;padding:4px 8px}.run-health{height:46px;width:103px;gap:2px;padding:2px}.run-health img:first-child{width:37px}.run-health img{width:15px}.run-stats{grid-row:2;grid-column:1/-1;justify-content:space-evenly}.run-stats b{padding:2px 5px;font-size:12px;white-space:normal}.run-stats img{width:21px;height:21px}.run-arena{height:clamp(355px,64svh,550px)}}
+@media(max-height:500px) and (orientation:landscape){.run-arena{height:65svh}.run-hud{padding-block:2px}.run-health{height:44px}.run-popup-art{height:66px}.run-popup-art .run-illustration{height:60px}}
+
+/* Keep the illustrated arch and rounded base intact when the guide is folded. */
+.run-modal {isolation:isolate;filter:drop-shadow(0 8px 12px #152b3e42)}
+.run-modal::before {content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border:solid transparent;border-width:84px 20px 22px;border-image:url('/Hanuman Run/Game HUD/HelpPanel.svg') 84 20 22 fill / 84px 20px 22px stretch}
+.run-modal[data-mode=ready] {display:block;aspect-ratio:314.642/596.383;padding:0;text-align:center}
+.run-modal[data-mode=ready]::before {border:0;background:url('/Hanuman Run/Game HUD/HelpPanel.svg') center/contain no-repeat}
+.run-modal[data-mode=ready] > :is(.run-popup-art,h2,p,.run-primary,.run-guide-title,.run-guide) {position:absolute;left:50%;transform:translateX(-50%);margin:0}
+.run-modal[data-mode=ready] .run-popup-art {top:7%;width:91%;height:20%}
+.run-modal[data-mode=ready] .run-illustration {height:88%}
+.run-modal[data-mode=ready] h2 {top:28%;width:90%;font-size:21px}
+.run-modal[data-mode=ready] > p {top:33.5%;width:56%;font-size:13px;line-height:1.4}
+.run-modal[data-mode=ready] .run-primary {top:42%;width:63%;min-width:0;min-height:39px;height:6.6%;padding:2px;font-size:14px}
+.run-modal[data-mode=ready] .run-guide-title {top:49.5%;min-height:40px;white-space:nowrap;font-size:14px}
+.run-modal[data-mode=ready] .run-guide {top:58%;bottom:2.6%;width:90%;grid-template-rows:auto 1fr}
+.run-modal .run-close {
+  position:absolute;top:10.5%;right:calc(-4% - 2px);z-index:2;
+  display:grid;place-items:center;width:44px;height:44px;
+  background: url('/Hanuman Run/Game HUD/CloseCircle.svg') center/40px 40px no-repeat;
+  border-radius:50%;
+}
+.run-close img {display:block;width:15px;height:15px;object-fit:contain}
+.run-guide .run-keys p {font-size:10px}
+.run-guide li {font-size:10px}
+@media(max-width:350px){.run-modal[data-mode=ready]{width:94%}.run-guide li{padding:4px 2px}.run-keys{padding:5px;gap:4px}}
+
+.run-modal .run-guide-title{margin:0;padding:8px 0;font-weight:800;color:#546281}
+
+.run-modal[data-mode=over] {
+  display: block;
+  padding: 0;
+  aspect-ratio: 314.642 / 405.383;
+}
+.run-modal[data-mode=over]::before {
+  border: 0;
+  background: url('/Hanuman Run/Game HUD/ResultPanel.svg') center/contain no-repeat;
+}
+.run-modal[data-mode=over] .run-popup-art {position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.run-modal[data-mode=over] .run-illustration {position:absolute;left:28%;top:15%;width:47%;height:auto}
+.run-modal[data-mode=over] .help-cloud.left {left:9%;top:24.5%;width:24%}
+.run-modal[data-mode=over] .help-cloud.right {right:19%;top:29%;width:15.4%}
+.run-modal[data-mode=over] .coin-0 {left:33%;top:11.5%}
+.run-modal[data-mode=over] .coin-1 {right:28%;top:20.5%;z-index:1}
+.run-modal[data-mode=over] .run-close {top:15%;right:-5%}
+.run-modal[data-mode=over] h2 {position:absolute;top:43.5%;width:100%;margin:0;font-size:21px;line-height:39px}
+.run-results {position:absolute;top:54%;width:100%;display:flex;justify-content:center;gap:40px}
+.run-results > div {display:grid;justify-items:center;align-content:start;min-width:40px;color:#57627e;font-size:12px;font-weight:600}
+.run-results img {width:auto;height:auto;align-self:center;max-width:40px}
+.run-results > div {grid-template-rows:40px auto auto}
+.run-results strong {font-size:21px;color:#13151a;font-weight:900}
+.run-modal[data-mode=over] .run-primary {position:absolute;top:81.5%;left:18.75%;width:62.5%;min-width:0;min-height:0;height:39px;margin:0;padding:0;background:#f0d566;border:2px solid #ddb13b;font-size:14px}

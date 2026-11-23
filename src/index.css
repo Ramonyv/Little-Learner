@@ -52,8 +52,24 @@
 
 /* Custom interactive pill button styles */
 .btn-chunky {
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  transition: transform 180ms cubic-bezier(.2,.8,.2,1), box-shadow 180ms ease;
 }
 .btn-chunky:active {
-  transform: translateY(2px);
+  transform: translateY(1px) scale(.985);
+}
+
+/* Shared motion for controls across learning pages. Keep drawing surfaces and
+   game pieces on their own timing so pointer input remains immediate. */
+@media (prefers-reduced-motion: no-preference) {
+  :root { --ui-ease: cubic-bezier(.2,.8,.2,1); }
+  :where(button, a, summary):not(.sliding-tile) {
+    transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+    transition-duration: 180ms;
+    transition-timing-function: var(--ui-ease);
+  }
+  :where(button, a, summary):not(.sliding-tile):active {
+    transition-duration: 100ms;
+  }
+  :where(.group):is(a):hover { transform: translateY(-2px); }
+  :where(.group):is(a):active { transform: translateY(0) scale(.99); }
 }

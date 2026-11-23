@@ -67,7 +67,7 @@
 .catalog-crumb,.catalog-tools,.catalog-tools span,.catalog-tools i,.catalog-preview {display:flex;align-items:center}
 .catalog-crumb {gap:15px;margin:32px 0 36px;font-size:12px;font-weight:500;color:#17212b}.catalog-crumb b{color:#1474dc}
 .catalog-card {display:block;width:min(324px,100%);background:#f7faff;border:2px solid white;border-radius:28px;padding:11px 12px 24px;text-align:center}
-.catalog-tools {justify-content:space-between;margin-bottom:12px}.catalog-tools span,.catalog-tools i{justify-content:center;height:32px;border-radius:24px;border:2px solid #e2d4ff;background:#f1eaff;color:#6142c7;font-size:12px;padding:0 10px;gap:5px}.catalog-tools img{width:19px;height:19px}.catalog-tools i{width:32px;padding:0;background:#fae67c;border-color:#e4c135}
+.catalog-tools {justify-content:space-between;margin-bottom:12px}.catalog-tools span,.catalog-tools i{justify-content:center;height:34px;border-radius:500px;border:2px solid #dfd2ff;background:#eee7fb;color:#553bbd;font-size:12px;padding:0 12px;gap:7px}.catalog-tools img{width:19px;height:19px}.catalog-tools i{width:34px;padding:0;background:#fae67c;border-color:#e4c135}.catalog-tools .catalog-category-puzzles{width:92px}.catalog-tools .catalog-category-puzzles img{width:18px;height:18px}.catalog-tools .catalog-category-adventure{width:110px;background:#fbf0c8;border-color:#f6cf5d;color:#634a00}.catalog-tools .catalog-category-adventure img{width:18px;height:18px}
 .catalog-preview{justify-content:center;aspect-ratio:294/224;border:2px solid white;border-radius:24px;background:#fcf2e5}.catalog-thumbnail{height:88%;width:auto;object-fit:contain}
 .catalog-card h2{font-size:18px;margin:17px 0 5px;font-weight:800}.catalog-card p{font-size:14px;color:#546281;font-weight:700}.catalog-card:focus-visible{outline:3px solid #1474dc;outline-offset:4px}
 @media(max-width:900px){.games-catalog .p-nav{display:flex;flex-wrap:wrap}.games-catalog .p-nav div{display:flex;order:1;width:100%;justify-content:flex-start;overflow-x:auto;white-space:nowrap}.games-catalog .p-nav>a:first-child{margin-right:auto}.games-catalog .catalog-crumb{margin:22px 0}.games-catalog .p-nav div a{padding:6px 9px;font-size:14px}}
@@ -82,3 +82,28 @@
 @media(max-width:600px){.p-guide-answers{grid-template-columns:1fr;gap:20px}.p-guide h2{margin-bottom:16px}}
 
 .catalog-list{display:flex;flex-wrap:wrap;gap:18px}
+
+.catalog-runner .catalog-preview {border:0;background:transparent;aspect-ratio:296/226}
+.catalog-runner .catalog-thumbnail {display:block;width:100%;height:auto}
+@media (prefers-reduced-motion:no-preference){
+  .catalog-card,.game-cover,.p-picker button{transition:transform 190ms cubic-bezier(.2,.8,.2,1),box-shadow 190ms ease,border-color 190ms ease,background-color 190ms ease}
+  .catalog-card:hover,.game-cover:hover,.p-picker button:hover{transform:translateY(-3px);box-shadow:0 10px 24px #2842691c}
+  .catalog-card:active,.game-cover:active,.p-picker button:active{transform:translateY(0) scale(.985)}
+  .p-actions button{transition:transform 150ms cubic-bezier(.2,.8,.2,1),filter 150ms ease}
+  .p-actions button:hover{filter:brightness(1.045)}
+  .p-actions button:active{transform:translateY(1px) scale(.985)}
+}
+@media (max-width: 700px) {
+  .catalog-list {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .catalog-card {width:100%;min-width:0;padding:8px 6px 14px;border-radius:18px}
+  .catalog-tools {margin-bottom:7px}
+  .catalog-tools span {font-size:10px;height:28px;padding:0 7px;gap:4px}
+  .catalog-tools .catalog-category-puzzles {width:78px}
+  .catalog-tools .catalog-category-adventure {width:94px}
+  .catalog-tools i {width:28px;height:28px}
+  .catalog-tools img,.catalog-tools .catalog-category-puzzles img,.catalog-tools .catalog-category-adventure img {width:15px;height:15px}
+  .catalog-preview {border-radius:12px;overflow:hidden}
+  .catalog-preview .catalog-thumbnail {max-width:100%}
+  .catalog-card h2 {font-size:15px;margin:9px 0 3px}
+  .catalog-card p {font-size:12px;line-height:1.35}
+}

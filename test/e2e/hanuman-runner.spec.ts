@@ -27,7 +27,7 @@ test('open the game from Games and resume a paused run', async ({ page }) => {
   await page.goto('/games');
   await page.getByRole('link', { name: 'Play Hanuman Runner' }).click();
   await expect(page.getByRole('combobox')).toHaveCount(0);
-  await page.getByRole('button', { name: 'Start running' }).click();
+  await page.getByRole('button', { name: 'Start running', exact: true }).click();
   await page.keyboard.press('Space');
   await page.keyboard.press('p');
   await expect(
@@ -132,7 +132,7 @@ test('runner audio loads all eight clips and schedules the temple greeting after
   await page.goto('/games/hanuman-runner');
   await page.getByRole('button', { name: 'Sound off', exact: true }).click();
   await expect.poll(() => loaded.size).toBe(8);
-  await page.getByRole('button', { name: 'Start running' }).click();
+  await page.getByRole('button', { name: 'Start running', exact: true }).click();
   await expect
     .poll(() =>
       page.evaluate(() => {
@@ -151,4 +151,61 @@ test('runner audio loads all eight clips and schedules the temple greeting after
   await page.keyboard.press('Space');
   await page.waitForTimeout(300);
   expect(await count()).toBe(mutedCount);
+});
+
+test('only the full start guide appears below the live HUD on desktop and phone', async ({page}) => {
+  for (const width of [1440,390]) {
+    await page.setViewportSize({width,height:850});
+    await page.goto('/games/hanuman-runner');
+    const panel = await page.locator('.run-modal').boundingBox();
+    expect(panel!.width/panel!.height).toBeCloseTo(314.642/596.383,2);
+    await expect(page.locator('.run-guide li')).toHaveCount(7);
+    const bar=await page.locator('.run-hud').boundingBox();
+    const arena=await page.locator('.run-arena').boundingBox();
+    expect(bar!.y+bar!.height).toBeLessThanOrEqual(arena!.y+1);
+    expect(await page.locator('.run-hud img').evaluateAll(images=>images.every(img=>(img as HTMLImageElement).naturalWidth>0))).toBe(true);
+    await expect(page.getByRole('heading',{name:'How to play?',exact:true})).toBeVisible();
+    await page.getByRole('button', {name: 'Close guide and start running'}).click();
+    await expect(page.locator('.run-modal')).toBeHidden();
+    await expect(page.getByRole('button', {name: 'Pause game'})).toBeEnabled();
+    const gamesLink = width === 390
+      ? page.getByRole('link', {name: 'Back to Games', exact: true})
+      : page.getByRole('navigation', {name: 'Breadcrumb'}).getByRole('link', {name: 'Games'});
+    await gamesLink.click();
+    await expect(page).toHaveURL(/\/games$/);
+  }
+});
+
+test('game over shows run totals and starts a fresh run', async ({page}) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({width, height: 850});
+    await page.clock.install();
+    await page.goto('/games/hanuman-runner');
+    await page.getByRole('button', {name: 'Start running', exact: true}).click();
+    const result = page.getByRole('region', {name: 'Game over'});
+    for (let i = 0; i < 60 && !(await result.isVisible()); i++) {
+      await page.clock.runFor(1000);
+    }
+    await expect(result).toBeVisible();
+    await expect(result.locator('.run-results')).toHaveText(/\d+Score\d+Coins/);
+    expect(await result.locator('img').evaluateAll(images =>
+      images.every(image => (image as HTMLImageElement).naturalWidth > 0)
+    )).toBe(true);
+    await result.getByRole('button', {name: 'Start running', exact: true}).click();
+    await expect(page.getByRole('button', {name: 'Pause game'})).toBeEnabled();
+  }
+});
+
+test('phone game cards share a row and show the runner thumbnail', async ({page}) => {
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({width, height: 800});
+    await page.goto('/games');
+    const cards = page.locator('.catalog-card');
+    const first = await cards.nth(0).boundingBox();
+    const second = await cards.nth(1).boundingBox();
+    expect(second!.y).toBe(first!.y);
+    expect(second!.x).toBeGreaterThanOrEqual(first!.x + first!.width);
+    expect(second!.x + second!.width).toBeLessThanOrEqual(width);
+    await expect(page.locator('.catalog-runner .catalog-thumbnail')).toHaveJSProperty('naturalWidth', 296);
+  }
 });

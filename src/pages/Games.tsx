@@ -62,16 +62,16 @@ export function Games() {
     <h1 className="catalog-title">Games for kids</h1>
     <div className="catalog-list">
     <Link className="catalog-card" to="/games/sliding-puzzle" aria-label="Play Sliding Puzzle">
-      <div className="catalog-tools"><span>Puzzles <img src="/puzzle-ui/category.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
+      <div className="catalog-tools"><span className="catalog-category catalog-category-puzzles">Puzzles <img src="/puzzle-ui/category-puzzles.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
       <div className="catalog-preview">
         <img className="catalog-thumbnail" src="/Slide Puzzle Game/Ganesha Card Thumnail.svg" alt="Ganesha sliding puzzle" width="178" height="197" />
       </div>
       <h2>Sliding Puzzle</h2><p>Slide the tiles to complete the picture!</p>
     </Link>
-    <Link className="catalog-card" to="/games/hanuman-runner" aria-label="Play Hanuman Runner">
-      <div className="catalog-tools"><span>Adventure</span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
-      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Hanuman Run/Hanuman Ji - 5 Movement Steps/08 FLy GLide.svg" alt="" width="178" height="150" /></div>
-      <h2>Hanuman Runner</h2><p>Leap over obstacles and collect Ram Coins!</p>
+    <Link className="catalog-card catalog-runner" to="/games/hanuman-runner" aria-label="Play Hanuman Runner">
+      <div className="catalog-tools"><span className="catalog-category catalog-category-adventure">Adventure <img src="/puzzle-ui/category-adventure.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
+      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Hanuman Run/Hanuman Run Thumbnail.svg" alt="" width="296" height="226" /></div>
+      <h2>Hanuman Run</h2><p>Leap over obstacles and collect Ram Coins!</p>
     </Link>
     </div>
   </section>;

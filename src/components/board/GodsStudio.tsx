@@ -11,6 +11,7 @@ import { portrait } from './deityPortrait';
 const colours = [['Yellow','#ffc800'],['Orange','#ff911c'],['Pink','#ed519a'],['Blue','#4878ec'],['Green','#32a86c'],['Brown','#795548']] as const;
 const names = ['Ganesha','Krishna','Shiva','Saraswati','Lakshmi','Hanuman','Rama','Vishnu','Durga','Parvati','Kartikeya','Surya'];
 const originalImagePages = ['Ganesha','Krishna','Shiva','Hanuman'];
+const toolbarIcon = (name:string) => <img src={'/drawing-board%20page%20assets/'+name+'.svg'} alt="" />;
 const addedArtwork: Record<string, string | undefined> = { Saraswati: 'Saraswati', Lakshmi: 'Laxmi', Rama: 'Ram', Durga: 'Durga' };
 type Sheet={artwork?: "svg";fills:Record<string,string>;strokes:Stroke[];undo:(string|undefined)[][]};
 type Mask = {canvas:HTMLCanvasElement;x:number;y:number};
@@ -83,9 +84,12 @@ function DeityCanvas({name,page,fills,onFill}:{name:string;page?:ReturnType<type
   }
  }}/>;
 }
-export function GodsStudio({focusControl}: {focusControl: ReactNode}){
- const [name,select]=useState(() => new URLSearchParams(location.search).get('deity') || 'Ganesha'),[tool,setTool]=useState<Brush|'Fill'>('Fill'),[color,paint]=useState('#32a86c'),[size,resize]=useState(1);
+export function GodsStudio({focusControl,settings,modernToolbar=false,locked=false}: {focusControl: ReactNode;settings?:{color:string;brush:Brush|'Fill';size:number;onBrush:(value:Brush|'Fill')=>void;onColor:(value:string)=>void;onSize:(value:number)=>void};modernToolbar?:boolean;locked?:boolean}){
+ const [name,select]=useState(() => new URLSearchParams(location.search).get('deity') || 'Ganesha'),[internalTool,setInternalTool]=useState<Brush|'Fill'>('Fill'),[internalColor,paint]=useState('#32a86c'),[internalSize,resize]=useState(1);
+ const tool=settings?.brush??internalTool,color=settings?.color??internalColor,size=settings?.size??internalSize;
+ const setTool=settings?.onBrush??setInternalTool,setColor=settings?.onColor??paint,setSize=settings?.onSize??resize;
  const [toolsOpen,setToolsOpen]=useState(false);
+ const redoStack=useRef(new Map<string,Sheet[]>());
  const [cleared,setCleared]=useState(new Map<string,{sheet:Sheet;at:number}>());
  const sheets=useRef(new Map<string,Sheet>(readWork<[string,Sheet][]>('ll-coloring',[]))); const [,update]=useState(0);const redraw=()=>{saveWork('ll-coloring',[...sheets.current]);update(v=>v+1)};
  if(!sheets.current.has(name))sheets.current.set(name,{artwork:"svg",fills:{},strokes:[],undo:[]});
@@ -124,21 +128,26 @@ export function GodsStudio({focusControl}: {focusControl: ReactNode}){
   };
  },[sheet.fills,name,page,useImagePage]);
  function fill(id:string){
+  if(locked)return;
   if(tool!=='Fill')return;
   // Different taps in one raster region share one fill entry.
   if(page){const mask=page.mask(id);id=Object.keys(sheet.fills).reverse().find(key=>page.mask(key)===mask)??id}
   rememberColor(color);
+  redoStack.current.delete(name);
   sheet.undo.push([id,sheet.fills[id]]);
   sheet.fills={...sheet.fills,[id]:color};redraw();
  }
  function region([id,d]:[string,string]){return <path key={id} d={d} fill={sheet.fills[id]||'white'} onClick={()=>fill(id)} role={tool==='Fill'?'button':undefined} aria-label={id} tabIndex={tool==='Fill'?0:undefined} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fill(id)}}}/>}
- function undo(){const saved=cleared.get(name);if(saved && saved.at===sheet.undo.length){sheets.current.set(name,saved.sheet);setCleared(m=>{const next=new Map(m);next.delete(name);return next});redraw();return}const action=sheet.undo.pop();if(!action)return;const [id,previous]=action;if(!id)sheet.strokes=sheet.strokes.slice(0,-1);else {sheet.fills={...sheet.fills};if(previous)sheet.fills[id]=previous;else delete sheet.fills[id]}redraw()}
+ function undo(){if(locked)return;const saved=cleared.get(name);if(!sheet.undo.length && !saved)return;redoStack.current.set(name,[...(redoStack.current.get(name)||[]),structuredClone(sheet)]);if(saved && saved.at===sheet.undo.length){sheets.current.set(name,saved.sheet);setCleared(m=>{const next=new Map(m);next.delete(name);return next});redraw();return}const action=sheet.undo.pop();if(!action)return;const [id,previous]=action;if(!id)sheet.strokes=sheet.strokes.slice(0,-1);else {sheet.fills={...sheet.fills};if(previous)sheet.fills[id]=previous;else delete sheet.fills[id]}redraw()}
+ function redo(){if(locked)return;const stack=redoStack.current.get(name)||[];if(!stack.length)return;sheets.current.set(name,stack[stack.length-1]);redoStack.current.set(name,stack.slice(0,-1));redraw()}
+ function clear(){if(locked||!sheet.strokes.length && !Object.keys(sheet.fills).length)return;if(modernToolbar && !confirm('Clear this canvas?'))return;redoStack.current.delete(name);setCleared(m=>new Map(m).set(name,{sheet,at:0}));sheets.current.set(name,{artwork:"svg",fills:{},strokes:[],undo:[]});redraw()}
 
- const actions = <div className="dock-actions"><span className="dock-label"><span aria-hidden="true">↶</span> Actions</span><button aria-label="Undo" disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}><BoardIcon name="Undo"/><span>Undo</span></button><button aria-label="Clear" disabled={!sheet.strokes.length && !Object.keys(sheet.fills).length} onClick={()=>{setCleared(m=>new Map(m).set(name,{sheet,at:0}));sheets.current.set(name,{artwork:"svg",fills:{},strokes:[],undo:[]});redraw()}}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
- return <div className="board-frame"><div className="board-top"><label className="font-black">Colour a deity <span className="deity-picker"><select value={name} onChange={e=>select(e.target.value)}>{names.map(n=><option key={n}>{n}</option>)}</select></span></label><span className="font-bold">{tool==='Fill'?'Tap a shape to colour it':'Draw on the page'}</span></div>
- <div className="board-paper">{focusControl}<DownloadDrawing/><div className="tablet-actions">{actions}</div>{useImagePage?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+ const actions = <div className="dock-actions"><span className="dock-label"><span aria-hidden="true">↶</span> Actions</span><button aria-label="Undo" disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}><BoardIcon name="Undo"/><span>Undo</span></button><button aria-label="Clear" disabled={!sheet.strokes.length && !Object.keys(sheet.fills).length} onClick={clear}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
+ const modernActions=<div className="db2-canvas-tools"><button aria-label="Undo" disabled={locked||!sheet.undo.length && !cleared.has(name)} onClick={undo}>{toolbarIcon('Undo ic')}</button><button aria-label="Redo" disabled={locked||!(redoStack.current.get(name)||[]).length} onClick={redo}>{toolbarIcon('Redo ic')}</button><button aria-label="Clear" disabled={locked} onClick={clear}>{toolbarIcon('Delete ic')}</button></div>;
+ return <div className="board-frame"><div className="board-top"><label className="font-black">Colour a deity <span className="deity-picker"><select value={name} onChange={e=>select(e.target.value)}>{names.map(n=><option key={n}>{n}</option>)}</select></span></label><span className="font-bold">{tool==='Fill'?'Tap a shape to colour it':'Draw on the page'}</span>{modernToolbar && focusControl}</div>
+ <div className="board-paper">{!modernToolbar && focusControl}<DownloadDrawing/>{modernToolbar?modernActions:<div className="tablet-actions">{actions}</div>}{useImagePage?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
  {portrait(name).map(region)}
- </svg>}<div className="absolute inset-0" style={{pointerEvents:tool==='Fill'?'none':'auto'}}><InkCanvas key={name} afterStroke={afterStroke} brush={tool==='Fill'?'Marker':tool} color={color} widthScale={size} strokes={sheet.strokes} onFinish={()=>{sheet.undo.push([]);redraw()}}/></div>{useImagePage?<img src={imageUrl} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-hidden="true" style={{pointerEvents:'none'}} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
+ </svg>}<div className="absolute inset-0" style={{pointerEvents:tool==='Fill'||locked?'none':'auto'}}><InkCanvas key={name} afterStroke={afterStroke} brush={tool==='Fill'?'Marker':tool} color={color} widthScale={size} strokes={sheet.strokes} onFinish={()=>{redoStack.current.delete(name);sheet.undo.push([]);redraw()}}/></div>{useImagePage?<img src={imageUrl} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-hidden="true" style={{pointerEvents:'none'}} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
  {portrait(name).map(([id,d])=><path key={id} d={d}/>)}
  <g strokeWidth="2.8">
  <path d="M80 80q4-6 9 0m22 0q5-6 9 0"/>
@@ -150,6 +159,6 @@ export function GodsStudio({focusControl}: {focusControl: ReactNode}){
  </g>
  </svg>}</div>
  <div className="mobile-board-bar"><button aria-expanded={toolsOpen} aria-controls="gods-tools" onClick={()=>setToolsOpen(v=>!v)}><span className="mobile-colour-dot" style={{backgroundColor:color}}/> {tool} tools <span aria-hidden="true">{toolsOpen?'⌄':'⌃'}</span></button><button disabled={!sheet.undo.length && !cleared.has(name)} onClick={undo}>Undo</button></div>
- <BottomToolMenu brushes={['Fill',...drawingBrushes]} brush={tool} onBrush={value=>{void playEffect("ui-tap");setTool(value)}} colors={colours} color={color} onColor={value=>{void playEffect("ui-tap");paint(value)}} size={size} onSize={resize}/>
+ <BottomToolMenu brushes={['Fill',...drawingBrushes]} brush={tool} onBrush={value=>{void playEffect("ui-tap");setTool(value)}} colors={colours} color={color} onColor={value=>{void playEffect("ui-tap");setColor(value)}} size={size} onSize={setSize}/>
 </div>
 }

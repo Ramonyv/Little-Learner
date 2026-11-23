@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { GameDetailHeader } from '../components/layout/GameDetailHeader';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { useSession } from '../context/SessionContext';
@@ -28,8 +29,7 @@ export default function Runner() {
   const [ready, setReady] = useState(false),
     [failed, setFailed] = useState(false),
     [attempt, retry] = useReducer((n) => n + 1, 0);
-  const [best, setBest] = useState(readBest),
-    [help, setHelp] = useState(false);
+  const [best, setBest] = useState(readBest);
   const { soundOn, setSoundOn } = useSession();
   useEffect(() => {
     if (soundOn) audio.preload();
@@ -156,7 +156,6 @@ export default function Runner() {
     audio.stop();
     game.current = newGame();
     game.current.mode = 'running';
-    setHelp(false);
     canvas.current?.focus();
     refresh();
   }
@@ -180,6 +179,41 @@ export default function Runner() {
         </button>
       </GameDetailHeader>
       <section className="run-stage" aria-label={scenes[g.scene]}>
+        <div className="run-hud">
+          <div className="run-health" aria-label={g.hearts + ' hearts'}>
+            <img src={hud('PlayerAvatar')} alt="" />
+            {[1, 2, 3].map((i) => (
+              <img
+                key={i}
+                src={hud(
+                  i <= g.hearts ? 'HealthHeartFilled' : 'HealthHeartEmpty',
+                )}
+                alt=""
+              />
+            ))}
+          </div>
+          <div className="run-stats">
+            <b><img src={hud('Scene')} alt=""/>{scenes[g.scene]}</b>
+            <b><img src={hud('Distance')} alt=""/>Distance: {Math.floor(g.x / 10)} m</b>
+            <b><img src={hud('Best')} alt=""/>Best: {best}</b>
+          </div>
+          <span className="run-counter">
+            <img
+              src={root + 'Collectibles : Coins (Pickups)/Coin_Basic.svg'}
+              alt="Coins"
+            />
+            <span>{g.total}</span>
+          </span>
+
+          <button
+            aria-label="Pause game"
+            disabled={g.mode !== 'running'}
+            onClick={toggle}
+          >
+            <img src={hud('Pause')} alt="" />
+          </button>
+        </div>
+        <div className="run-arena">
         <canvas
           tabIndex={0}
           aria-label="Hanuman Runner play area"
@@ -195,35 +229,6 @@ export default function Runner() {
             g.held = false;
           }}
         />
-        <div className="run-hud">
-          <div className="run-health" aria-label={g.hearts + ' hearts'}>
-            <img src={hud('PlayerAvatar')} alt="" />
-            {[1, 2, 3].map((i) => (
-              <img
-                key={i}
-                src={hud(
-                  i <= g.hearts ? 'HealthHeartFilled' : 'HealthHeartEmpty',
-                )}
-                alt=""
-              />
-            ))}
-          </div>
-          <span className="run-counter">
-            <img
-              src={root + 'Collectibles : Coins (Pickups)/Coin_Basic.svg'}
-              alt="Coins"
-            />
-            {g.total}
-          </span>
-          <span className="run-score">Score {g.score}</span>
-          <button
-            aria-label="Pause game"
-            disabled={g.mode !== 'running'}
-            onClick={toggle}
-          >
-            <img src={hud('Pause')} alt="" />
-          </button>
-        </div>
         {g.mode === 'running' && (
           <div className="run-powers">
             {[
@@ -248,15 +253,26 @@ export default function Runner() {
               data-mode={g.mode}
               aria-label={title}
             >
-              <img
-                className="run-illustration"
-                src={hero(
-                  g.mode === 'ready' ? '08 FLy GLide' : '02 Idle-Neautral',
-                )}
-                alt=""
-              />
+              <div className="run-popup-art" aria-hidden="true">
+                <img className="help-cloud left" src={hud('HelpCloud')} alt=""/>
+                <img className="help-cloud right" src={hud('HelpCloudSmall')} alt=""/>
+                <img className="run-illustration" src={g.mode === 'over' ? hud('ResultHanuman') : hero(g.mode === 'ready' ? '08 FLy GLide' : '02 Idle-Neautral')} alt=""/>
+                {[0,1].map(i=><img key={i} className={'help-coin coin-'+i} src={root+'Collectibles : Coins (Pickups)/Coin_Basic.svg'} alt=""/>)}
+              </div>
+              {g.mode === 'ready' ? (
+                <button type="button" className="run-close" aria-label="Close guide and start running" disabled={!ready || failed} onClick={start}>
+                  <img src={hud('CloseMark')} alt="" />
+                </button>
+              ) : (
+                <Link className="run-close" aria-label="Back to games" to="/games"><img src={hud('CloseMark')} alt="" /></Link>
+              )}
               <h2>{title}</h2>
-              <p>
+              {g.mode === 'over' ? (
+                <div className="run-results">
+                  <div><img src={hud('ResultScore')} alt="" /><strong>{g.score}</strong>Score</div>
+                  <div><img src={hud('ResultCoin')} alt="" /><strong>{g.total}</strong>Coins</div>
+                </div>
+              ) : <p>
                 {g.mode === 'ready'
                   ? 'Help Hanuman collect Ram Coins and avoid traps!'
                   : scenes[g.scene] +
@@ -265,7 +281,7 @@ export default function Runner() {
                     ' · ' +
                     g.total +
                     ' coins'}
-              </p>
+              </p>}
               {failed ? (
                 <button
                   onClick={() => {
@@ -290,33 +306,25 @@ export default function Runner() {
                   )}
                   {!ready
                     ? 'Loading artwork…'
-                    : g.mode === 'ready'
-                      ? 'Start running'
-                      : g.mode === 'paused'
-                        ? 'Resume'
-                        : 'Try again'}
+                    : g.mode === 'paused'
+                      ? 'Resume'
+                      : 'Start running'}
                 </button>
               )}
-              {g.mode === 'paused' ? (
-                <button onClick={start}>Restart run</button>
-              ) : (
-                <button aria-expanded={help} onClick={() => setHelp(!help)}>
-                  How to play
-                </button>
-              )}
-              {help && (
+              {g.mode === 'paused' && <button onClick={start}>Restart run</button>}
+              {g.mode === 'ready' && <>
+                <h3 className="run-guide-title">How to play?</h3>
                 <div className="run-guide">
-                  <p>
-                    Tap, Space or ↑ to jump. Hold to rise during flight. Release
+                  <div className="run-keys"><div><kbd>↑</kbd><kbd>Space</kbd><kbd>P</kbd></div><p>Tap, Space or ↑ to jump. Hold to rise during flight. Release
                     to descend. Press P to pause.
-                  </p>
+                  </p></div>
                   <ul>
                     {[
                       ['Basic', '1 coin'],
                       ['Golden', '5 coins'],
                       ['Star', '10 coins'],
-                      ['Glow', 'Double coins for 8s'],
                       ['Shield', 'Block one hit'],
+                      ['Glow', 'Double coins for 8s'],
                       ['Winged', 'Attract coins for 6s'],
                       ['Flying (Fly_Powerup)', 'Fly for 6s'],
                     ].map(([name, description]) => (
@@ -335,16 +343,12 @@ export default function Runner() {
                     ))}
                   </ul>
                 </div>
-              )}
+              </>}
             </section>
           </div>
         )}
+        </div>
       </section>
-      <div className="run-progress">
-        <b>{scenes[g.scene]}</b>
-        <span className="run-distance">Distance {Math.floor(g.x / 10)} m</span>
-        <span>Best {best}</span>
-      </div>
       <section className="p-guide" aria-labelledby="runner-guide-title">
         <h2 id="runner-guide-title">How to play</h2>
         <div className="p-guide-answers">

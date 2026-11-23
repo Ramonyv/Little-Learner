@@ -1,4 +1,4 @@
-.site-bar {background:#f7faff;color:#172951;font-weight:800;position:relative;z-index:30}
+.site-bar {background:#f7faff;color:#172951;font-weight:800;position:sticky;top:0;z-index:100;width:100%;box-shadow:0 2px 12px #21334a12}
 .site-bar nav,.site-links,.site-trophy {display:flex;align-items:center}
 .site-bar nav {gap:12px;min-height:clamp(72px,6.6vw,96px);padding:14px 4.35%}
 .site-logo {width:clamp(140px,16vw,230px)}
@@ -10,6 +10,12 @@
 .site-profile {position:relative}.site-profile summary {cursor:pointer;list-style:none}.site-profile summary::-webkit-details-marker{display:none}.site-profile summary img{width:44px}
 .site-profile>div {position:absolute;right:0;top:calc(100% + 6px);width:140px;display:grid;text-align:left;padding:12px;gap:8px;background:white;border-radius:14px;box-shadow:0 4px 16px #21334a22}.site-profile button{text-align:left}
 body:has(.drawing-board.focus-mode) .site-bar{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .site-links a:hover{background:#e8f2ff;color:#174e9f}
+  .site-links a[aria-current]:hover{background:#1169dc;color:white}
+  .site-profile[open]>div{transform-origin:top right;animation:site-menu-in 180ms cubic-bezier(.2,.8,.2,1) both}
+  @keyframes site-menu-in{from{opacity:0;transform:translateY(-5px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+}
 @media(max-width:980px){.site-bar nav{flex-wrap:wrap}.site-links{order:1;width:100%;overflow-x:auto}.site-logo{margin-right:auto}.site-bar nav>a:first-child{margin-right:auto}.site-links a{padding:6px 9px;font-size:14px}}
 
 @media(min-width:981px){.site-bar nav>a:first-child{padding-right:clamp(14px,1.6vw,24px);border-right:2px solid #cedeee}}

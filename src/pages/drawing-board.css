@@ -410,10 +410,45 @@
   .board-top{justify-content:flex-start}.board-top .exercise-icon{display:block}
   .board-top .guide-count{margin-left:auto;margin-right:0}.board-top .star-count+.surface-selector{margin-left:0}
 }
+
+/* Keep trace categories cohesive on wide desktop screens. */
+@media(min-width:1367px){
+  .guide-list{
+    width:fit-content;
+    max-width:100%;
+    margin:10px 0 16px;
+    padding:6px;
+    gap:5px;
+    justify-content:flex-start;
+    border:1px solid #c8dced;
+    border-radius:22px;
+    background:#f8fbffcc;
+    box-shadow:0 6px 18px #315b8112;
+  }
+  .guide-list button{
+    flex:0 0 126px;
+    min-height:62px;
+    gap:3px;
+    padding:6px 7px;
+    border:1px solid transparent;
+    border-radius:13px;
+    color:#1c2d59;
+    font-size:14px;
+    transition:background-color .16s ease,border-color .16s ease,transform .16s ease;
+  }
+  .guide-list button:hover{background:#edf6ff;border-color:#c6def4}
+  .guide-list button:active{transform:translateY(1px)}
+  .guide-list button[aria-pressed=true]{
+    background:white;
+    border-color:#83bdf1;
+    box-shadow:0 3px 10px #2c67941a,inset 0 -3px #e7f3ff;
+  }
+  .guide-list .board-symbol{width:26px;height:26px}
+}
 .bottom-tool-heading img.bottom-tool-arrow{width:15px;height:15px;flex:none}
 
 .board-frame:has(>.drawing-tool-sidebar){
-  display:grid;grid-template-columns:clamp(365px,28vw,476px) minmax(0,1fr);
+  display:grid;grid-template-columns:clamp(320px,24vw,410px) minmax(0,1fr);
   grid-template-rows:auto auto minmax(0,1fr);gap:0 16px;
 }
 .board-frame:has(>.drawing-tool-sidebar)>.board-top{grid-area:1/2}

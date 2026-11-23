@@ -12,7 +12,7 @@ import { SessionProvider } from './context/SessionContext';
 import { SiteHeader } from './components/layout/SiteHeader';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { SeedActivity } from './pages/SeedActivity';
-import { DrawingBoard } from './pages/DrawingBoard';
+import { DrawingBoardV2 } from './pages/DrawingBoardV2';
 import { HomePage } from './pages/HomePage';
 import { TopicsPage } from './pages/TopicsPage';
 import { ExamIntroPage } from './pages/ExamIntroPage';
@@ -34,7 +34,7 @@ export const App: React.FC = () => {
             <Route path="/games" element={<main><Games /></main>} />
             <Route path="/games/hanuman-runner" element={<React.Suspense><Runner /></React.Suspense>} />
             <Route path="/games/sliding-puzzle" element={<main><Puzzle /></main>} />
-            <Route path="/drawing-board" element={<main><DrawingBoard /></main>} />
+            <Route path="/drawing-board" element={<main><DrawingBoardV2 /></main>} />
             <Route element={<><main className="flex-1"><Outlet /></main><SiteFooter/><MobileBottomNav /></>}>
               <Route path="/explore/seed" element={<SeedActivity />} />
               <Route path="/" element={<HomePage />} />
