@@ -3,7 +3,6 @@
 @media(max-width:720px){.db2{padding:16px 9px}.db2-header{margin-bottom:50px}.db2-grid{display:flex;flex-direction:column}.db2-settings{height:auto;max-height:380px;min-height:0}.db2-canvas-panel{height:650px}.db2-pages{height:auto}.db2-activity h2{font-size:18px}.db2-activity p{white-space:normal}.db2-badges span{display:none}.db2-modes>button{font-size:13px;padding:8px}.db2-modes>button img{width:19px;height:19px}.db2-category-toggle{top:130px}.db2-center>.board-frame{height:650px}}
 .db2 .db2-gods{background:transparent;padding:0;min-height:0;max-width:none;height:calc(100vh - 165px)}.db2 .db2-gods>.board-frame{height:100%;display:flex;flex-direction:column;background:#f2f8fe;border:0;box-shadow:none}.db2 .db2-gods .board-paper{flex:1;min-height:0;height:auto;background:white}.db2 .db2-gods .drawing-rail,.db2 .db2-gods .drawing-tool-sidebar,.db2 .db2-gods .bottom-tool-menu{display:none}.db2 .db2-gods .board-top{min-height:48px}.db2 .db2-gods .drawing-download{opacity:0;pointer-events:none}.db2-focus .db2-gods{height:calc(100vh - 16px)}
 .db2 .db2-gods{display:block}
-.db2-fill-tool{width:100%;padding:8px;border:2px solid #dce3ef;border-radius:12px;background:white;color:#1b294e;font-weight:900}.db2-fill-tool[aria-pressed=true]{border-color:#1976ec;background:#eaf4ff}
 .db2-form-row select{appearance:none;-webkit-appearance:none;width:88px;max-width:88px;min-height:40px;padding:5px 23px 5px 9px;background:#fff url('/drawing-board%20page%20assets/choose%20letter%20dropdpwn%20arrow%20icon.svg') no-repeat right 9px center;background-size:10px 6px;cursor:pointer}
 .db2-segment{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:88px;min-height:40px}
 .db2-segment button{width:100%;min-width:0;padding:3px 0;text-align:center}
@@ -72,3 +71,15 @@
 .db2-setting-body,.db2-form-row{font-size:13px;font-weight:700;line-height:1.62}
 
 .db2-settings h2,.db2-pages h2{font-size:15px;font-weight:800;line-height:1.4}
+
+/* Let tool tiles shrink with the sidebar, but stop them growing past the design scale. */
+.db2-tool-grid{max-width:306px}
+
+.db2-guide-thumb{color:#1b294e;padding:5px;overflow:hidden}
+.db2-guide-thumb svg{display:block;width:100%;height:100%}
+
+@media (min-width:901px) and (max-width:1150px){.db2-grid{grid-template-columns:280px minmax(0,1fr)}.db2-header{margin-bottom:24px}.db2-modes>button{padding:10px 14px;gap:7px}.db2-modes>button img{width:22px;height:22px}}
+@media (min-width:721px) and (max-width:900px){.db2{padding:20px 16px}.db2-header{margin-bottom:24px}.db2-header h1{margin-bottom:16px}.db2-modes{width:100%;overflow:visible;justify-content:space-between}.db2-modes>button{padding:9px 12px;gap:6px;font-size:14px}.db2-modes>button img{width:20px;height:20px}.db2-grid{display:flex;flex-direction:column}.db2-settings{height:auto;min-height:0;max-height:320px;overflow-y:auto}.db2-canvas-panel{height:700px;min-height:0}.db2-pages{height:auto;min-height:0}.db2-tool-grid{max-width:306px}.db2 .db2-gods{height:700px}}
+
+.db2-god-thumb{overflow:hidden;padding:3px}
+.db2-god-thumb img{display:block;width:100%;height:100%;object-fit:contain}
