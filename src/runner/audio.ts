@@ -1,4 +1,4 @@
-import { getEnabledAudioContext } from '../utils/soundEffects';
+import { getEnabledAudioContext, resumeAudioContext } from '../utils/soundEffects';
 
 const files = ['ram-coin', 'special-coin', 'jump', 'flight-start', 'shield-break',
   'heart-lost', 'temple-bell', 'temple-jai-shri-ram'] as const;
@@ -42,6 +42,7 @@ export class RunnerAudio {
   async play(cue: RunnerCue) {
     const context = getEnabledAudioContext();
     if (!context) return;
+    resumeAudioContext();
     const generation = this.generation;
     const clips: Clip[] = cue === 'temple' ? ['temple-bell', 'temple-jai-shri-ram'] : [cue];
     let pitch = 1;

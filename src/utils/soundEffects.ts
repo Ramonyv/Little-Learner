@@ -9,6 +9,11 @@ const clips = new Map<Effect, Promise<AudioBuffer>>();
 
 export const getEnabledAudioContext = () => enabled ? context : undefined;
 
+export function resumeAudioContext() {
+  if (!enabled || !context || context.state === 'running') return;
+  void context.resume().catch(() => {});
+}
+
 export const isSoundEnabled = () => enabled;
 
 export function setSoundEnabled(value: boolean) {
@@ -20,7 +25,15 @@ export function setSoundEnabled(value: boolean) {
   } else {
     try {
       context ??= new AudioContext();
-      void context.resume().then(() => playEffect('ui-tap')).catch(() => {});
+      // Start a silent source during the tap itself. Mobile Safari can keep a
+      // context locked when its first source starts after an async fetch.
+      const unlock = context.createBufferSource();
+      unlock.buffer = context.createBuffer(1, 1, context.sampleRate);
+      unlock.connect(context.destination);
+      unlock.start();
+      unlock.onended = () => unlock.disconnect();
+      resumeAudioContext();
+      void playEffect('ui-tap');
     } catch { /* Playback is optional on devices without Web Audio. */ }
   }
 }
@@ -28,6 +41,7 @@ export function setSoundEnabled(value: boolean) {
 export async function playEffect(effect: Effect, delay = 0) {
   const audio = context;
   if (!enabled || !audio) return;
+  resumeAudioContext();
   const ticket = ++sequence;
   try {
     const startAt = audio.currentTime + delay;
