@@ -83,3 +83,58 @@
 
 .db2-god-thumb{overflow:hidden;padding:3px}
 .db2-god-thumb img{display:block;width:100%;height:100%;object-fit:contain}
+
+.db2-tablet-action{display:none!important}
+
+/* The tablet drawing workspace follows the portrait Figma layout. */
+@media (min-width:721px) and (max-width:1024px) and (orientation:portrait){
+  .db2{padding:10px 2% 24px}
+  .db2-header{display:block;min-height:0;margin:0 0 12px}
+  .db2-header h1{display:none}
+  .db2-modes{position:relative;left:auto;transform:none;width:100%;max-width:none;overflow:visible;gap:10px}
+  .db2-modes>button{flex:1;justify-content:center;min-width:0;min-height:48px;padding:9px 6px;gap:7px;font-size:clamp(13px,1.9vw,17px)}
+  .db2-modes>button img{width:21px;height:21px;flex:none}
+  .db2-mode-menu{width:min(620px,100%)}
+  .db2-grid{display:grid;grid-template-columns:clamp(188px,23vw,236px) minmax(0,1fr);gap:12px;align-items:stretch}
+  .db2-settings{height:calc(100dvh - 195px);min-height:760px;max-height:none;padding:10px;overflow-y:auto;scrollbar-width:thin}
+  .db2-settings h2{display:none}
+  .db2-pages{display:block;grid-column:1/-1;height:auto;min-height:0}
+  .db2-canvas-panel{height:calc(100dvh - 195px);min-height:760px;padding:12px}
+  .db2 .db2-gods{height:calc(100dvh - 195px);min-height:760px}
+  .db2-setting{border-radius:16px;margin-bottom:10px}
+  .db2-setting-head{min-height:46px;padding:7px 8px;gap:7px;font-size:14px}
+  .db2-setting-head>img{width:22px;height:22px;flex:none}
+  .db2-setting-head .db2-chevron{width:22px;height:22px;flex:none}
+  .db2-setting-body{padding:10px;font-size:13px}
+  .db2-setting-body p{margin:10px 0 7px}
+  .db2-form-row{display:block!important;margin-bottom:10px}
+  .db2-letter-picker{width:100%;min-width:0;min-height:44px;margin-top:6px}
+  .db2-segment{width:100%;margin-top:6px}
+  .db2-swatches{gap:8px}
+  .db2-swatches button{width:31px;height:31px}
+  .db2-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:7px}
+  .db2-tool-grid button{min-height:58px;padding:9px}
+  .db2-sizes{flex-wrap:wrap;justify-content:flex-start;gap:5px}
+  .db2-sizes button{width:40px;height:40px}
+  .db2-canvas-head{flex-wrap:wrap;gap:8px}
+  .db2-activity{flex:1;gap:8px}
+  .db2-activity>img{display:block;width:46px;height:46px;flex:none}
+  .db2-activity h2{font-size:19px}
+  .db2-badges{margin-left:auto}
+  .db2-badges span,.db2-badges button{min-height:40px;font-size:12px;padding:5px 8px}
+  .db2-badges button{min-width:40px}
+  .db2-tablet-action{display:grid!important;place-items:center}
+  .db2-tablet-action svg{width:18px;height:18px}
+  .db2-canvas-tools>button,.db2-canvas-tools span button{width:38px;height:38px;min-width:38px;min-height:38px}
+  .db2-canvas-tools span button[aria-pressed=true]{width:40px;height:40px;min-width:40px;min-height:40px}
+  .db2-canvas-tools>button img{width:21px;height:21px}
+  .db2-focus .db2-header,.db2-focus .db2-settings{display:none}
+  .db2-focus .db2-grid{display:block}
+  .db2-focus .db2-canvas-panel,.db2-focus .db2-gods{height:calc(100dvh - 16px);min-height:0}
+}
+@media (min-width:721px) and (max-width:900px) and (orientation:portrait){
+  .db2-canvas-head{align-items:flex-start}
+  .db2-activity{flex-basis:100%}
+  .db2-activity h2,.db2-activity p{white-space:normal}
+  .db2-badges{margin-left:auto}
+}
