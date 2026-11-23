@@ -58,6 +58,7 @@ export function DownloadDrawing() {
       context.fillStyle = board.classList.contains('dark') ? '#004d3d' : '#ffffff';
       context.fillRect(0, 0, rect.width, rect.height);
       for (const layer of board.querySelectorAll('canvas, svg.board-guide, img.board-guide')) {
+        if (layer.classList.contains('db2-trace-image')) continue;
         const bounds = layer.getBoundingClientRect();
         const x = bounds.left - rect.left, y = bounds.top - rect.top;
         if (layer instanceof HTMLCanvasElement) {

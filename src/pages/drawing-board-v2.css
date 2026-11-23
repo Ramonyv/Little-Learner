@@ -85,6 +85,15 @@
 .db2-god-thumb img{display:block;width:100%;height:100%;object-fit:contain}
 
 .db2-tablet-action{display:none!important}
+.db2-trace-image{position:absolute;z-index:0;max-height:90%;object-fit:contain;pointer-events:none;user-select:none;opacity:.55;touch-action:none}
+.db2-trace-image.is-positioning{z-index:6;pointer-events:auto;cursor:grab;outline:2px dashed #1976ec;opacity:.7}
+.db2-trace-image.is-positioning:active{cursor:grabbing}
+.db2-paper>canvas[aria-label="Drawing surface"]{z-index:1}
+.db2-trace-controls{display:grid;gap:8px;padding:8px;border:1px solid #dce3ef;border-radius:12px;background:#f8fbff}
+.db2-trace-controls label{display:grid;gap:3px;color:#1b294e;font-size:13px;font-weight:800}
+.db2-trace-controls input{width:100%}
+.db2-trace-controls small{color:#526685;font-size:11px;line-height:1.3}
+@media print{.db2-trace-image{display:none!important}}
 
 /* The tablet drawing workspace follows the portrait Figma layout. */
 @media (min-width:721px) and (max-width:1024px) and (orientation:portrait){
