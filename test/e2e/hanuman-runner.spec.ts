@@ -109,6 +109,16 @@ test('the default run cycles through every scene and ends on the last heart', ()
   expect(game.mode).toBe('over');
 });
 
+test('3D Style keeps the same run going after all hearts are lost', () => {
+  const game = new Game(() => {}, true);
+  game.mode = 'running';
+  advance(game, 120);
+  expect(game.mode).toBe('running');
+  expect(game.hearts).toBeGreaterThan(0);
+  expect(game.x).toBeGreaterThan(20000);
+  expect(game.score).toBeGreaterThan(0);
+});
+
 test('runner audio loads all eight clips and schedules the temple greeting after its bell', async ({
   page,
 }) => {
@@ -210,4 +220,33 @@ test('phone game cards share a row and show the runner thumbnail', async ({page}
     expect(second!.x + second!.width).toBeLessThanOrEqual(width);
     await expect(page.locator('.catalog-runner .catalog-thumbnail')).toHaveJSProperty('naturalWidth', 296);
   }
+});
+
+test('3D Style loads its artwork and Classic remains playable', async ({page}) => {
+  const missing: string[] = [];
+  page.on('response', response => {
+    if (response.url().includes('/Hanuman%20Run/3d%20assets/') && !response.ok()) missing.push(response.url());
+  });
+  await page.goto('/games/hanuman-runner?art=3d');
+  await expect(page.getByRole('button', {name:'3D Style'})).toHaveAttribute('aria-pressed','true');
+  await expect(page.getByRole('button', {name:'Start running',exact:true})).toBeEnabled();
+  expect(missing).toEqual([]);
+  const artwork = await page.locator('.run-modal[data-mode="ready"] .run-illustration').boundingBox();
+  const heading = await page.getByRole('heading', {name:'Ready to run?'}).boundingBox();
+  expect(artwork!.y + artwork!.height).toBeLessThan(heading!.y);
+  await page.setViewportSize({width:390,height:850});
+  const mobileArtwork = await page.locator('.run-modal[data-mode="ready"] .run-illustration').boundingBox();
+  const mobileHeading = await page.getByRole('heading', {name:'Ready to run?'}).boundingBox();
+  expect(mobileArtwork!.y + mobileArtwork!.height).toBeLessThan(mobileHeading!.y);
+  await expect(page.locator('.run-health img').first()).toHaveJSProperty('naturalWidth',164);
+  await page.getByRole('button', {name:'Start running',exact:true}).click();
+  await expect(page.getByRole('button', {name:'Pause game'})).toBeEnabled();
+  const groundPixel = await page.locator('.run-arena canvas').evaluate(canvas => {
+    const surface = canvas as HTMLCanvasElement;
+    return [...surface.getContext('2d')!.getImageData(Math.floor(surface.width / 2), surface.height - 2, 1, 1).data];
+  });
+  expect(groundPixel[0]).toBeGreaterThan(groundPixel[2]);
+  await page.getByRole('button', {name:'Classic'}).click();
+  await expect(page.getByRole('button', {name:'Classic'})).toHaveAttribute('aria-pressed','true');
+  await expect(page.getByRole('button', {name:'Start running',exact:true})).toBeEnabled();
 });

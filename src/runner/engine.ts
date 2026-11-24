@@ -143,13 +143,16 @@ export class Game {
     life: number;
     color: string;
   }[] = [];
-  constructor(readonly effect: (event: RunnerCue) => void = () => {}) {
+  constructor(readonly effect: (event: RunnerCue) => void = () => {}, readonly endless = false) {
     this.appendCourse(this.scene, 0);
   }
   private appendCourse(scene: number, start: number) {
     courses[scene].forEach((kind, i) => {
       const x = start + 460 + i * spacing,
-        [w, h] = sizes[kind];
+        [baseW, baseH] = sizes[kind],
+        // The 3D hanging ball has more visual detail and needs a larger
+        // footprint. Keep its collision area aligned with the artwork.
+        [w, h] = this.endless && kind === 'mace' ? [62, 62] : [baseW, baseH];
       this.hazards.push({
         kind,
         x,
@@ -356,7 +359,10 @@ export class Game {
         if (this.shield) this.shield = false;
         else this.hearts--;
         this.invulnerable = 2;
-        if (!this.hearts) this.mode = 'over';
+        if (!this.hearts) {
+          if (this.endless) this.hearts = 3;
+          else this.mode = 'over';
+        }
       }
     }
     for (const p of this.particles) {

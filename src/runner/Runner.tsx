@@ -1,16 +1,16 @@
-import { Link } from 'react-router-dom';
 import { GameDetailHeader } from '../components/layout/GameDetailHeader';
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { useSession } from '../context/SessionContext';
 import { RunnerAudio } from './audio';
 import { Game, scenes } from './engine';
-import { draw, loadArt } from './art';
+import { draw, loadArt, type RunnerArtStyle } from './art';
 import './runner.css';
 
 const root = '/Hanuman Run/';
 const hud = (name: string) => root + 'Game HUD/' + name + '.svg';
 const hero = (name: string) =>
   root + 'Hanuman Ji - 5 Movement Steps/' + name + '.svg';
+const threeD = (name: string) => root + '3d assets/' + name + '.webp';
 const bestKey = 'little-learner.hanuman-runner.best';
 function readBest() {
   try {
@@ -20,8 +20,9 @@ function readBest() {
   }
 }
 export default function Runner() {
+  const [artStyle, setArtStyle] = useState<RunnerArtStyle>(() => new URLSearchParams(location.search).get('art') === '3d' ? '3d' : 'classic');
   const [audio] = useState(() => new RunnerAudio());
-  const newGame = () => new Game((cue) => void audio.play(cue));
+  const newGame = (style: RunnerArtStyle = artStyle) => new Game((cue) => void audio.play(cue), style === '3d');
   const canvas = useRef<HTMLCanvasElement>(null);
   const game = useRef<Game>(null!);
   if (!game.current) game.current = newGame();
@@ -31,6 +32,16 @@ export default function Runner() {
     [attempt, retry] = useReducer((n) => n + 1, 0);
   const [best, setBest] = useState(readBest);
   const { soundOn, setSoundOn } = useSession();
+  const hudImage = (name: string) => artStyle === '3d' && ['PlayerAvatar', 'HealthHeartFilled', 'HealthHeartEmpty', 'Pause'].includes(name) ? threeD(name) : hud(name);
+  function selectArtStyle(next: RunnerArtStyle) {
+    if (next === artStyle) return;
+    audio.stop();
+    game.current = newGame(next);
+    setReady(false);
+    setFailed(false);
+    setArtStyle(next);
+    refresh();
+  }
   useEffect(() => {
     if (soundOn) audio.preload();
     return () => audio.stop();
@@ -47,6 +58,7 @@ export default function Runner() {
       last = 0,
       carry = 0,
       reported = 0,
+      lastBestSync = 0,
       slow = 0;
     let width = 0,
       height = 0,
@@ -65,7 +77,7 @@ export default function Runner() {
     const observer = new ResizeObserver(resize);
     observer.observe(el);
     resize();
-    loadArt()
+    loadArt(artStyle)
       .then((images) => {
         if (!active) return;
         setReady(true);
@@ -93,7 +105,17 @@ export default function Runner() {
               return value;
             });
           }
-          draw(ctx, width, height, g, images, g.lowEffects);
+          draw(ctx, width, height, g, images, g.lowEffects, artStyle);
+          if (artStyle === '3d' && g.mode === 'running' && now - lastBestSync > 1000) {
+            setBest(previous => {
+              const value = Math.max(previous, g.score);
+              if (value !== previous) {
+                try { localStorage.setItem(bestKey, String(value)); } catch { /* Storage is optional. */ }
+              }
+              return value;
+            });
+            lastBestSync = now;
+          }
           if (
             (g.mode === 'running' && now - reported > 75) ||
             before !== g.mode
@@ -150,7 +172,7 @@ export default function Runner() {
       window.removeEventListener('blur', pause);
       document.removeEventListener('visibilitychange', visibility);
     };
-  }, [attempt]);
+  }, [attempt, artStyle]);
   const g = game.current;
   function start() {
     audio.stop();
@@ -178,14 +200,18 @@ export default function Runner() {
           <img src={hud(soundOn ? 'Sound On-Ic' : 'Sound Off-ic')} alt="" />
         </button>
       </GameDetailHeader>
-      <section className="run-stage" aria-label={scenes[g.scene]}>
+      <div className="run-art-switch" role="group" aria-label="Hanuman Runner art mode">
+        <button type="button" aria-pressed={artStyle === 'classic'} onClick={() => selectArtStyle('classic')}>Classic</button>
+        <button type="button" aria-pressed={artStyle === '3d'} onClick={() => selectArtStyle('3d')}>3D Style</button>
+      </div>
+      <section className="run-stage" data-art-style={artStyle} aria-label={scenes[g.scene]}>
         <div className="run-hud">
           <div className="run-health" aria-label={g.hearts + ' hearts'}>
-            <img src={hud('PlayerAvatar')} alt="" />
+            <img src={hudImage('PlayerAvatar')} alt="" />
             {[1, 2, 3].map((i) => (
               <img
                 key={i}
-                src={hud(
+                src={hudImage(
                   i <= g.hearts ? 'HealthHeartFilled' : 'HealthHeartEmpty',
                 )}
                 alt=""
@@ -203,7 +229,7 @@ export default function Runner() {
           </div>
           <span className="run-counter">
             <img
-              src={root + 'Collectibles : Coins (Pickups)/Coin_Basic.svg'}
+              src={artStyle === '3d' ? threeD('Coin_Basic') : root + 'Collectibles : Coins (Pickups)/Coin_Basic.svg'}
               alt="Coins"
             />
             <span>{g.total}</span>
@@ -214,7 +240,7 @@ export default function Runner() {
             disabled={g.mode !== 'running'}
             onClick={toggle}
           >
-            <img src={hud(g.mode === 'paused' ? 'Play-ic' : 'Puase-ic')} alt="" />
+            <img src={artStyle === '3d' ? threeD(g.mode === 'paused' ? 'Play' : 'Pause') : hud(g.mode === 'paused' ? 'Play-ic' : 'Puase-ic')} alt="" />
           </button>
         </div>
         <div className="run-arena">
@@ -260,12 +286,9 @@ export default function Runner() {
               <div className="run-popup-art" aria-hidden="true">
                 <img className="help-cloud left" src={hud('HelpCloud')} alt=""/>
                 <img className="help-cloud right" src={hud('HelpCloudSmall')} alt=""/>
-                <img className="run-illustration" src={g.mode === 'over' ? hud('ResultHanuman') : hero(g.mode === 'ready' ? '08 FLy GLide' : '02 Idle-Neautral')} alt=""/>
+                <img className="run-illustration" src={artStyle === '3d' ? threeD(g.mode === 'over' ? 'Hit-Hurt' : g.mode === 'ready' ? '08 FLy GLide' : '02 Idle-Neautral') : g.mode === 'over' ? hud('ResultHanuman') : hero(g.mode === 'ready' ? '08 FLy GLide' : '02 Idle-Neautral')} alt=""/>
                 {[0,1].map(i=><img key={i} className={'help-coin coin-'+i} src={root+'Collectibles : Coins (Pickups)/Coin_Basic.svg'} alt=""/>)}
               </div>
-              {g.mode === 'paused' && (
-                <Link className="run-close" aria-label="Back to games" to="/games"><img src={hud('CloseMark')} alt="" /></Link>
-              )}
               <h2>{title}</h2>
               {g.mode === 'over' ? (
                 <div className="run-results">
@@ -364,10 +387,9 @@ export default function Runner() {
           <div>
             <h3>How far can I run?</h3>
             <p>
-              Endless run takes you through all three scenes and keeps going
-              while you have hearts. You start with three. A hit costs one
-              heart, and a Shield Coin protects you from one hit. Collect Ram
-              Coins along the way to beat your best score.
+              {artStyle === '3d'
+                ? 'The 3D Style run continues through all three scenes. Hits cost hearts, and your hearts refill when they run out. A Shield Coin protects you from one hit. Collect Ram Coins and keep going to beat your best score.'
+                : 'The Classic run takes you through all three scenes while you have hearts. You start with three. A hit costs one heart, and a Shield Coin protects you from one hit. Collect Ram Coins along the way to beat your best score.'}
             </p>
           </div>
         </div>

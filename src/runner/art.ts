@@ -6,6 +6,15 @@ const env = 'Environment (Background : Decorative)',
   hero = 'Hanuman Ji - 5 Movement Steps',
   enemy = 'Raksahs Enemy - 5 Movement : Action Varinants',
   coins = 'Collectibles : Coins (Pickups)';
+export type RunnerArtStyle = 'classic' | '3d';
+const threeDNames: Record<string, string> = {
+  'Bush_Small': 'Cartoon Adventure Asset Sheet (1) 1',
+  'Bush_Small-Alt': 'Cartoon Adventure Asset Sheet (1) 2',
+  'Rocke Cluster 1': 'Rocke Cluster 3',
+  'Rocke Cluster 2': 'Rocke Cluster 4',
+  '04 Attack- Sword': '04 Attack- Sword Running',
+};
+const threeDFallback = new Set(['Vector 610', 'Vector 611', 'Vector 612', 'Vector 613']);
 const groups: [string, string[]][] = [
   [
     env,
@@ -86,13 +95,15 @@ const groups: [string, string[]][] = [
     ['Ground_Tile_Long', 'Ground_Tile_Medium', 'Ground_Tile_Single'],
   ],
 ];
-export async function loadArt() {
+export async function loadArt(style: RunnerArtStyle = 'classic') {
   const atlas: Record<string, HTMLImageElement | HTMLCanvasElement> = {};
   await Promise.all(
     groups.flatMap(([group, files]) =>
       files.map(async (name) => {
         const img = new Image();
-        img.src = '/Hanuman Run/' + group + '/' + name + '.svg';
+        img.src = style === '3d' && !threeDFallback.has(name)
+          ? '/Hanuman Run/3d assets/' + (group === enemy && name === '01 Idle-Neautral' ? '01 Idle-Neautral-1' : threeDNames[name] || name) + '.webp'
+          : '/Hanuman Run/' + group + '/' + name + '.svg';
         await img.decode();
         let art: HTMLImageElement | HTMLCanvasElement = img;
         // Character exports have generous transparent margins. Align visible feet to the collision surface.
@@ -153,6 +164,7 @@ export function draw(
   g: Game,
   atlas: Awaited<ReturnType<typeof loadArt>>,
   low: boolean,
+  style: RunnerArtStyle = 'classic',
 ) {
   const floor = h - 65,
     player = Math.min(130, w * 0.2),
@@ -197,17 +209,18 @@ export function draw(
   }
   const mountainHeight = [96, 155, 65][g.scene];
   const mountainGap = [690, 540, 720][g.scene];
+  const mountainBottom = floor + (style === '3d' ? 12 : 4);
   for (
     let x = 370 - ((g.x * 0.17) % mountainGap) - mountainGap;
     x < w + mountainGap;
     x += mountainGap
   ) {
-    sprite('Mountain-Waterfall', x, floor + 4, mountainHeight);
+    sprite('Mountain-Waterfall', x, mountainBottom, mountainHeight);
     if (g.scene === 1 && !low) {
       const unit = mountainHeight / 115,
         left = x - (339 * unit) / 2;
       ctx.save();
-      ctx.translate(left, floor + 4 - mountainHeight);
+      ctx.translate(left, mountainBottom - mountainHeight);
       ctx.scale(unit, unit);
       ctx.strokeStyle = '#c0f3ff';
       ctx.lineWidth = 1.5;
@@ -238,10 +251,14 @@ export function draw(
     'Ground_Tile_Single',
   ][g.scene];
   const tile = atlas[tileName],
-    tileWidth = (66 * tile.width) / tile.height;
-  const stride = tileWidth - 1;
+    tileHeight = style === '3d' ? 70 : 66,
+    tileBottom = style === '3d' ? floor + 69 : floor + 65,
+    tileWidth = (tileHeight * tile.width) / tile.height;
+  // The clay tiles have rounded, transparent side padding. Tuck their edges
+  // behind the next tile so the ground reads as one continuous strip.
+  const stride = tileWidth - (style === '3d' ? 9 : 1);
   for (let x = -(left % stride) - stride; x < w; x += stride)
-    sprite(tileName, x + tileWidth / 2, floor + 65, 66);
+    sprite(tileName, x + tileWidth / 2, tileBottom, tileHeight);
   for (const p of g.platforms) {
     const key = p.wooden ? 'Wooden Platform' : 'Floating_Platform';
     const height = (p.w * atlas[key].height) / atlas[key].width;
@@ -251,6 +268,10 @@ export function draw(
     const x = z.x - left,
       bottom = floor - z.y;
     if (z.kind === 'mace') {
+      if (style === '3d') {
+        sprite(z.alternateMace ? 'Hanging Spiked Ball' : 'Hazard_HangingSpikedBall_Large', x, bottom, z.h, -Math.sin(g.time * 2) * 0.47);
+        continue;
+      }
       const mace = z.alternateMace
         ? atlas['Hanging Spiked Ball']
         : atlas.Hazard_HangingSpikedBall_Large;
@@ -293,7 +314,7 @@ export function draw(
         wheel: 'Spiked Wheel',
       }[z.kind],
       x,
-      bottom,
+      style === '3d' && z.y === 0 ? bottom + 4 : bottom,
       z.h,
       z.kind === 'wheel'
         ? g.time * 3
