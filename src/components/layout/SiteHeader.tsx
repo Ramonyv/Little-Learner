@@ -13,6 +13,7 @@ const mobileIcons: Record<string,string> = {
   Practice: '/drawing-board%20page%20assets/Nav-Practice-ic.svg',
   'Drawing Board': '/drawing-board%20page%20assets/Nav-Drawing-Board-ic.svg',
   Progress: '/drawing-board%20page%20assets/Nav-Progress-ic.svg',
+  About: '/drawing-board%20page%20assets/Nav-About-ic.svg',
 };
 const compactNavigation = '(max-width: 980px), (max-width: 1024px) and (orientation: portrait)';
 
@@ -41,7 +42,7 @@ export function SiteHeader() {
     <div className="site-links">{links.map(([label, path]) => {
       return <Link key={path} to={path} aria-current={isActive(label,path) ? 'page' : undefined}>{label}</Link>;
     })}</div>
-    <div className="site-tablet-menu" ref={menuRef}><button className="site-menu-toggle" type="button" aria-label={menuOpen?'Close navigation menu':'Open navigation menu'} aria-controls="site-mobile-menu" aria-expanded={menuOpen} onClick={()=>setMenuOpen(open=>!open)}><span/><span/><span/></button>{menuOpen && <div id="site-mobile-menu" className="site-mobile-menu">{links.map(([label,path])=><Link key={label} to={path} aria-current={isActive(label,path)?'page':undefined} onClick={()=>setMenuOpen(false)}>{mobileIcons[label] && <img src={mobileIcons[label]} alt=""/>}<span>{label}</span></Link>)}</div>}</div>
+    <div className="site-tablet-menu" ref={menuRef}><button className="site-menu-toggle" type="button" aria-label={menuOpen?'Close navigation menu':'Open navigation menu'} aria-controls="site-mobile-menu" aria-expanded={menuOpen} onClick={()=>setMenuOpen(open=>!open)}><span/><span/><span/></button>{menuOpen && <div id="site-mobile-menu" className="site-mobile-menu">{links.map(([label,path])=><Link key={label} to={path} aria-current={isActive(label,path)?'page':undefined} onClick={()=>setMenuOpen(false)}>{mobileIcons[label] && <img src={mobileIcons[label]} alt=""/>}<span>{label === 'About' ? 'About LL' : label}</span></Link>)}</div>}</div>
     <Link className="site-trophy" to="/progress" aria-label={'Progress, '+puzzleWins+' puzzle wins'}><img src="/puzzle-ui/imgGroup46.svg" alt="" />{puzzleWins}</Link>
     <details className="site-profile" key={pathname}><summary aria-label="Learner menu"><img src="/puzzle-ui/imgUserProfile.svg" alt="" /></summary>
       <div><strong>Class {selectedClass}</strong><Link to="/my-work">My Work</Link><button aria-pressed={soundOn} onClick={()=>setSoundOn(!soundOn)}>Sound {soundOn?'on':'off'}</button></div>

@@ -165,7 +165,8 @@ test('only the full start guide appears below the live HUD on desktop and phone'
     expect(bar!.y+bar!.height).toBeLessThanOrEqual(arena!.y+1);
     expect(await page.locator('.run-hud img').evaluateAll(images=>images.every(img=>(img as HTMLImageElement).naturalWidth>0))).toBe(true);
     await expect(page.getByRole('heading',{name:'How to play?',exact:true})).toBeVisible();
-    await page.getByRole('button', {name: 'Close guide and start running'}).click();
+    await expect(page.locator('.run-modal[data-mode="ready"] .run-close')).toHaveCount(0);
+    await page.getByRole('button', {name: 'Start running', exact: true}).click();
     await expect(page.locator('.run-modal')).toBeHidden();
     await expect(page.getByRole('button', {name: 'Pause game'})).toBeEnabled();
     const gamesLink = width === 390
@@ -187,6 +188,7 @@ test('game over shows run totals and starts a fresh run', async ({page}) => {
       await page.clock.runFor(1000);
     }
     await expect(result).toBeVisible();
+    await expect(result.locator('.run-close')).toHaveCount(0);
     await expect(result.locator('.run-results')).toHaveText(/\d+Score\d+Coins/);
     expect(await result.locator('img').evaluateAll(images =>
       images.every(image => (image as HTMLImageElement).naturalWidth > 0)

@@ -173,9 +173,9 @@ export default function Runner() {
         : 'Game over';
   return (
     <main className="runner">
-      <GameDetailHeader title="Hanuman Runner" description="Jump over traps and collect Ram Coins as you run." icon={hud('PlayerAvatar')}>
-        <button onClick={() => setSoundOn(!soundOn)} aria-pressed={soundOn}>
-          Sound {soundOn ? 'on' : 'off'}
+      <GameDetailHeader title="Hanuman Runner" description="Jump over traps and collect Ram Coins as you run." icon={hud('Hanuma Run Game Icon')}>
+        <button className="run-sound" onClick={() => setSoundOn(!soundOn)} aria-label={soundOn ? 'Sound on' : 'Sound off'} aria-pressed={soundOn}>
+          <img src={hud(soundOn ? 'Sound On-Ic' : 'Sound Off-ic')} alt="" />
         </button>
       </GameDetailHeader>
       <section className="run-stage" aria-label={scenes[g.scene]}>
@@ -192,10 +192,14 @@ export default function Runner() {
               />
             ))}
           </div>
+          <div className="run-brand">
+            <img className="run-logo" src={hud('Hanuman Run Logo')} alt="Hanuman Runner" />
+            <span>A Product of <strong>Yogicxx</strong> by raman</span>
+          </div>
           <div className="run-stats">
-            <b><img src={hud('Scene')} alt=""/>{scenes[g.scene]}</b>
-            <b><img src={hud('Distance')} alt=""/>Distance: {Math.floor(g.x / 10)} m</b>
-            <b><img src={hud('Best')} alt=""/>Best: {best}</b>
+            <b><img src={hud('Scene')} alt=""/><span><small>Mode</small>{scenes[g.scene]}</span></b>
+            <b><img src={hud('Distance')} alt=""/><span><small>Distance</small>{Math.floor(g.x / 10)}m</span></b>
+            <b><img src={hud('Best')} alt=""/><span><small>Best</small>{best}</span></b>
           </div>
           <span className="run-counter">
             <img
@@ -210,7 +214,7 @@ export default function Runner() {
             disabled={g.mode !== 'running'}
             onClick={toggle}
           >
-            <img src={hud('Pause')} alt="" />
+            <img src={hud(g.mode === 'paused' ? 'Play-ic' : 'Puase-ic')} alt="" />
           </button>
         </div>
         <div className="run-arena">
@@ -259,11 +263,7 @@ export default function Runner() {
                 <img className="run-illustration" src={g.mode === 'over' ? hud('ResultHanuman') : hero(g.mode === 'ready' ? '08 FLy GLide' : '02 Idle-Neautral')} alt=""/>
                 {[0,1].map(i=><img key={i} className={'help-coin coin-'+i} src={root+'Collectibles : Coins (Pickups)/Coin_Basic.svg'} alt=""/>)}
               </div>
-              {g.mode === 'ready' ? (
-                <button type="button" className="run-close" aria-label="Close guide and start running" disabled={!ready || failed} onClick={start}>
-                  <img src={hud('CloseMark')} alt="" />
-                </button>
-              ) : (
+              {g.mode === 'paused' && (
                 <Link className="run-close" aria-label="Back to games" to="/games"><img src={hud('CloseMark')} alt="" /></Link>
               )}
               <h2>{title}</h2>

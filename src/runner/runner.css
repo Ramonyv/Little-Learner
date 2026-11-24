@@ -353,3 +353,66 @@
 .run-results > div {grid-template-rows:40px auto auto}
 .run-results strong {font-size:21px;color:#13151a;font-weight:900}
 .run-modal[data-mode=over] .run-primary {position:absolute;top:81.5%;left:18.75%;width:62.5%;min-width:0;min-height:0;height:39px;margin:0;padding:0;background:#f0d566;border:2px solid #ddb13b;font-size:14px}
+
+/* Hanuman Runner's compact game header and illustrated HUD. */
+.runner .p-heading {gap:14px;margin-bottom:22px}
+.runner .p-heading .p-symbol {width:64px;border-radius:19px}
+.runner .p-symbol img {width:90%;height:90%}
+.runner .p-heading .game-heading-copy h1 {font-size:clamp(24px,2.6vw,38px)}
+.runner .p-heading .game-heading-copy p {font-size:clamp(14px,1.35vw,20px)}
+.runner .p-heading > .run-sound {width:64px;height:64px;aspect-ratio:1;padding:0;border:0;background:none;border-radius:18px}
+.run-sound img {display:block;width:100%;height:100%}
+.run-hud {grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:center;column-gap:18px;row-gap:8px;padding:14px 18px 0;border-bottom:0}
+.run-health {grid-column:1;grid-row:1;width:clamp(145px,22vw,220px);height:clamp(60px,8vw,86px)}
+.run-health img:first-child {width:clamp(50px,7vw,74px)}
+.run-health img {width:clamp(18px,2.5vw,25px)}
+.run-logo {grid-column:2;grid-row:1;display:block;width:clamp(120px,15vw,175px);max-height:88px;object-fit:contain}
+.run-brand {grid-column:2;grid-row:1;display:grid;justify-items:center;align-content:center;gap:2px;min-width:0;text-align:center;white-space:nowrap;color:#111;font-size:clamp(10px,1.25vw,17px);font-weight:700}
+.run-brand .run-logo {grid-column:auto;grid-row:auto}
+.run-brand strong {color:#ff8600}
+.run-counter {grid-column:3;grid-row:1;min-width:clamp(96px,13vw,140px);height:clamp(48px,6vw,70px);font-size:clamp(20px,2.5vw,30px)}
+.run-counter img {width:clamp(36px,4.5vw,52px)}
+.run-hud > button {grid-column:4;grid-row:1;width:clamp(54px,7vw,76px);height:clamp(54px,7vw,76px);margin:0}
+.run-hud > button img {width:100%;height:100%}
+.run-stats {grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));min-height:80px;border-top:3px solid #111}
+.run-stats b {font-size:clamp(15px,2vw,22px);justify-content:center;gap:12px;padding:8px 12px}
+.run-stats b+b {border-left:3px solid #111}
+.run-stats img {width:clamp(32px,4.5vw,50px);height:clamp(32px,4.5vw,50px)}
+.run-stats b span {display:grid;line-height:1.15}
+.run-stats b small {font-size:.8em;font-weight:500}
+.run-arena::before {content:"";position:absolute;z-index:2;top:0;left:0;right:0;height:26px;background:url('/Hanuman Run/Game HUD/Ornament Frame.svg') left top/auto 26px repeat-x;pointer-events:none}
+
+@media (max-width:760px) {
+  .runner .p-heading {gap:7px;margin-bottom:14px}
+  .runner .p-heading > a {width:42px;border-color:#111;border-radius:14px}
+  .runner .p-heading .p-symbol {width:42px;border-radius:14px}
+  .runner .p-heading .game-heading-copy h1 {font-size:clamp(18px,4.6vw,27px);white-space:nowrap}
+  .runner .p-heading .game-heading-copy p {display:none}
+  .runner .p-heading > .run-sound {width:42px;height:42px;margin-left:auto;flex:none}
+  .run-hud {grid-template-columns:minmax(0,1fr) auto auto auto;grid-template-rows:auto auto;column-gap:6px;row-gap:0;padding:8px 8px 0}
+  .run-health {grid-column:1;grid-row:1;width:clamp(105px,31vw,170px);height:clamp(50px,14vw,74px);gap:2px}
+  .run-health img:first-child {width:clamp(38px,11vw,62px)}
+  .run-health img {width:clamp(15px,4.3vw,22px)}
+  .run-brand {grid-column:2;grid-row:1;font-size:clamp(7px,1.8vw,11px)}
+  .run-logo {width:clamp(78px,22vw,132px)}
+  .run-counter {grid-column:3;grid-row:1;min-width:74px;height:44px;font-size:20px}
+  .run-counter img {width:31px}
+  .run-hud > button {grid-column:4;grid-row:1;justify-self:end;width:48px;height:48px;margin:0}
+  .run-stats {grid-column:1/-1;grid-row:2;min-height:64px;border-top:3px solid #111}
+  .run-stats b {font-size:clamp(10px,2.5vw,15px);gap:3px;padding:3px}
+  .run-stats img {width:clamp(22px,6vw,34px);height:clamp(22px,6vw,34px)}
+  .run-stats b small {font-size:.75em}
+}
+@media (max-width:420px) {
+  .run-hud {column-gap:4px}
+  .run-health {width:100px}
+  .run-health img:first-child {width:37px}
+  .run-health img {width:14px}
+  .run-brand {font-size:7px}
+  .run-logo {width:78px}
+  .run-counter {min-width:65px;height:39px;font-size:17px}
+  .run-counter img {width:27px}
+  .run-hud > button {width:39px;height:39px}
+  .run-stats {border-top:2px solid #111}
+  .run-stats b+b {border-left-width:2px}
+}

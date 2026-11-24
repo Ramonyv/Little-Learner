@@ -35,6 +35,17 @@
 .db2-letter-list button{display:block;width:100%;min-height:34px;border:0;border-radius:8px;background:#fff;color:#1b294e;padding:5px 10px;text-align:left;font:800 15px Nunito,sans-serif;cursor:pointer}
 .db2-letter-list button:hover,.db2-letter-list button[data-highlighted=true]{background:#e9f0fc}
 .db2-letter-list button[aria-selected=true]{background:#dce9fc;color:#145eda}
+.db2-paper>.single-trace-guide{position:absolute;inset:9% 5% 5%;width:90%;height:86%;pointer-events:none}
+.db2-badges .db2-next{background:#1976ec;border-color:#1976ec;color:#fff;min-height:42px;padding-inline:18px}
+.db2-badges .db2-next:disabled{background:#e1e7f0;border-color:#e1e7f0;color:#687b98;cursor:default}
+.db2[data-mode='Trace'] .db2-pages>h2:first-child,.db2[data-mode='Trace'] .db2-pages-box,.db2[data-mode='Trace'] .db2-divider{display:none}
+.db2-trace-stage{position:absolute;z-index:1;left:50%;top:50%;width:68%;height:68%;transform-origin:center;touch-action:none}
+.db2-trace-stage>.single-trace-guide{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.db2-letter-size{margin-top:22px;padding:18px;background:#fff;border:2px solid #e5eaf2;border-radius:20px;color:#1b294e;font-weight:800}
+.db2-letter-size label,.db2-letter-size>div{display:flex;justify-content:space-between;gap:10px}
+.db2-letter-size output{color:#1976ec}
+.db2-letter-size input{display:block;width:100%;margin:16px 0 8px;accent-color:#1976ec;cursor:pointer}
+.db2-letter-size>div{font-size:12px;color:#526685}
 @media(prefers-reduced-motion:no-preference){.db2-letter-list{animation:db2-page-pop-in 180ms cubic-bezier(.2,.8,.2,1) both}}
 @media (prefers-reduced-motion:no-preference){
   .db2-mode-menu{transform-origin:top center;animation:db2-pop-in 190ms cubic-bezier(.2,.8,.2,1) both}
