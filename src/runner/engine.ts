@@ -97,7 +97,7 @@ const speed = 225,
   jump = 580;
 const spacing = speed * ((2 * jump) / gravity + 0.95);
 const pickups: CoinKind[] = [
-  'basic',
+  'winged',
   'golden',
   'glow',
   'star',

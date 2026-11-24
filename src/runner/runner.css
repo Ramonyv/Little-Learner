@@ -1,6 +1,9 @@
 .runner {
   background: #e8f3fc;
   color: #19294b;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
   padding: 12px max(12px, env(safe-area-inset-right))
     max(14px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
   min-height: 80svh;
