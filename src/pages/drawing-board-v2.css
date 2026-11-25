@@ -50,7 +50,8 @@
 .db2-settings-wrap{position:relative;min-width:0;min-height:0}
 .db2-settings-wrap .db2-settings{padding-right:38px;scrollbar-width:none}
 .db2-settings-wrap .db2-settings::-webkit-scrollbar{display:none}
-.db2-scrollbar{position:absolute;top:8px;right:5px;bottom:8px;width:24px;display:flex;flex-direction:column;align-items:center;background:url('/Scrollbar/Scrollbar/Vertical.webp') center/100% 100% no-repeat}
+.db2-scrollbar{position:absolute;top:8px;right:5px;bottom:8px;width:24px;display:flex;flex-direction:column;align-items:center;padding:2px 0;border-radius:999px;background:#b5d2ff;user-select:none}
+.db2-scrollbar img{pointer-events:none;user-select:none;-webkit-user-drag:none}
 .db2-scrollbar .db2-scroll-arrow{display:grid;place-items:center;flex:none;width:24px;height:24px;min-height:0;padding:0;border:0;background:transparent}
 .db2-scroll-arrow img{display:block;width:24px;height:24px}
 .db2-scroll-arrow:disabled{opacity:.5;cursor:default}
