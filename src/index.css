@@ -70,6 +70,5 @@
   :where(button, a, summary):not(.sliding-tile):active {
     transition-duration: 100ms;
   }
-  :where(.group):is(a):hover { transform: translateY(-2px); }
   :where(.group):is(a):active { transform: translateY(0) scale(.99); }
 }

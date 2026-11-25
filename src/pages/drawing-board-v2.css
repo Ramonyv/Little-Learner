@@ -10,12 +10,15 @@
 .db2-modes:has(.db2-mode-menu){padding:10px 10px 0;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 12px 32px #27385126}
 .db2-modes:has(.db2-mode-menu) .db2-mode-menu{top:calc(100% - 1px);width:100%;border-radius:0 0 24px 24px;box-shadow:0 18px 32px #27385126}
 .db2-modes:has(.db2-mode-menu)>button{position:relative;z-index:1}
-.db2-canvas-tools{gap:5px;padding:4px;border:2px solid #dee3ed;border-radius:50px}
-.db2-canvas-tools>button,.db2-canvas-tools span button{display:grid;place-items:center;flex:none;width:28px;height:28px;min-width:28px;min-height:28px;padding:5px;border:0;border-radius:30px;background:#fff}
+.db2-modes>button,.db2-swatches button,.db2-tool-grid button,.db2-sizes button{position:relative}
+.db2-modes>button::after,.db2-swatches button::after,.db2-tool-grid button::after,.db2-sizes button::after{content:'';position:absolute;inset:-4px;border-radius:inherit}
+.db2-canvas-tools{gap:4px;padding:4px 6px;border:2px solid #dee3ed;border-radius:50px}
+.db2-canvas-tools>button,.db2-canvas-tools span button{position:relative;display:grid;place-items:center;flex:none;width:28px;height:28px;min-width:28px;min-height:28px;padding:5px;border:0;border-radius:30px;background:#fff}
+.db2-canvas-tools button::after{content:'';position:absolute;inset:-4px;border-radius:inherit}
 .db2-canvas-tools>button:first-child{background:#dee3ed}
 .db2-canvas-tools>button:disabled{opacity:1;cursor:default}
 .db2-canvas-tools>button img{display:block;width:18px;height:18px;max-width:none}
-.db2-canvas-tools span{display:flex;align-items:center;gap:5px;padding:2px;border:2px solid #dee3ed;border-radius:50px;background:#dee3ed}
+.db2-canvas-tools span{display:flex;align-items:center;gap:4px;padding:3px;border:0;border-radius:50px;background:#dee3ed}
 .db2-canvas-tools span button{padding:4px;background:transparent}
 .db2-canvas-tools span button[aria-pressed=true]{width:32px;height:32px;min-width:32px;min-height:32px;border:2px solid #dee3ed;padding:4px;background:#fff}
 .db2-canvas-tools span button img{display:block;width:auto;height:auto;max-width:19px;max-height:17px}
@@ -151,15 +154,18 @@
   .db2-swatches button{width:31px;height:31px}
   .db2-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none;gap:7px}
   .db2-tool-grid button{min-height:58px;padding:9px}
-  .db2-sizes{flex-wrap:wrap;justify-content:flex-start;gap:5px}
+  .db2-sizes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));justify-items:center;gap:6px}
   .db2-sizes button{width:40px;height:40px}
-  .db2-canvas-head{flex-wrap:wrap;gap:8px}
-  .db2-activity{flex:1;gap:8px}
-  .db2-activity>img{display:block;width:46px;height:46px;flex:none}
-  .db2-activity h2{font-size:19px}
-  .db2-badges{margin-left:auto}
-  .db2-badges span,.db2-badges button{min-height:40px;font-size:12px;padding:5px 8px}
-  .db2-badges button{min-width:40px}
+  .db2-sizes button:first-child{display:none}
+  .db2-canvas-head{flex-wrap:nowrap;align-items:center;gap:8px}
+  .db2-activity{flex:1;min-width:0;gap:8px}
+  .db2-activity>img{display:block;width:42px;height:42px;flex:none}
+  .db2-activity h2{font-size:19px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .db2-activity p{display:none}
+  .db2-badges{margin-left:auto;flex-shrink:1;flex-wrap:wrap;justify-content:flex-end;gap:4px}
+  .db2-badges span,.db2-badges button{min-height:38px;font-size:12px;padding:4px 8px}
+  .db2-badges button{min-width:38px}
+  .db2-badges .db2-next,.db2-badges .db2-prev{min-height:38px;padding-inline:10px}
   .db2-tablet-action{display:grid!important;place-items:center}
   .db2-tablet-action svg{width:18px;height:18px}
   .db2-canvas-tools>button,.db2-canvas-tools span button{width:38px;height:38px;min-width:38px;min-height:38px}
@@ -168,10 +174,4 @@
   .db2-focus .db2-header,.db2-focus .db2-settings{display:none}
   .db2-focus .db2-grid{display:block}
   .db2-focus .db2-canvas-panel,.db2-focus .db2-gods{height:calc(100dvh - 16px);min-height:0}
-}
-@media (min-width:721px) and (max-width:900px) and (orientation:portrait){
-  .db2-canvas-head{align-items:flex-start}
-  .db2-activity{flex-basis:100%}
-  .db2-activity h2,.db2-activity p{white-space:normal}
-  .db2-badges{margin-left:auto}
 }

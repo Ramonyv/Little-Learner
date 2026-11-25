@@ -88,7 +88,7 @@
 .catalog-runner .catalog-thumbnail {display:block;width:100%;height:auto}
 @media (prefers-reduced-motion:no-preference){
   .catalog-card,.game-cover,.p-picker button{transition:transform 190ms cubic-bezier(.2,.8,.2,1),box-shadow 190ms ease,border-color 190ms ease,background-color 190ms ease}
-  .catalog-card:hover,.game-cover:hover,.p-picker button:hover{transform:translateY(-3px);box-shadow:0 10px 24px #2842691c}
+  .catalog-card:hover,.game-cover:hover,.p-picker button:hover{box-shadow:0 10px 24px #2842691c}
   .catalog-card:active,.game-cover:active,.p-picker button:active{transform:translateY(0) scale(.985)}
   .p-actions button{transition:transform 150ms cubic-bezier(.2,.8,.2,1),filter 150ms ease}
   .p-actions button:hover{filter:brightness(1.045)}
