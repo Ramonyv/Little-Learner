@@ -36,16 +36,31 @@
 .db2-letter-list button:hover,.db2-letter-list button[data-highlighted=true]{background:#e9f0fc}
 .db2-letter-list button[aria-selected=true]{background:#dce9fc;color:#145eda}
 .db2-paper>.single-trace-guide{position:absolute;inset:9% 5% 5%;width:90%;height:86%;pointer-events:none}
-.db2-badges .db2-next{background:#1976ec;border-color:#1976ec;color:#fff;min-height:42px;padding-inline:18px}
-.db2-badges .db2-next:disabled{background:#e1e7f0;border-color:#e1e7f0;color:#687b98;cursor:default}
+.db2-badges .db2-next,.db2-badges .db2-prev{background:#1976ec;border-color:#1976ec;color:#fff;min-height:42px;padding-inline:18px}
+.db2-badges .db2-prev{background:#fff;color:#1976ec}
+.db2-badges .db2-next:disabled,.db2-badges .db2-prev:disabled{background:#e1e7f0;border-color:#e1e7f0;color:#687b98;cursor:default}
 .db2[data-mode='Trace'] .db2-pages>h2:first-child,.db2[data-mode='Trace'] .db2-pages-box,.db2[data-mode='Trace'] .db2-divider{display:none}
-.db2-trace-stage{position:absolute;z-index:1;left:50%;top:50%;width:68%;height:68%;transform-origin:center;touch-action:none}
+.db2-trace-stage{position:absolute;z-index:1;left:50%;top:50%;width:68%;height:68%;transform-origin:center;pointer-events:none}
 .db2-trace-stage>.single-trace-guide{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .db2-letter-size{margin-top:22px;padding:18px;background:#fff;border:2px solid #e5eaf2;border-radius:20px;color:#1b294e;font-weight:800}
 .db2-letter-size label,.db2-letter-size>div{display:flex;justify-content:space-between;gap:10px}
 .db2-letter-size output{color:#1976ec}
 .db2-letter-size input{display:block;width:100%;margin:16px 0 8px;accent-color:#1976ec;cursor:pointer}
 .db2-letter-size>div{font-size:12px;color:#526685}
+.db2-settings-wrap{position:relative;min-width:0;min-height:0}
+.db2-settings-wrap .db2-settings{padding-right:38px;scrollbar-width:none}
+.db2-settings-wrap .db2-settings::-webkit-scrollbar{display:none}
+.db2-scrollbar{position:absolute;top:8px;right:5px;bottom:8px;width:24px;display:flex;flex-direction:column;align-items:center;background:url('/Scrollbar/Scrollbar/Vertical.webp') center/100% 100% no-repeat}
+.db2-scrollbar .db2-scroll-arrow{display:grid;place-items:center;flex:none;width:24px;height:24px;min-height:0;padding:0;border:0;background:transparent}
+.db2-scroll-arrow img{display:block;width:24px;height:24px}
+.db2-scroll-arrow:disabled{opacity:.5;cursor:default}
+.db2-scroll-track{position:relative;flex:1;width:100%;min-height:74px;touch-action:none}
+.db2-scrollbar .db2-scroll-thumb{position:absolute;left:2px;display:block;width:20px;height:74px;min-height:0;padding:0;border:0;border-radius:7px;background:transparent;touch-action:none;cursor:grab}
+.db2-scroll-thumb:active{cursor:grabbing}
+.db2-scroll-thumb img{display:block;width:100%;height:100%}
+.db2-scrollbar button:focus-visible{outline:2px solid #10244e;outline-offset:2px}
+.db2-focus .db2-settings-wrap{display:none}
+@media print{.db2-settings-wrap{display:none!important}}
 @media(prefers-reduced-motion:no-preference){.db2-letter-list{animation:db2-page-pop-in 180ms cubic-bezier(.2,.8,.2,1) both}}
 @media (prefers-reduced-motion:no-preference){
   .db2-mode-menu{transform-origin:top center;animation:db2-pop-in 190ms cubic-bezier(.2,.8,.2,1) both}
@@ -96,12 +111,13 @@
 .db2-god-thumb img{display:block;width:100%;height:100%;object-fit:contain}
 
 .db2-tablet-action{display:none!important}
-.db2-trace-image{position:absolute;z-index:0;max-height:90%;object-fit:contain;pointer-events:none;user-select:none;opacity:.55;touch-action:none}
-.db2-trace-image.is-positioning{z-index:6;pointer-events:auto;cursor:grab;outline:2px dashed #1976ec;opacity:.7}
+.db2-trace-image{position:absolute;z-index:0;max-height:90%;object-fit:contain;pointer-events:none;user-select:none;touch-action:none}
+.db2-trace-image.is-positioning{z-index:6;pointer-events:auto;cursor:grab;outline:2px dashed #1976ec}
 .db2-trace-image.is-positioning:active{cursor:grabbing}
 .db2-paper>canvas[aria-label="Drawing surface"]{z-index:1}
 .db2-trace-controls{display:grid;gap:8px;padding:8px;border:1px solid #dce3ef;border-radius:12px;background:#f8fbff}
 .db2-trace-controls label{display:grid;gap:3px;color:#1b294e;font-size:13px;font-weight:800}
+.db2-trace-label{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .db2-trace-controls input{width:100%}
 .db2-trace-controls small{color:#526685;font-size:11px;line-height:1.3}
 @media print{.db2-trace-image{display:none!important}}

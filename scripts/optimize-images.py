@@ -21,7 +21,11 @@ for source in sources:
             if getattr(original, "is_animated", False):
                 raise SystemExit(f"Export {source} as animated WebP to preserve every frame.")
             image = ImageOps.exif_transpose(original)
-            image.save(temporary, "WEBP", quality=85, method=6)
+            is_3d_icon = "3D Icons" in source.relative_to(public).parts
+            save_kwargs: dict[str, object] = {"lossless": True, "method": 6} if is_3d_icon else {"quality": 85, "method": 6}
+            if icc_profile := original.info.get("icc_profile"):
+                save_kwargs["icc_profile"] = icc_profile
+            image.save(temporary, "WEBP", **save_kwargs)
             with Image.open(temporary) as check:
                 check.load()
                 if check.size != image.size:

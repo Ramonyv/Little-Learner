@@ -92,7 +92,7 @@ export const ProgressPage: React.FC = () => {
         
         {/* Total Questions Attempted */}
         <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-sm flex items-center gap-4">
-          <img src="/SVG Icons/Progress.svg" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
+          <img src="/3D Icons/Total Questions.webp" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
           <div>
             <span className="block text-2xl font-black text-brand-ink leading-tight">
               {totalQuestionsAttempted}
@@ -103,7 +103,7 @@ export const ProgressPage: React.FC = () => {
 
         {/* Practice Sets Completed */}
         <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-sm flex items-center gap-4">
-          <img src="/SVG Icons/Medal.svg" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
+          <img src="/3D Icons/Sets Completed.webp" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
           <div>
             <span className="block text-2xl font-black text-brand-ink leading-tight">
               {completedSessions.length}
@@ -114,7 +114,7 @@ export const ProgressPage: React.FC = () => {
 
         {/* Overall Accuracy */}
         <div className="bg-white rounded-3xl p-5 border-2 border-slate-200 shadow-sm flex items-center gap-4">
-          <img src="/SVG Icons/Trophy.svg" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
+          <img src="/3D Icons/Average Accuracy.webp" alt="" className="w-12 h-12 object-contain flex-shrink-0" />
           <div>
             <span className="block text-2xl font-black text-brand-ink leading-tight">
               {completedSessions.length > 0 ? `${averagePercentage}%` : '—'}
