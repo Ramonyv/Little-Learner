@@ -3,7 +3,10 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 public = Path(__file__).resolve().parents[1] / "public"
-sources = sorted(p for p in public.rglob("*") if p.suffix.lower() in {".png", ".jpg", ".jpeg"})
+sources = sorted(
+    p for p in public.rglob("*")
+    if p.suffix.lower() in {".png", ".jpg", ".jpeg"} and p.name != "og-image.png"
+)
 if sources:
     try:
         from PIL import Image, ImageOps

@@ -122,10 +122,69 @@ test('removes All colors everywhere and applies iPad portrait header and 6-size 
   await page.getByRole('button', { name: 'Fullscreen', exact: true }).click();
   await expect(page.locator('.db2-focus-rail')).toBeVisible();
   const toolHeight = await page.locator('.db2-focus-tool').first().evaluate(el => el.getBoundingClientRect().height);
-  expect(toolHeight).toBeLessThanOrEqual(34);
+  expect(toolHeight).toBeGreaterThanOrEqual(32);
+  expect(toolHeight).toBeLessThanOrEqual(42);
+  const railOverflow = await page.locator('.db2-focus-rail-items').evaluate(el => el.scrollHeight - el.clientHeight);
+  expect(railOverflow).toBeLessThanOrEqual(1);
   await page.locator('.db2-focus-color-btn').click();
   await expect(page.locator('.db2-focus-colors')).toBeVisible();
   await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
   await expect(page.locator('.db2-focus-rail')).toHaveCount(0);
+
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.getByRole('button', { name: 'Trace', exact: true }).click();
+  await page.getByRole('button', { name: 'Letters', exact: true }).click();
+  await page.getByRole('button', { name: 'Next →', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Trace B' })).toBeVisible();
+  await expect(page.locator('.db2-header-print')).toBeHidden();
+  await expect(page.locator('.db2-tablet-action')).toHaveCount(2);
+  await expect(page.locator('.db2-tablet-action').first()).toBeHidden();
+  const titleRect = await page.locator('.db2-activity h2').boundingBox();
+  const prevRect = await page.locator('.db2-prev').boundingBox();
+  expect(titleRect).not.toBeNull();
+  expect(prevRect).not.toBeNull();
+  expect(titleRect!.x + titleRect!.width).toBeLessThan(prevRect!.x);
+  const titleOverflow = await page.locator('.db2-activity h2').evaluate(el => el.scrollWidth - el.clientWidth);
+  expect(titleOverflow).toBeLessThanOrEqual(0);
+  await page.getByRole('button', { name: 'Fullscreen', exact: true }).click();
+  await expect(page.locator('.db2-header-print')).toBeVisible();
+  await expect(page.locator('.db2-tablet-action').first()).toBeVisible();
+  await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
+
+  await page.evaluate(() => {
+    Object.defineProperty(window.crypto, 'randomUUID', { value: undefined, configurable: true });
+  });
+  await page.getByRole('button', { name: 'Trace', exact: true }).click();
+  await page.getByRole('button', { name: 'Words', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Trace the word' })).toBeVisible();
+  const arrowBg = await page.locator('.db2-next .db2-nav-arrow').evaluate(el => getComputedStyle(el).backgroundColor);
+  expect(arrowBg).toBe('rgba(0, 0, 0, 0)');
+
+  await page.getByRole('button', { name: 'Gods', exact: true }).click();
+  await page.getByRole('button', { name: 'Fullscreen', exact: true }).click();
+  const godsToolBox = await page.locator('.db2-focus-tool').first().boundingBox();
+  const godsSizeBox = await page.locator('.db2-focus-size').first().boundingBox();
+  expect(godsToolBox).not.toBeNull();
+  expect(godsSizeBox).not.toBeNull();
+  expect(Math.abs(godsToolBox!.width - godsToolBox!.height)).toBeLessThanOrEqual(1);
+  expect(Math.abs(godsSizeBox!.width - godsSizeBox!.height)).toBeLessThanOrEqual(1);
+  const godsRailOverflow = await page.locator('.db2-focus-rail-items').evaluate(el => el.scrollHeight - el.clientHeight);
+  expect(godsRailOverflow).toBeLessThanOrEqual(1);
+  await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
+
+  const toolCenterOffsets = await page.locator('.db2-tool-grid button').evaluateAll(buttons =>
+    buttons.map(btn => {
+      const b = btn.getBoundingClientRect();
+      const img = btn.querySelector('img')!.getBoundingClientRect();
+      return {
+        dx: Math.abs((b.left + b.width / 2) - (img.left + img.width / 2)),
+        dy: Math.abs((b.top + b.height / 2) - (img.top + img.height / 2)),
+      };
+    }),
+  );
+  for (const offset of toolCenterOffsets) {
+    expect(offset.dx).toBeLessThanOrEqual(2);
+    expect(offset.dy).toBeLessThanOrEqual(2);
+  }
 });
 

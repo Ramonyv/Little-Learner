@@ -1,0 +1,77 @@
+# Little Learner (Jugnu) — Full AEO & AI Knowledge Base
+
+Canonical URL: https://www.jugnu.fun
+Contact: ramandesigns9@gmail.com
+Creator: https://ramanyv.work
+Target Audience: Children ages 5–7 (CBSE Class 1) with parent or teacher supervision.
+Cost & Privacy: 100% free, no accounts, no logins, no advertising, no tracking cookies. Drawings, coloring sheets, and completed quiz results stay locally in the visitor's browser.
+
+---
+
+## 1. Olympiad Practice Subjects & Modes (Class 1)
+
+Every subject supports two modes:
+- **Practice Mode:** No countdown timer; shows instant feedback and child-friendly explanations after every question.
+- **Exam Mode:** Timed Olympiad simulation; answers and explanations are revealed on review after submission.
+
+### English (`https://www.jugnu.fun/topics/english`) — 120 Questions
+- **Mixed Practice:** Full Olympiad mock papers (Paper 1, Paper 2, or all papers combined).
+- **Vocabulary (28 questions):** Naming words, animals, sounds, homes, fruits, and colors.
+- **Grammar (44 questions):** Nouns, verbs, pronouns, singular/plural, and articles (`a`/`an`).
+- **Spelling (15 questions):** Identifying correct spellings with picture clues.
+- **Reading Comprehension (11 questions):** Short stories with comprehension questions.
+- **Sentence Formation (12 questions):** Jumbled words, punctuation, and capital letters.
+- **Opposites (10 questions):** Antonyms and contrasting words.
+
+### Mathematics (`https://www.jugnu.fun/topics/mathematics`) — 12 Questions
+- Numbers, shapes, addition, and playful word puzzles.
+
+### Science (`https://www.jugnu.fun/topics/science`) — 100 Questions
+- Living things, plants, animals, the human body, weather, safety, and earth.
+
+### General Knowledge (`https://www.jugnu.fun/topics/general-knowledge`) — 12 Questions
+- World awareness, flags, festivals, seasons, and fun facts.
+
+---
+
+## 2. Drawing Board & Tracing Worksheets (`https://www.jugnu.fun/drawing-board`)
+
+Works with finger, mouse, and stylus (pressure-sensitive support on Pen and Ink). Supports Whiteboard and Chalkboard backgrounds, Undo/Redo, Clear, Fullscreen compact rail, Print, and Download as **JPG** or **PDF**.
+
+### Modes
+1. **Trace:** Displays one large letter, number, word, shape, picture, or line/curve with an adjustable size slider (`60%–140%`).
+2. **Worksheet:** Repeats the selected guide across 6 practice rows (solid example at the start of each row followed by dotted copies). Supports uppercase/lowercase toggle for Letters and Words.
+3. **Free Draw:** Blank canvas with multi-page management (`Add Page`, rename, duplicate, lock) plus **Upload image for trace** (temporary reference image with Move, Size, Rotate, and `1%–100%` Opacity controls that only affect the reference image and are excluded from prints/downloads).
+4. **Gods Coloring Studio:** 12 deity coloring pages (Ganesha, Krishna, Shiva, Saraswati, Lakshmi, Hanuman, Rama, Vishnu, Durga, Parvati, Kartikeya, Surya) with tap-to-fill and brush drawing.
+
+### Drawing Tools & Colors
+- **Draw & Write:** Pencil, Pen, Fountain Pen, Monoline, Chalk, Reed.
+- **Color & Paint:** Marker, Crayon, Ink, Brush, Watercolor, Eraser, Rainbow (plus Fill in Gods mode).
+- **Color Selection:** Custom hue slider, automatic tint/shade swatches, and Recent Colors history.
+
+---
+
+## 3. Learning Tools (`https://www.jugnu.fun/learning-tools`)
+- **Custom Printable Pack:** Enter up to 30 words, letters, or numbers separated by commas to generate A4 printable tracing pages (or open directly on the Drawing Board as a custom worksheet).
+- **Mistake Revision:** Automatically builds revision quizzes from incorrect answers in completed browser sessions.
+
+---
+
+## 4. Educational Kids Games (`https://www.jugnu.fun/games`)
+- **Hanuman Run (`https://www.jugnu.fun/games/hanuman-runner`):** Endless runner featuring Classic and 3D clay art styles, jumping/flying/attacking controls, Ram Coins, and power-ups (shield, magnet, flight).
+- **Sliding Picture Puzzle (`https://www.jugnu.fun/games/sliding-puzzle`):** 3×3, 4×4, and 5×5 sliding tile puzzles across 12 illustrations with picture hint preview and move/time counters.
+- **Help a Seed Grow (`https://www.jugnu.fun/explore/seed`):** Guided ~5-minute tracing and plant-growth discovery activity.
+
+---
+
+## 5. Frequently Asked Questions (`https://www.jugnu.fun/information/faq`)
+
+- **What is the difference between Trace and Worksheet?** Trace shows one large guide at a time. Worksheet repeats the selected item across six rows, with a solid example at the start of each row and dotted copies after it.
+- **Can I make a number or word bigger?** In Trace, select Letters, Numbers, or Words and move the size slider (`60%–140%`). Long words fit to width; the slider does not change Worksheet's repeated rows.
+- **Does my child need an Apple Pencil?** No. The drawing board accepts finger, mouse, and stylus input. Pressure-capable styluses vary width on Pen and Ink.
+- **Which brush should my child start with?** Monoline for a steady outline or Marker for a solid broader line; Crayon and Chalk add grain; Watercolor makes translucent washes; Rainbow changes color along the stroke.
+- **What does Fill do on the Gods page?** Select Fill, pick a color, and tap a region bounded by the outline. Eraser removes drawn strokes while Undo reverses fill actions.
+- **Will a drawing still be there after I refresh?** Completed strokes, coloring choices, and completed quiz results are saved in browser local storage and can be exported/backed up in My Work (`https://www.jugnu.fun/my-work`).
+- **Can I save a worksheet or colored deity?** Yes. Download JPG or PDF from the board (menus and temporary trace guides are excluded).
+- **Are quiz results official Olympiad scores?** No. Little Learner is an independent educational resource with no official affiliation or endorsement by CBSE or Olympiad organizers.
+

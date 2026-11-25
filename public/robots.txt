@@ -1,4 +1,52 @@
 User-agent: *
 Allow: /
+Disallow: /exam/
+Disallow: /progress
+Disallow: /my-work
 
-Sitemap: https://littlelearner.netlify.app/sitemap.xml
+# Search & AI Search / Answer Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+Sitemap: https://www.jugnu.fun/sitemap.xml
+# LLM & AI Agent Reference: https://www.jugnu.fun/llms.txt
+# Extended AI Reference: https://www.jugnu.fun/llms-full.txt

@@ -38,7 +38,7 @@ export function SiteHeader() {
   },[menuOpen]);
   const isActive=(label:string,path:string)=>label==='Practice' ? /^\/(topics|intro|exam)(\/|$)/.test(pathname) : pathname===path || pathname.startsWith(path+'/');
   return <header className="site-bar"><nav aria-label="Main navigation">
-    <Link to="/" aria-label="Little Learner home"><img className="site-logo" src="/Logo.svg" alt="Little Learner" /></Link>
+    <Link to="/" aria-label="Jugnu home"><img className="site-logo" src="/Logo/Jugnu Logo V1.svg" alt="Jugnu" /></Link>
     <div className="site-links">{links.map(([label, path]) => {
       return <Link key={path} to={path} aria-current={isActive(label,path) ? 'page' : undefined}>{label}</Link>;
     })}</div>

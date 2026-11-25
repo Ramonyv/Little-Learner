@@ -70,7 +70,7 @@ export function Games() {
     </Link>
     <Link className="catalog-card catalog-runner" to="/games/hanuman-runner" aria-label="Play Hanuman Runner">
       <div className="catalog-tools"><span className="catalog-category catalog-category-adventure">Adventure <img src="/puzzle-ui/category-adventure.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
-      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Hanuman Run/Hanuman Run Thumbnail.svg" alt="" width="296" height="226" /></div>
+      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Hanuman Run/Hanuman Run Thumbnail.webp" alt="Hanuman Run" width="296" height="226" /></div>
       <h2>Hanuman Run</h2><p>Leap over obstacles and collect Ram Coins!</p>
     </Link>
     </div>

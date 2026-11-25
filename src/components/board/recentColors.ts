@@ -19,5 +19,5 @@ function subscribe(notify: () => void) {
 }
 
 export function useRecentColors() {
-  return useSyncExternalStore(subscribe, () => recent);
+  return useSyncExternalStore(subscribe, () => recent, () => recent);
 }

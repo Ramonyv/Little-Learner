@@ -18,10 +18,10 @@ export function BrushIcon({brush}: {brush: Brush | 'Fill'}) {
   return brushIcons[brush] ? <img src={asset + brushIcons[brush]} alt=""/> : <BoardIcon name={brush}/>;
 }
 
-const desktop = window.matchMedia('(min-width: 1367px) and (pointer: fine)');
+const desktop = typeof window !== 'undefined' ? window.matchMedia('(min-width: 1367px) and (pointer: fine)') : undefined;
 function subscribeLayout(update: () => void) {
-  desktop.addEventListener('change', update);
-  return () => desktop.removeEventListener('change', update);
+  desktop?.addEventListener('change', update);
+  return () => desktop?.removeEventListener('change', update);
 }
 
 type Props = {
@@ -37,7 +37,7 @@ type Props = {
 };
 
 export function BottomToolMenu({ brushes, brush, onBrush, color, onColor, size, onSize }: Props) {
-  const sidebar = useSyncExternalStore(subscribeLayout, () => desktop.matches);
+  const sidebar = useSyncExternalStore(subscribeLayout, () => Boolean(desktop?.matches), () => false);
   const rail = useRef<HTMLElement>(null);
   const [railHeight, setRailHeight] = useState(0);
   useLayoutEffect(() => {

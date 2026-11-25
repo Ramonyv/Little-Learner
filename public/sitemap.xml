@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://littlelearner.netlify.app/</loc></url>
-<url><loc>https://littlelearner.netlify.app/about</loc></url>
-<url><loc>https://littlelearner.netlify.app/contact</loc></url>
-<url><loc>https://littlelearner.netlify.app/information/privacy</loc></url>
-<url><loc>https://littlelearner.netlify.app/information/terms</loc></url>
-<url><loc>https://littlelearner.netlify.app/information/disclaimer</loc></url>
-<url><loc>https://littlelearner.netlify.app/information/parent-guide</loc></url>
-<url><loc>https://littlelearner.netlify.app/drawing-board</loc></url>
-<url><loc>https://littlelearner.netlify.app/explore/seed</loc></url>
-<url><loc>https://littlelearner.netlify.app/topics/english</loc></url>
-<url><loc>https://littlelearner.netlify.app/topics/science</loc></url>
-<url><loc>https://littlelearner.netlify.app/information/faq</loc></url>
+  <url><loc>https://www.jugnu.fun/</loc><lastmod>2026-11-25</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.jugnu.fun/topics/english</loc><lastmod>2026-11-25</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.jugnu.fun/topics/mathematics</loc><lastmod>2026-11-25</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.jugnu.fun/topics/science</loc><lastmod>2026-11-25</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.jugnu.fun/topics/general-knowledge</loc><lastmod>2026-11-25</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.jugnu.fun/drawing-board</loc><lastmod>2026-11-25</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.jugnu.fun/learning-tools</loc><lastmod>2026-11-25</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.jugnu.fun/games</loc><lastmod>2026-11-25</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.jugnu.fun/games/hanuman-runner</loc><lastmod>2026-11-25</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.jugnu.fun/games/sliding-puzzle</loc><lastmod>2026-11-25</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.jugnu.fun/explore/seed</loc><lastmod>2026-11-25</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.jugnu.fun/information/faq</loc><lastmod>2026-11-25</lastmod><priority>0.8</priority></url>
+  <url><loc>https://www.jugnu.fun/information/parent-guide</loc><lastmod>2026-11-25</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.jugnu.fun/about</loc><lastmod>2026-11-25</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.jugnu.fun/contact</loc><lastmod>2026-11-25</lastmod><priority>0.5</priority></url>
+  <url><loc>https://www.jugnu.fun/information/privacy</loc><lastmod>2026-11-25</lastmod><priority>0.4</priority></url>
+  <url><loc>https://www.jugnu.fun/information/terms</loc><lastmod>2026-11-25</lastmod><priority>0.4</priority></url>
+  <url><loc>https://www.jugnu.fun/information/disclaimer</loc><lastmod>2026-11-25</lastmod><priority>0.4</priority></url>
 </urlset>

@@ -218,7 +218,7 @@ test('phone game cards share a row and show the runner thumbnail', async ({page}
     expect(second!.y).toBe(first!.y);
     expect(second!.x).toBeGreaterThanOrEqual(first!.x + first!.width);
     expect(second!.x + second!.width).toBeLessThanOrEqual(width);
-    await expect(page.locator('.catalog-runner .catalog-thumbnail')).toHaveJSProperty('naturalWidth', 296);
+    await expect(page.locator('.catalog-runner .catalog-thumbnail')).toHaveJSProperty('naturalWidth', 592);
   }
 });
 

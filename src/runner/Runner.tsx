@@ -20,7 +20,7 @@ function readBest() {
   }
 }
 export default function Runner() {
-  const [artStyle, setArtStyle] = useState<RunnerArtStyle>(() => new URLSearchParams(location.search).get('art') === '3d' ? '3d' : 'classic');
+  const [artStyle, setArtStyle] = useState<RunnerArtStyle>(() => new URLSearchParams(typeof location !== 'undefined' ? location.search : '').get('art') === '3d' ? '3d' : 'classic');
   const [audio] = useState(() => new RunnerAudio());
   const newGame = (style: RunnerArtStyle = artStyle) => new Game((cue) => void audio.play(cue), style === '3d');
   const canvas = useRef<HTMLCanvasElement>(null);

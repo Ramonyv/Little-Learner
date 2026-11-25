@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_160_5806)">
+<rect width="64" height="64" rx="12" fill="#8C5AEC" style="fill:#8C5AEC;fill:color(display-p3 0.5490 0.3529 0.9255);fill-opacity:1;"/>
+<path d="M28.0317 62.6275C41.2225 62.6275 51.9157 53.4931 51.9157 42.2253C51.9157 30.9575 41.2225 21.8231 28.0317 21.8231C19.3764 21.8231 10.0945 26.5475 6.24137 33.8597C9.42634 38.6527 11.7347 42.0306 9.63182 46.9387C11.3704 42.881 9.90606 38.0067 6.24137 33.8597C4.89618 36.4125 4.14771 39.2442 4.14771 42.2253C4.14771 43.3194 4.24852 44.3933 4.44263 45.4407C4.56057 46.0771 4.71294 46.7036 4.89808 47.319C6.40731 52.3352 10.0935 56.6054 15.0453 59.351C15.6193 59.6692 16.2102 59.9669 16.8167 60.243C20.1606 61.7649 23.9782 62.6275 28.0317 62.6275Z" fill-rule="evenodd" clip-rule="evenodd" fill="black" style="fill:black;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="0.853955" stroke="black"/>
+<path d="M15.4185 4.51392C20.9705 5.66137 27.0086 13.5473 27.5549 22.5125" stroke-width="5.97768" stroke-linecap="round" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<ellipse cx="12.4058" cy="8.04328" rx="7.70877" ry="6.66846" fill="black" style="fill:black;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="0.853955" stroke="black"/>
+<path d="M50.1438 10.7455C44.554 11.5606 38.4697 17.1394 38.1236 23.5344" stroke-width="5.97768" stroke-linecap="round" stroke="black" style="stroke:black;stroke-opacity:1;"/>
+<ellipse cx="52.1433" cy="14.7113" rx="7.70878" ry="6.66846" fill="black" style="fill:black;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="0.853955" stroke="black"/>
+<ellipse cx="30.415" cy="42.5305" rx="21.5017" ry="17.4091" fill="white" style="fill:white;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="0.853955" stroke="black"/>
+<path d="M37.6524 49.1202C37.8385 48.6925 37.9384 48.2162 37.8735 47.7483C37.8089 47.2807 37.5891 46.8635 37.2451 46.5739C36.9012 46.2842 36.4526 46.1386 35.9809 46.1545C35.5088 46.1702 35.0564 46.3497 34.6667 46.6059C34.6667 46.6059 34.6667 46.6059 34.6667 46.6059C34.5494 46.6573 34.4231 46.713 34.2987 46.7621C33.1226 47.2385 32.1164 47.3184 31.2912 47.2405C30.4461 47.1745 29.3506 46.8343 28.0436 46.114C27.9027 46.0384 27.7571 45.9569 27.6069 45.8688C27.1818 45.6007 26.6851 45.4283 26.1746 45.4385C25.6644 45.4485 25.1869 45.6359 24.8325 45.9735C24.4781 46.311 24.2677 46.7788 24.2328 47.2879C24.1977 47.7973 24.3457 48.3017 24.5928 48.7394C24.5928 48.7394 24.5928 48.7394 24.5928 48.7394C24.7148 48.9371 24.8406 49.1282 24.9703 49.3127C26.1463 50.9859 28.1503 52.5814 30.7942 52.8206C33.4345 53.0735 35.9219 51.7209 37.2333 49.8033C37.3821 49.589 37.5267 49.3575 37.6524 49.1202Z" fill="black" style="fill:black;fill-opacity:1;"/>
+<ellipse cx="23.8175" cy="39.2928" rx="3.42081" ry="3.9095" fill="black" style="fill:black;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="0.853955" stroke="black"/>
+<ellipse cx="43.1187" cy="42.2247" rx="2.77841" ry="3.66515" fill="black" style="fill:black;fill-opacity:1;stroke:black;stroke-opacity:1;" stroke-width="0.853955" stroke="black"/>
+</g>
+<defs>
+<clipPath id="clip0_160_5806">
+<rect width="64" height="64" rx="12" fill="white" style="fill:white;fill-opacity:1;"/>
+</clipPath>
+</defs>
+</svg>

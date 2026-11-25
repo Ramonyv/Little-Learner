@@ -86,7 +86,7 @@ function DeityCanvas({name,page,fills,onFill}:{name:string;page?:ReturnType<type
  }}/>;
 }
 export function GodsStudio({focusControl,rail,settings,modernToolbar=false,locked=false,pageId,deity,onDeityChange}: {focusControl: ReactNode;rail?: ReactNode;settings?:{color:string;brush:Brush|'Fill';size:number;onBrush:(value:Brush|'Fill')=>void;onColor:(value:string)=>void;onSize:(value:number)=>void};modernToolbar?:boolean;locked?:boolean;pageId?:string;deity?:string;onDeityChange?:(name:string)=>void}){
- const [internalName,setInternalName]=useState(() => new URLSearchParams(location.search).get('deity') || 'Ganesha'),[internalTool,setInternalTool]=useState<Brush|'Fill'>('Fill'),[internalColor,paint]=useState('#32a86c'),[internalSize,resize]=useState(1);
+ const [internalName,setInternalName]=useState(() => new URLSearchParams(typeof location!=='undefined'?location.search:'').get('deity') || 'Ganesha'),[internalTool,setInternalTool]=useState<Brush|'Fill'>('Fill'),[internalColor,paint]=useState('#32a86c'),[internalSize,resize]=useState(1);
  const name=deity??internalName,select=onDeityChange??setInternalName,sheetKey=pageId??name;
  const tool=settings?.brush??internalTool,color=settings?.color??internalColor,size=settings?.size??internalSize;
  const setTool=settings?.onBrush??setInternalTool,setColor=settings?.onColor??paint,setSize=settings?.onSize??resize;

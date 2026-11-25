@@ -28,7 +28,7 @@ function Plant({grass, choose, highlight}: {grass:boolean; choose?:(part:Part)=>
 export function SeedActivity(){
   const [step,setStep]=useState(0),[correct,setCorrect]=useState(false),[feedback,setFeedback]=useState(''),[voice,setVoice]=useState(false);
   const strokes=useRef<Stroke[]>([]);
-  const available=typeof window.speechSynthesis!=='undefined';
+  const available=typeof window!=='undefined' && typeof window.speechSynthesis!=='undefined';
   const message=feedback || prompts[step] || 'You found the roots of two different plants!';
   function speak(words:string){window.speechSynthesis.cancel();const speech=new SpeechSynthesisUtterance(words);speech.lang='en-IN';speech.rate=.85;window.speechSynthesis.speak(speech)}
   useEffect(()=>{if(voice && available)speak(message);return ()=>{if(available)window.speechSynthesis.cancel()}},[voice,message,available]);
