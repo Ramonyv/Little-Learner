@@ -34,27 +34,49 @@ export function cleanEnv(val) {
   return val.trim().replace(/^["']|["']$/g, '').trim();
 }
 
+export function cleanUrl(val) {
+  if (!val || typeof val !== 'string') return '';
+  let s = val.trim().replace(/^["']|["']$/g, '').trim();
+  if (s.startsWith('UPSTASH_REDIS_REST_URL=')) s = s.slice(23).trim();
+  s = s.replace(/^["']|["']$/g, '').trim();
+  if (!s.startsWith('http://') && !s.startsWith('https://')) s = `https://${s}`;
+  return s.replace(/\/+$/, '');
+}
+
+export function cleanToken(val) {
+  if (!val || typeof val !== 'string') return '';
+  let s = val.trim().replace(/^["']|["']$/g, '').trim();
+  if (s.startsWith('UPSTASH_REDIS_REST_TOKEN=')) s = s.slice(25).trim();
+  return s.replace(/^["']|["']$/g, '').trim();
+}
+
 class UpstashAggregateStore {
   constructor(url, token) {
-    this.url = cleanEnv(url).replace(/\/+$/, '');
-    this.token = cleanEnv(token);
+    this.url = cleanUrl(url);
+    this.token = cleanToken(token);
     this.kind = 'upstash-redis';
   }
 
   async pipeline(commands) {
-    const response = await fetch(`${this.url}/pipeline`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(commands),
-    });
-    if (!response.ok) {
-      const errText = await response.text().catch(() => '');
-      throw new Error(`Upstash pipeline HTTP ${response.status}: ${errText}`);
+    try {
+      const response = await fetch(`${this.url}/pipeline`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commands),
+      });
+      if (!response.ok) {
+        const errText = await response.text().catch(() => '');
+        throw new Error(`Upstash HTTP ${response.status}: ${errText}`);
+      }
+      return response.json();
+    } catch (err) {
+      const cause = err?.cause?.code || err?.cause?.message || '';
+      const extra = cause ? ` (${cause})` : '';
+      throw new Error(`Pipeline to ${this.url || 'missing-url'} failed: ${err?.message || 'network error'}${extra}`);
     }
-    return response.json();
   }
 
   async incrementDay(dateKey, increments) {
@@ -109,8 +131,8 @@ export function createAggregateStore(env = process.env, customMemoryMap) {
   if (customMemoryMap) {
     return new MemoryAggregateStore(customMemoryMap);
   }
-  const url = cleanEnv(env.UPSTASH_REDIS_REST_URL);
-  const token = cleanEnv(env.UPSTASH_REDIS_REST_TOKEN);
+  const url = cleanUrl(env.UPSTASH_REDIS_REST_URL);
+  const token = cleanToken(env.UPSTASH_REDIS_REST_TOKEN);
   if (url && token) {
     return new UpstashAggregateStore(url, token);
   }
