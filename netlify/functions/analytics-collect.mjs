@@ -4,7 +4,7 @@ import {
   validateBatchPayload,
 } from './_lib/aggregateContract.mjs';
 import { createRateLimiter, isAllowedOrigin, jsonResponse } from './_lib/security.mjs';
-import { createAggregateStore, toUtcDateKey } from './_lib/storage.mjs';
+import { cleanEnv, createAggregateStore, toUtcDateKey } from './_lib/storage.mjs';
 
 const ingestLimiter = createRateLimiter({ windowMs: 60_000, maxRequests: 60 });
 
@@ -22,7 +22,7 @@ export function createCollectHandler(options = {}) {
     }
 
     // Production collection stays disabled unless explicitly activated by the owner.
-    if (env.JUGNU_AGGREGATE_COLLECTION_ENABLED !== 'true') {
+    if (cleanEnv(env.JUGNU_AGGREGATE_COLLECTION_ENABLED) !== 'true') {
       return new Response(null, {
         status: 204,
         headers: { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' },

@@ -29,10 +29,15 @@ function normalizeRedisHashArray(result) {
   return map;
 }
 
+export function cleanEnv(val) {
+  if (typeof val !== 'string') return '';
+  return val.trim().replace(/^["']|["']$/g, '').trim();
+}
+
 class UpstashAggregateStore {
   constructor(url, token) {
-    this.url = url.replace(/\/+$/, '');
-    this.token = token;
+    this.url = cleanEnv(url).replace(/\/+$/, '');
+    this.token = cleanEnv(token);
     this.kind = 'upstash-redis';
   }
 
@@ -46,7 +51,8 @@ class UpstashAggregateStore {
       body: JSON.stringify(commands),
     });
     if (!response.ok) {
-      throw new Error(`Upstash pipeline HTTP ${response.status}`);
+      const errText = await response.text().catch(() => '');
+      throw new Error(`Upstash pipeline HTTP ${response.status}: ${errText}`);
     }
     return response.json();
   }
@@ -103,11 +109,13 @@ export function createAggregateStore(env = process.env, customMemoryMap) {
   if (customMemoryMap) {
     return new MemoryAggregateStore(customMemoryMap);
   }
-  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
-    return new UpstashAggregateStore(env.UPSTASH_REDIS_REST_URL, env.UPSTASH_REDIS_REST_TOKEN);
+  const url = cleanEnv(env.UPSTASH_REDIS_REST_URL);
+  const token = cleanEnv(env.UPSTASH_REDIS_REST_TOKEN);
+  if (url && token) {
+    return new UpstashAggregateStore(url, token);
   }
   const isProd = env.NODE_ENV === 'production' || env.CONTEXT === 'production';
-  if (!isProd || env.JUGNU_ALLOW_MEMORY_STORAGE === 'true') {
+  if (!isProd || cleanEnv(env.JUGNU_ALLOW_MEMORY_STORAGE) === 'true') {
     return new MemoryAggregateStore();
   }
   return null;

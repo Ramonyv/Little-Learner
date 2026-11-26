@@ -1,6 +1,7 @@
 import { jsonResponse, verifySessionCookie } from './_lib/security.mjs';
 import {
   buildInsightsSummary,
+  cleanEnv,
   createAggregateStore,
   getRecentUtcDateKeys,
 } from './_lib/storage.mjs';
@@ -37,10 +38,11 @@ export function createInsightsDataHandler(options = {}) {
       return jsonResponse({
         ...summary,
         storageBackend: store.kind,
-        collectionEnabled: env.JUGNU_AGGREGATE_COLLECTION_ENABLED === 'true',
+        collectionEnabled: cleanEnv(env.JUGNU_AGGREGATE_COLLECTION_ENABLED) === 'true',
       });
-    } catch {
-      return jsonResponse({ error: 'Could not load aggregate summary' }, 503);
+    } catch (err) {
+      console.error('Insights data load failed:', err);
+      return jsonResponse({ error: 'Could not load aggregate summary', details: err?.message }, 503);
     }
   };
 }
