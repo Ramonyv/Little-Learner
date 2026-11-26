@@ -5,7 +5,7 @@ from tempfile import NamedTemporaryFile
 public = Path(__file__).resolve().parents[1] / "public"
 sources = sorted(
     p for p in public.rglob("*")
-    if p.suffix.lower() in {".png", ".jpg", ".jpeg"} and p.name != "og-image.png"
+    if p.suffix.lower() in {".png", ".jpg", ".jpeg"} and p.name != "og-image.png" and "OG Image" not in p.parts
 )
 if sources:
     try:
