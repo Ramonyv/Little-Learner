@@ -4,7 +4,7 @@ import { getBlogPost } from './blogPosts';
 import { SubjectId } from '../types';
 
 export const SITE_URL = 'https://www.jugnu.fun';
-export const SITE_NAME = 'Little Learner';
+export const SITE_NAME = 'Jugnu';
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
 export interface RouteSeo {
@@ -69,14 +69,14 @@ const staticPages: Record<string, { title: string; description: string; ogType?:
       'Solve 12 colourful sliding picture puzzles including Ganesha, Krishna, Shiva, and festive illustrations with picture hints and timer tracking.',
   },
   '/about': {
-    title: 'About Little Learner',
+    title: 'About Jugnu',
     description:
-      'Learn about Little Learner’s privacy-first design: zero data collection, instant browser access, client-side session memory, and children’s book artwork.',
+      'Learn about Jugnu’s privacy-first design: zero data collection, instant browser access, client-side session memory, and children’s book artwork.',
   },
   '/contact': {
-    title: 'Contact Little Learner',
+    title: 'Contact Jugnu',
     description:
-      'Report a question correction, drawing board issue, or privacy concern to the Little Learner team.',
+      'Report a question correction, drawing board issue, or privacy concern to the Jugnu team.',
   },
   '/drawing-board': {
     title: 'Drawing Board & Tracing Worksheets for Kids',
@@ -347,7 +347,7 @@ export function getRouteSeo(rawPathname: string): RouteSeo {
 
   const fallbackTitle = pathname.startsWith('/intro/')
     ? 'Practice Activity Setup'
-    : 'Practice with Little Learner';
+    : 'Practice with Jugnu';
   const fallbackDesc =
     'Interactive Class 1 Olympiad practice, tracing worksheets, drawing tools, and educational games for young learners.';
   return {

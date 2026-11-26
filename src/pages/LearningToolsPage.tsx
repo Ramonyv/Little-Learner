@@ -16,7 +16,7 @@ export function LearningToolsPage() {
     setError('');
     const page=window.open('','_blank');
     if(!page){setError('Allow a new tab to open the printable pack.');return;}
-    page.document.title='Little Learner activity pack';
+    page.document.title='Jugnu activity pack';
     const style=page.document.createElement('style');
     style.textContent=`
       @page{size:A4 portrait;margin:0}

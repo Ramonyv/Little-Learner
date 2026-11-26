@@ -1,4 +1,4 @@
-# Little Learner (Jugnu) — Full AEO & AI Knowledge Base
+# Jugnu (Jugnu) — Full AEO & AI Knowledge Base
 
 Canonical URL: https://www.jugnu.fun
 Contact: ramandesigns9@gmail.com
@@ -73,5 +73,5 @@ Works with finger, mouse, and stylus (pressure-sensitive support on Pen and Ink)
 - **What does Fill do on the Gods page?** Select Fill, pick a color, and tap a region bounded by the outline. Eraser removes drawn strokes while Undo reverses fill actions.
 - **Will a drawing still be there after I refresh?** Completed strokes, coloring choices, and completed quiz results are saved in browser local storage and can be exported/backed up in My Work (`https://www.jugnu.fun/my-work`).
 - **Can I save a worksheet or colored deity?** Yes. Download JPG or PDF from the board (menus and temporary trace guides are excluded).
-- **Are quiz results official Olympiad scores?** No. Little Learner is an independent educational resource with no official affiliation or endorsement by CBSE or Olympiad organizers.
+- **Are quiz results official Olympiad scores?** No. Jugnu is an independent educational resource with no official affiliation or endorsement by CBSE or Olympiad organizers.
 

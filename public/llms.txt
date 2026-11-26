@@ -1,4 +1,4 @@
-# Little Learner (Jugnu)
+# Jugnu (Jugnu)
 
 > Free, ad-free, privacy-first CBSE Class 1 learning web app (`https://www.jugnu.fun`) featuring Olympiad practice quizzes, interactive letter/number/word tracing, a multi-brush drawing board, printable A4 worksheets, and educational games for young children (ages 5–7). No logins, accounts, or tracking cookies required.
 
@@ -24,7 +24,7 @@ For a complete, detailed reference of all topics, question counts, FAQs, and gui
 ## Guides, Trust & Support
 - [Frequently Asked Questions](https://www.jugnu.fun/information/faq): Answers on tracing, iPad/Apple Pencil support, brushes, local storage, and exports.
 - [Parent's Guide](https://www.jugnu.fun/information/parent-guide): Tips for short, supported Class 1 practice and tracing sessions.
-- [About Little Learner](https://www.jugnu.fun/about): Core principles (Zero Data Collection, Instant Access, Client-Side Memory, Children's Book Design).
+- [About Jugnu](https://www.jugnu.fun/about): Core principles (Zero Data Collection, Instant Access, Client-Side Memory, Children's Book Design).
 - [Privacy Policy](https://www.jugnu.fun/information/privacy)
 - [Terms of Use](https://www.jugnu.fun/information/terms)
 - [Educational Disclaimer](https://www.jugnu.fun/information/disclaimer)

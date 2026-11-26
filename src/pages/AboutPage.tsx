@@ -12,7 +12,7 @@ export const AboutPage: React.FC = () => {
           <Icon icon="solar:star-fall-bold" className="w-8 h-8" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-brand-ink mb-2">
-          About Little Learner
+          About Jugnu
         </h1>
         <p className="text-slate-500 font-bold text-base sm:text-lg">
           Thoughtfully built for young minds taking their very first Olympiad steps.
@@ -70,7 +70,7 @@ export const AboutPage: React.FC = () => {
       <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-slate-200/90 shadow-sm mb-8">
         <h2 className="text-xl font-black text-brand-ink mb-3">Expanding the Question Bank</h2>
         <p className="text-sm font-bold text-slate-600 leading-relaxed mb-4">
-          Little Learner uses a structured question architecture. Adding new classes (Class 2, 3...) or new subjects (Maths, Science, GK) is as simple as adding JSON question files without altering the interface code.
+          Jugnu uses a structured question architecture. Adding new classes (Class 2, 3...) or new subjects (Maths, Science, GK) is as simple as adding JSON question files without altering the interface code.
         </p>
         <div className="p-4 rounded-2xl bg-slate-900 text-slate-100 font-mono text-xs overflow-x-auto">
           <code>

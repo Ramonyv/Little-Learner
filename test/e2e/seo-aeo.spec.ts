@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('SEO/AEO canonicals, JSON-LD, and crawler endpoints work across routes', async ({ page, request }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/Little Learner/);
+  await expect(page).toHaveTitle(/Jugnu/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.jugnu.fun/');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://www.jugnu.fun/og-image.png');
   const homeLd = await page.locator('script[data-seo-jsonld="true"]').allTextContents();

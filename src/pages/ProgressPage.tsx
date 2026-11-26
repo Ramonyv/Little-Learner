@@ -37,7 +37,7 @@ export const ProgressPage: React.FC = () => {
         <Icon icon="solar:info-circle-bold" className="w-5 h-5 text-brand-blue flex-shrink-0 mt-0.5" />
         <div className="text-xs sm:text-sm font-bold">
           <span className="font-black text-brand-blue block mb-0.5">Session Memory Only</span>
-          This progress reflects practice completed during your current browser session. Little Learner respects children's privacy: no accounts, logins, or tracking cookies are used. Refreshing your browser will reset this session.
+          This progress reflects practice completed during your current browser session. Jugnu respects children's privacy: no accounts, logins, or tracking cookies are used. Refreshing your browser will reset this session.
         </div>
       </div>
 

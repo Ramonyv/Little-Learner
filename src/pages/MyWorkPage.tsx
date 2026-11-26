@@ -59,7 +59,7 @@ export function MyWorkPage() {
       }
       setMessage('Backup restored. Reloading saved work…');
       window.location.reload();
-    } catch { setMessage('This file could not be restored. Choose a Little Learner backup.'); }
+    } catch { setMessage('This file could not be restored. Choose a Jugnu backup.'); }
   }
   return <article className="max-w-5xl mx-auto p-5 sm:p-10">
     <Link className="underline block mb-4" to="/learning-tools">Worksheet builder, printable packs & mistake practice</Link><h1 className="text-3xl font-black mb-3">My Work</h1>
