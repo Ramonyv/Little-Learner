@@ -17,6 +17,7 @@ export function resolveSectionFromPathname(pathname: string): {
   if (normalized === '/games/sliding-puzzle') return { sectionId: 'sliding_puzzle' };
   if (normalized === '/games/hanuman-runner') return { sectionId: 'hanuman_runner' };
   if (normalized === '/drawing-board') return { sectionId: 'drawing_board' };
+  if (normalized === '/voxel-studio') return { sectionId: 'voxel_studio' };
   if (normalized === '/explore/seed') return { sectionId: 'explore_seed', subjectId: 'science' };
   if (normalized === '/progress') return { sectionId: 'progress' };
   if (normalized === '/learning-tools') return { sectionId: 'learning_tools' };

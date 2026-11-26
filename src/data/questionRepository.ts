@@ -5,6 +5,9 @@ import { scienceQuestions } from './questions/class1/science';
 
 import mathData from './questions/class1/mathematics.json';
 import gkData from './questions/class1/general-knowledge.json';
+import { mathExtraQuestions } from './questions/class1/mathematicsExtra';
+import { gkExtraQuestions } from './questions/class1/gkExtra';
+import { logicalReasoningQuestions } from './questions/class1/logicalReasoning';
 
 // Static metadata for all subjects
 export const SUBJECTS: SubjectMeta[] = [
@@ -35,9 +38,17 @@ export const SUBJECTS: SubjectMeta[] = [
   {
     id: 'general-knowledge',
     title: 'General Knowledge',
-    shortDesc: 'Discover the world, flags, festivals, seasons, and fun facts.',
+    shortDesc: 'Discover India, flags, festivals, space, seasons, and fun facts.',
     icon: 'solar:globus-bold',
     badgeColor: 'purple',
+    isAvailable: true,
+  },
+  {
+    id: 'logical-reasoning',
+    title: 'Logical Reasoning',
+    shortDesc: 'Sharpen young minds with patterns, odd-one-out, analogies, and puzzles.',
+    icon: 'solar:lightbulb-bolt-bold',
+    badgeColor: 'coral',
     isAvailable: true,
   },
 ];
@@ -138,31 +149,46 @@ function topic(subjectId: SubjectId, id: TopicId, title: string, description: st
 }
 
 const mathTopics = [
-  topic('mathematics', 'mixed-practice', 'Mixed Practice', 'Practise numbers and shapes together.', 'solar:shuffle-bold'),
-  topic('mathematics', 'numbers', 'Numbers', 'Count, compare and solve number stories.', 'solar:calculator-minimalistic-bold'),
-  topic('mathematics', 'shapes', 'Shapes & Patterns', 'Explore shapes, corners and repeating patterns.', 'solar:square-bold'),
+  topic('mathematics', 'mixed-practice', 'Mixed Practice', 'All 60 mathematics questions together.', 'solar:shuffle-bold'),
+  topic('mathematics', 'numbers', 'Numbers', 'Count, compare, and solve number stories.', 'solar:calculator-minimalistic-bold'),
+  topic('mathematics', 'addition-subtraction', 'Addition & Subtraction', 'Build speed with fun sums and takeaways.', 'solar:add-square-bold'),
+  topic('mathematics', 'shapes', 'Shapes & Patterns', 'Explore 2D/3D shapes and repeating patterns.', 'solar:square-bold'),
+  topic('mathematics', 'time-and-money', 'Time & Money', 'Read clocks, calendars, and Indian coins.', 'solar:clock-circle-bold'),
+  topic('mathematics', 'measurement', 'Measurement', 'Compare length, weight, and capacity.', 'solar:ruler-bold'),
 ];
 const gkTopics = [
-  topic('general-knowledge', 'mixed-practice', 'Mixed Practice', 'Explore your community and the world.', 'solar:shuffle-bold'),
-  topic('general-knowledge', 'community', 'Our Community', 'Discover helpers, places and transport.', 'solar:home-bold'),
-  topic('general-knowledge', 'world', 'Around the World', 'Explore festivals, symbols, music and sport.', 'solar:globus-bold'),
+  topic('general-knowledge', 'mixed-practice', 'Mixed Practice', 'All 60 general knowledge questions together.', 'solar:shuffle-bold'),
+  topic('general-knowledge', 'india-and-festivals', 'India & Festivals', 'National symbols, monuments, and celebrations.', 'solar:flag-bold'),
+  topic('general-knowledge', 'space-and-seasons', 'Space & Seasons', 'Sun, Moon, planets, weather, and seasons.', 'solar:sun-bold'),
+  topic('general-knowledge', 'community', 'Our Community', 'Discover helpers, places, and transport.', 'solar:home-bold'),
+  topic('general-knowledge', 'world', 'Around the World', 'Explore animals, music, and everyday wonders.', 'solar:globus-bold'),
+];
+const logicalReasoningTopics = [
+  topic('logical-reasoning', 'mixed-practice', 'Mixed Practice', 'All 60 logical reasoning challenges together.', 'solar:shuffle-bold'),
+  topic('logical-reasoning', 'odd-one-out', 'Odd One Out', 'Spot the item that does not belong.', 'solar:eye-bold'),
+  topic('logical-reasoning', 'patterns', 'Patterns & Sequences', 'Find the next number, letter, or shape.', 'solar:widget-4-bold'),
+  topic('logical-reasoning', 'analogies', 'Smart Analogies', 'Match word and picture relationships.', 'solar:link-round-bold'),
+  topic('logical-reasoning', 'directions-and-order', 'Order & Logic', 'Solve ranking, calendar, and direction clues.', 'solar:compass-bold'),
 ];
 
-const starterPapers: PracticeSetMeta[] = [1, 2].map(number => ({
+const twentyQuestionPapers: PracticeSetMeta[] = [1, 2, 3].map(number => ({
   id: `paper-${number}` as PracticeSetId, title: `Practice Paper ${number}`,
-  description: 'Six questions across both topics.', icon: 'solar:document-text-bold',
+  description: '20 Olympiad practice questions.', icon: 'solar:document-text-bold',
   iconBgColor: '#EBF4FE', iconColor: '#087CF7',
 }));
-starterPapers.push({ ...starterPapers[0], id: 'all', title: 'Mixed Practice', description: 'Try both papers together.', icon: 'solar:shuffle-bold' });
+twentyQuestionPapers.push({ ...twentyQuestionPapers[0], id: 'all', title: 'All 60 Questions', description: 'Every question in one complete challenge.', icon: 'solar:shuffle-bold' });
 
 export function getTopics(subjectId: SubjectId): TopicMeta[] {
   if (subjectId === 'mathematics') return mathTopics;
   if (subjectId === 'general-knowledge') return gkTopics;
+  if (subjectId === 'logical-reasoning') return logicalReasoningTopics;
   return subjectId === 'science' ? SCIENCE_TOPICS : ENGLISH_TOPICS;
 }
 
 export function getPracticeSets(subjectId: SubjectId): PracticeSetMeta[] {
-  if (subjectId === 'mathematics' || subjectId === 'general-knowledge') return starterPapers;
+  if (subjectId === 'mathematics' || subjectId === 'general-knowledge' || subjectId === 'logical-reasoning') {
+    return twentyQuestionPapers;
+  }
   return subjectId === 'science' ? SCIENCE_PRACTICE_SETS : ENGLISH_PRACTICE_SETS;
 }
 
@@ -199,7 +225,10 @@ const rawQuestions: Question[] = [
   ...(class1EnglishPracticePaper2Data as Question[]),
   ...scienceQuestions,
   ...(mathData as Question[]),
+  ...mathExtraQuestions,
   ...(gkData as Question[]),
+  ...gkExtraQuestions,
+  ...logicalReasoningQuestions,
 ];
 
 const questionsBySet: Record<Exclude<PracticeSetId, 'all'>, Question[]> = {
@@ -258,7 +287,7 @@ export function getQuestionsForTest(
       if (subjectId === 'english') {
         list = questionsBySet[practiceSetId].filter(q => q.classNumber === classNumber);
       } else {
-        const paperSize = subjectId === 'science' ? 25 : 6;
+        const paperSize = subjectId === 'science' ? 25 : 20;
         const start = (Number(practiceSetId.slice(-1)) - 1) * paperSize;
         list = list.slice(start, start + paperSize);
       }

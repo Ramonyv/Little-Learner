@@ -10,5 +10,6 @@ export const cardIcons: Record<string, string> = {
   'mathematics': '/3D Icons/Mathematics.webp',
   'science': '/3D Icons/Science.webp',
   'general-knowledge': '/3D Icons/General knowledge.webp',
+  'logical-reasoning': '/3D Icons/Mixed Practice.webp',
   'more-subjects': '/3D Icons/More Subjects.webp',
 };

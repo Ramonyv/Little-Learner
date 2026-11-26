@@ -14,6 +14,7 @@ import { SiteHeader } from './components/layout/SiteHeader';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { SeedActivity } from './pages/SeedActivity';
 import { DrawingBoardV2 } from './pages/DrawingBoardV2';
+import { VoxelStudioPage } from './pages/VoxelStudioPage';
 import { HomePage } from './pages/HomePage';
 import { TopicsPage } from './pages/TopicsPage';
 import { ExamIntroPage } from './pages/ExamIntroPage';
@@ -22,9 +23,13 @@ import { ProgressPage } from './pages/ProgressPage';
 import { AboutPage } from './pages/AboutPage';
 import { BlogPage } from './pages/BlogPage';
 import { BlogPostPage } from './pages/BlogPostPage';
+import { WhatsNewPage } from './pages/WhatsNewPage';
 
 const Runner = React.lazy(() => import('./runner/Runner'));
 const InsightsPage = React.lazy(() => import('./pages/InsightsPage'));
+const DesignSystemPage = React.lazy(() =>
+  import('./pages/DesignSystemPage').then((m) => ({ default: m.DesignSystemPage })),
+);
 const BrushGallery = import.meta.env.DEV ? React.lazy(() => import('./pages/BrushGallery')) : null;
 
 export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ runnerComponent: RunnerOverride }) => {
@@ -38,10 +43,12 @@ export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ 
       <Routes>
         {BrushGallery && <Route path="/dev/brushes" element={<React.Suspense><BrushGallery /></React.Suspense>} />}
         <Route path="/insights" element={<React.Suspense><InsightsPage /></React.Suspense>} />
+        <Route path="/design-system" element={<React.Suspense><DesignSystemPage /></React.Suspense>} />
         <Route path="/games" element={<main><Games /></main>} />
         <Route path="/games/hanuman-runner" element={RunnerOverride ? <RunnerOverride /> : <React.Suspense><Runner /></React.Suspense>} />
         <Route path="/games/sliding-puzzle" element={<main><Puzzle /></main>} />
         <Route path="/drawing-board" element={<main><DrawingBoardV2 /></main>} />
+        <Route path="/voxel-studio" element={<main><VoxelStudioPage /></main>} />
         <Route element={<><main className="flex-1"><Outlet /></main><SiteFooter /><MobileBottomNav /></>}>
           <Route path="/explore/seed" element={<SeedActivity />} />
           <Route path="/" element={<HomePage />} />
@@ -56,6 +63,7 @@ export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ 
           <Route path="/about" element={<AboutPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/whats-new" element={<WhatsNewPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

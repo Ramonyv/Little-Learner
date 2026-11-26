@@ -223,3 +223,35 @@
   .db2-focus .db2-grid{display:block}
   .db2-focus .db2-canvas-panel,.db2-focus .db2-gods{height:calc(100dvh - 16px);min-height:0}
 }
+
+.db2-mobile-tabs{display:none}
+
+/* Canvas-first mobile portrait folder-tab layout (phones <= 720px) */
+@media (max-width:720px){
+  .db2{padding:10px 8px 20px}
+  .db2-header{margin-bottom:10px;min-height:0;position:relative;z-index:30}
+  .db2-header h1{display:none}
+  .db2-modes{width:100%;justify-content:space-between;gap:6px;overflow:visible}
+  .db2-modes>button{flex:1;justify-content:center;padding:8px 6px;font-size:12px;gap:5px}
+  .db2-mode-menu,.db2-modes:has(.db2-mode-menu) .db2-mode-menu{grid-template-columns:repeat(3,minmax(0,1fr));width:100%;left:0;right:0;transform:none;animation:none;z-index:35}
+  .db2-category-toggle{position:static;transform:none;margin:6px auto 0}
+  .db2-mobile-tabs{display:flex;align-items:flex-end;gap:6px;padding:0 2px;margin-bottom:0;position:relative;z-index:2}
+  .db2-mobile-tabs button{border:0;border-radius:16px 16px 0 0;background:#d3e7fb;color:#425b87;padding:10px 18px;font-size:13px;font-weight:900;transition:background-color 140ms ease,color 140ms ease}
+  .db2-mobile-tabs button[aria-selected=true]{background:#f2f8fe;color:#172951;padding-top:12px}
+  .db2-focus .db2-mobile-tabs{display:none}
+  .db2-grid{display:block}
+  .db2:not([data-mobile-tab='canvas']) .db2-center{display:none}
+  .db2:not([data-mobile-tab='settings']) .db2-settings-wrap{display:none}
+  .db2:not([data-mobile-tab='pages']) .db2-pages{display:none}
+  .db2-canvas-panel,.db2 .db2-gods,.db2-center>.board-frame,.db2-settings,.db2-pages{border-radius:0 20px 20px 20px}
+  .db2[data-mobile-tab='settings'] .db2-settings,.db2[data-mobile-tab='pages'] .db2-pages{border-radius:20px}
+  .db2-canvas-panel,.db2 .db2-gods,.db2-center>.board-frame{height:calc(100dvh - 195px);min-height:430px;padding:10px}
+  .db2-canvas-head{padding-bottom:8px;gap:6px}
+  .db2-activity>img{width:36px;height:36px}
+  .db2-activity h2{font-size:17px;overflow:hidden;text-overflow:ellipsis}
+  .db2-activity p{display:none}
+  .db2-canvas-tools{top:auto;bottom:10px;padding:3px 5px}
+  .db2-scrollbar{display:none}
+  .db2-settings-wrap .db2-settings{height:auto;max-height:none;min-height:0;overflow:visible;padding-right:14px}
+  .db2-pages{height:auto;min-height:0}
+}

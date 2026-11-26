@@ -1,6 +1,6 @@
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
-export type SubjectId = 'english' | 'mathematics' | 'science' | 'general-knowledge';
+export type SubjectId = 'english' | 'mathematics' | 'science' | 'general-knowledge' | 'logical-reasoning';
 
 export type TopicId = 
   | 'mixed-practice'
@@ -12,8 +12,17 @@ export type TopicId =
   | 'opposites'
   | 'community'
   | 'world'
+  | 'india-and-festivals'
+  | 'space-and-seasons'
   | 'numbers'
   | 'shapes'
+  | 'addition-subtraction'
+  | 'time-and-money'
+  | 'measurement'
+  | 'odd-one-out'
+  | 'patterns'
+  | 'analogies'
+  | 'directions-and-order'
   | 'living-things'
   | 'our-body'
   | 'plants'
@@ -22,6 +31,40 @@ export type TopicId =
   | 'earth-and-sky'
   | 'air-and-water'
   | 'materials-and-safety';
+
+export type Question3DSceneId =
+  | 'cube'
+  | 'sphere'
+  | 'cone'
+  | 'cylinder'
+  | 'triangle'
+  | 'square'
+  | 'rectangle'
+  | 'circle'
+  | 'beads-9-6'
+  | 'beads-7-5'
+  | 'clock-4'
+  | 'clock-3'
+  | 'coins'
+  | 'ruler'
+  | 'balance'
+  | 'saturn'
+  | 'earth'
+  | 'sun'
+  | 'moon'
+  | 'rainbow'
+  | 'cloud-rain'
+  | 'tree'
+  | 'flower'
+  | 'apple'
+  | 'house'
+  | 'car'
+  | 'book'
+  | 'pencil'
+  | 'flag-india'
+  | 'robot'
+  | 'pattern-blocks'
+  | 'pattern-shapes';
 
 export interface Question {
   id: string;
@@ -32,6 +75,7 @@ export interface Question {
   question: string;
   passage?: string; // For reading comprehension
   illustration?: string; // e.g. 'cat' | 'apple' | 'dog' | 'sun' | 'pencil' | 'tree' | 'car' | 'elephant'
+  scene3d?: Question3DSceneId;
   options: [string, string, string, string]; // Exactly 4 options A, B, C, D
   correctAnswer: 0 | 1 | 2 | 3; // Index 0-3 (A=0, B=1, C=2, D=3)
   explanation: string;

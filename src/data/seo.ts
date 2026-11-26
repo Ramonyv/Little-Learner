@@ -23,13 +23,16 @@ export const INDEXABLE_ROUTES = [
   '/topics/mathematics',
   '/topics/science',
   '/topics/general-knowledge',
+  '/topics/logical-reasoning',
   '/drawing-board',
+  '/voxel-studio',
   '/learning-tools',
   '/games',
   '/games/hanuman-runner',
   '/games/sliding-puzzle',
   '/explore/seed',
   '/about',
+  '/whats-new',
   '/contact',
   '/information/faq',
   '/information/parent-guide',
@@ -73,6 +76,11 @@ const staticPages: Record<string, { title: string; description: string; ogType?:
     description:
       'Learn about Jugnu’s privacy-first design: zero data collection, instant browser access, client-side session memory, and children’s book artwork.',
   },
+  '/whats-new': {
+    title: "What's New on Jugnu — Latest Features & Updates",
+    description:
+      'See the newest learning tools, 3D Voxel Studio updates, Olympiad question banks, and Drawing Board improvements on Jugnu.fun.',
+  },
   '/contact': {
     title: 'Contact Jugnu',
     description:
@@ -82,6 +90,11 @@ const staticPages: Record<string, { title: string; description: string; ogType?:
     title: 'Drawing Board & Tracing Worksheets for Kids',
     description:
       'Trace letters, numbers, words, shapes, and pictures, practice 6-row worksheets, color deities, or free-draw with 13 brushes and image tracing.',
+  },
+  '/voxel-studio': {
+    title: 'Voxel Studio — 3D Block Builder for Kids',
+    description:
+      'Build 3D houses, castles, trees, animals, cars, and robots with rounded candy blocks in Jugnu Voxel Studio. Free, ad-free, and works right in your browser.',
   },
   '/learning-tools': {
     title: 'Printable Tracing Pack & Mistake Revision Tools',

@@ -1,4 +1,4 @@
-export const workKeys = ['ll-drawings','ll-coloring','ll-results'] as const;
+export const workKeys = ['ll-drawings','ll-coloring','ll-results','ll-voxels'] as const;
 
 export function readWork<T>(key: string, fallback: T): T {
   try { return JSON.parse(localStorage.getItem(key) || 'null') ?? fallback; }

@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { Question, ExamMode } from '../../types';
 import { AnswerOption } from './AnswerOption';
 import { QuestionIllustration } from '../illustrations/Illustrations';
+import { resolveQuestion3DScene } from '../../voxel/resolveQuestion3DScene';
+
+const LazyQuestion3DStage = React.lazy(() =>
+  import('../../voxel/Question3DStage').then((m) => ({ default: m.Question3DStage })),
+);
 
 interface QuestionCardProps {
   question: Question;
@@ -19,11 +24,28 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   onSelectOption,
   mode,
 }) => {
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => setIsClient(true), []);
+
+  const scene3d = resolveQuestion3DScene(question);
   const isAnswered = selectedOptionIndex !== undefined;
   const isCorrect = isAnswered && selectedOptionIndex === question.correctAnswer;
 
   return (
     <div className="w-full max-w-[700px] mx-auto bg-white rounded-3xl p-5 sm:p-8 border-2 border-slate-100 shadow-sm transition-all">
+      
+      {/* Interactive 3D Visual Context Box */}
+      {scene3d && isClient && (
+        <React.Suspense
+          fallback={
+            <div className="w-full h-48 sm:h-56 rounded-3xl bg-[#cbe4fc] border-2 border-blue-200/70 mb-5 flex items-center justify-center text-xs font-extrabold text-slate-600">
+              Loading 3D object…
+            </div>
+          }
+        >
+          <LazyQuestion3DStage sceneId={scene3d} />
+        </React.Suspense>
+      )}
       
       {/* Reading Comprehension Story Passage (if applicable) */}
       {question.passage && (

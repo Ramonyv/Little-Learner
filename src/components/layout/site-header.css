@@ -10,7 +10,8 @@
 .site-profile {position:relative}.site-profile summary {cursor:pointer;list-style:none}.site-profile summary::-webkit-details-marker{display:none}.site-profile summary img{width:44px}
 .site-profile>div {position:absolute;right:0;top:calc(100% + 6px);width:140px;display:grid;text-align:left;padding:12px;gap:8px;background:white;border-radius:14px;box-shadow:0 4px 16px #21334a22}.site-profile button{text-align:left}
 .site-tablet-menu{display:none}
-body:has(.drawing-board.focus-mode) .site-bar{display:none}
+body:has(.drawing-board.focus-mode) .site-bar,
+body:has(.voxel-studio.focus-mode) .site-bar{display:none}
 @media (prefers-reduced-motion:no-preference){
   .site-links a:hover{background:#e8f2ff;color:#174e9f}
   .site-links a[aria-current]:hover{background:#1169dc;color:white}

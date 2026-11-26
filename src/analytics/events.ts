@@ -38,7 +38,7 @@ export type GameId = 'sliding_puzzle' | 'hanuman_runner';
 export type DifficultyId = '3x3' | '4x4' | '5x5' | 'classic' | '3d';
 export type BoardModeId = 'trace' | 'free_draw' | 'gods' | 'worksheet';
 export type ExportFormatId = 'pdf' | 'jpg' | 'json';
-export type SubjectSlug = 'english' | 'mathematics' | 'science' | 'general-knowledge';
+export type SubjectSlug = 'english' | 'mathematics' | 'science' | 'general-knowledge' | 'logical-reasoning';
 export type PracticeModeSlug = 'practice' | 'exam' | 'mistakes_revision' | 'explore_seed';
 export type ScoreBand = '90_plus' | '75_89' | '50_74' | 'under_50';
 export type DurationBucket = 'under_30s' | '30s_to_2m' | '2m_to_5m' | 'over_5m';
@@ -78,6 +78,7 @@ export type SectionId =
   | 'sliding_puzzle'
   | 'hanuman_runner'
   | 'drawing_board'
+  | 'voxel_studio'
   | 'topics'
   | 'exam_intro'
   | 'exam_session'

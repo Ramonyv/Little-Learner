@@ -97,6 +97,7 @@ export function DrawingBoardV2() {
   };
   const params = new URLSearchParams(readQuery());
   const [mode,setMode] = useState(params.get('mode') || 'Trace');
+  const [mobileTab,setMobileTab] = useState<'canvas'|'settings'|'pages'>('canvas');
   const [tracePages,setTracePages] = useState<Page[]>(readPages);
   const [freePages,setFreePages] = useState<Page[]>(readFreePages);
   const [godPages,setGodPages] = useState<Page[]>(readGodPages);
@@ -224,8 +225,13 @@ export function DrawingBoardV2() {
     </div>
     {focusColorsOpen && <div className="db2-focus-colors" role="dialog" aria-label="Colors"><label className="db2-custom-color">Custom<input type="range" min="0" max="359" value={colorHue(color)} aria-label="Custom color hue" style={{'--db2-picker-color':color} as React.CSSProperties} onChange={e=>setColor(`hsl(${e.target.value} 72% 55%)`)}/></label><p>Shades</p><div className="db2-swatches">{shades.map(c=><button key={c} type="button" style={{backgroundColor:c}} aria-label={'Color '+c} aria-pressed={color===c} onClick={()=>setColor(c)}/>)}</div><p>Recent Colors</p><div className="db2-swatches">{recent.map(c=><button key={c} type="button" style={{backgroundColor:c}} aria-label={'Recent color '+c} onClick={()=>setColor(c)}/>)}</div></div>}
   </div> : null;
-  return <section className={'db2'+(focus?' db2-focus':'')} data-mode={mode}>
+  return <section className={'db2'+(focus?' db2-focus':'')} data-mode={mode} data-mobile-tab={mobileTab}>
     <header className="db2-header"><h1>{icon('Drawing Board')} Drawing Board</h1><div className="db2-modes">{modes.map(([name,asset])=><button key={name} aria-pressed={mode===name} aria-expanded={(name==='Trace'||name==='Worksheet')?menu:undefined} onClick={()=>{analytics.track('activity_selected',{activity_type:'drawing',activity_id:toBoardModeId(name),source_section:'drawing_board'});setMode(name);setSelectedId(name==='Free Draw'?freePages[0].id:name==='Gods'?godPages[0].id:tracePages[0].id);setPageMenu(null);setMenu(name==='Trace'||name==='Worksheet' ? mode===name?!menu:true : false)}}>{icon(asset)}{name}</button>)}{menu && (mode==='Trace'||mode==='Worksheet') && <div className="db2-mode-menu">{categoryNames.map(name=><button key={name} aria-pressed={activeCategory===name} onClick={()=>chooseCategory(name)}>{icon(categoryIcons[name])}<span>{name==='Lines & curves'?'Lines':name}</span></button>)}</div>}</div></header>
+    <div className="db2-mobile-tabs" role="tablist" aria-label="Drawing workspace panels">
+      <button type="button" role="tab" aria-selected={mobileTab==='canvas'} onClick={()=>setMobileTab('canvas')}>Canvas</button>
+      <button type="button" role="tab" aria-selected={mobileTab==='settings'} onClick={()=>setMobileTab('settings')}>Customize</button>
+      <button type="button" role="tab" aria-selected={mobileTab==='pages'} onClick={()=>setMobileTab('pages')}>Pages</button>
+    </div>
     <div className="db2-grid">
       <div className="db2-settings-wrap">
       <aside id="db2-settings-panel" ref={settingsRef} className="db2-settings" tabIndex={0} aria-label="Drawing settings" onScroll={event=>setSettingsScroll({top:event.currentTarget.scrollTop,max:Math.max(0,event.currentTarget.scrollHeight-event.currentTarget.clientHeight)})}><h2>{icon('Customize Workseet Ic')} {mode==='Gods'?'Customize Coloring':mode==='Free Draw'?'Customize Drawing':mode==='Trace'?'Customize Trace':'Customize Worksheet'}</h2>
