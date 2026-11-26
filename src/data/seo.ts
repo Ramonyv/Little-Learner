@@ -1,5 +1,6 @@
 import { informationPages } from '../pages/InformationPage';
 import { SUBJECTS, getAllSubjectQuestions, getTopics } from './questionRepository';
+import { getBlogPost } from './blogPosts';
 import { SubjectId } from '../types';
 
 export const SITE_URL = 'https://www.jugnu.fun';
@@ -35,9 +36,18 @@ export const INDEXABLE_ROUTES = [
   '/information/privacy',
   '/information/terms',
   '/information/disclaimer',
+  '/blog',
+  '/blog/class-1-maths-olympiad-guide',
+  '/blog/4-line-handwriting-method-kindergarten',
+  '/blog/healthy-screen-time-early-learners',
 ] as const;
 
 const staticPages: Record<string, { title: string; description: string; ogType?: 'website' | 'article' }> = {
+  '/blog': {
+    title: 'Learning Guides & Early Education Tips for Parents',
+    description:
+      'Practical, research-backed guides on Class 1 Olympiad prep, handwriting motor skills, early reading, and healthy screen time for kids.',
+  },
   '/': {
     title: 'Class 1 Olympiad Practice, Tracing & Kids Games',
     description:
@@ -225,6 +235,54 @@ export function getRouteSeo(rawPathname: string): RouteSeo {
         },
       ],
     };
+  }
+
+  if (pathname.startsWith('/blog/')) {
+    const slug = pathname.replace('/blog/', '');
+    const post = getBlogPost(slug);
+    if (post) {
+      const canonical = `${SITE_URL}/blog/${slug}`;
+      const jsonLd: Record<string, unknown>[] = [
+        breadcrumb([
+          { name: 'Home', path: '/' },
+          { name: 'Learning Guides', path: '/blog' },
+          { name: post.title, path: `/blog/${slug}` },
+        ]),
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: post.title,
+          description: post.excerpt,
+          url: canonical,
+          datePublished: post.publishedDate,
+          dateModified: post.updatedDate,
+          author: {
+            '@type': 'Organization',
+            name: 'Jugnu',
+            url: SITE_URL,
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Jugnu',
+            logo: {
+              '@type': 'ImageObject',
+              url: `${SITE_URL}/Logo/Jugnu%20Logo%20V1.svg`,
+            },
+          },
+          image: OG_IMAGE,
+          mainEntityOfPage: canonical,
+        },
+      ];
+      return {
+        title: post.title,
+        fullTitle: `${post.title} | ${SITE_NAME}`,
+        description: post.excerpt,
+        canonical,
+        robots: 'index,follow,max-image-preview:large,max-snippet:-1',
+        ogType: 'article',
+        jsonLd,
+      };
+    }
   }
 
   const page = staticPages[pathname];

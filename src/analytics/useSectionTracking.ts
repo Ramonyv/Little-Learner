@@ -23,6 +23,7 @@ export function resolveSectionFromPathname(pathname: string): {
   if (normalized === '/my-work') return { sectionId: 'my_work' };
   if (normalized === '/contact') return { sectionId: 'contact' };
   if (normalized === '/about') return { sectionId: 'about' };
+  if (normalized === '/blog' || normalized.startsWith('/blog/')) return { sectionId: 'information' };
   if (normalized.startsWith('/information/')) return { sectionId: 'information' };
 
   const match = /^\/(topics|intro|exam)\/([^/]+)/.exec(normalized);

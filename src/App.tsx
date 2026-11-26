@@ -20,6 +20,8 @@ import { ExamIntroPage } from './pages/ExamIntroPage';
 import { ExamPage } from './pages/ExamPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { AboutPage } from './pages/AboutPage';
+import { BlogPage } from './pages/BlogPage';
+import { BlogPostPage } from './pages/BlogPostPage';
 
 const Runner = React.lazy(() => import('./runner/Runner'));
 const InsightsPage = React.lazy(() => import('./pages/InsightsPage'));
@@ -52,6 +54,8 @@ export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ 
           <Route path="/my-work" element={<MyWorkPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

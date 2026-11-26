@@ -7,6 +7,7 @@ import { SubjectCard } from '../components/cards/SubjectCard';
 import { ENGLISH_TOPICS, SUBJECTS, getTopicQuestionCount, getAllSubjectQuestions } from '../data/questionRepository';
 
 import { cardIcons } from '../data/cardIcons';
+import { BLOG_POSTS } from '../data/blogPosts';
 import { analytics } from '../analytics';
 
 export const HomePage: React.FC = () => {
@@ -203,6 +204,56 @@ export const HomePage: React.FC = () => {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* 5. Parent & Educator Learning Guides */}
+      <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-14 sm:pt-20 pb-10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
+          <div>
+            <span className="text-brand-blue font-black text-xs sm:text-sm uppercase tracking-wider block mb-1">
+              Practical Guides
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-brand-ink">
+              Learning Guides & Parent Tips
+            </h2>
+          </div>
+          <Link
+            to="/blog"
+            className="text-sm font-bold text-brand-blue hover:underline inline-flex items-center gap-1 shrink-0"
+          >
+            View all guides <span aria-hidden="true">&rarr;</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {BLOG_POSTS.slice(0, 3).map((post) => (
+            <article
+              key={post.slug}
+              className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col hover:-translate-y-1 group"
+            >
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${post.categoryColor}`}>
+                  {post.category}
+                </span>
+                <span className="text-xs font-semibold text-slate-500">
+                  {post.readTime}
+                </span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-brand-ink group-hover:text-brand-blue transition-colors leading-snug mb-2 line-clamp-2">
+                <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+              </h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-4 flex-1 line-clamp-2">
+                {post.excerpt}
+              </p>
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span className="text-slate-500">{post.publishedDate}</span>
+                <Link to={`/blog/${post.slug}`} className="font-bold text-brand-blue group-hover:underline">
+                  Read &rarr;
+                </Link>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
