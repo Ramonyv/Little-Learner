@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { readWork, saveWork, workKeys } from '../utils/localWork';
 import type { Stroke } from '../components/board/InkCanvas';
 import { guides } from '../components/board/guides';
+import { analytics } from '../analytics';
 
 export function MyWorkPage() {
   const [, refresh] = useState(0);
@@ -26,6 +27,8 @@ export function MyWorkPage() {
     const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,data})],{type:'application/json'}));
     const link=document.createElement('a');link.href=url;link.download='little-learner-backup.json';link.click();
     setTimeout(()=>URL.revokeObjectURL(url),10000);
+    analytics.track('feature_used',{feature_id:'backup_export',section_id:'my_work'});
+    analytics.track('drawing_exported',{board_mode:'backup',export_format:'json'});
   }
   async function restore(file?:File) {
     if(!file)return;

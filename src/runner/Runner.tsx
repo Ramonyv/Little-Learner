@@ -4,6 +4,7 @@ import { useSession } from '../context/SessionContext';
 import { RunnerAudio } from './audio';
 import { Game, scenes } from './engine';
 import { draw, loadArt, type RunnerArtStyle } from './art';
+import { analytics, toDurationBucket, toSafeSlug, toScoreBand } from '../analytics';
 import './runner.css';
 
 const root = '/Hanuman Run/';
@@ -31,10 +32,24 @@ export default function Runner() {
     [failed, setFailed] = useState(false),
     [attempt, retry] = useReducer((n) => n + 1, 0);
   const [best, setBest] = useState(readBest);
+  const bestRef = useRef(best);
+  bestRef.current = best;
   const { soundOn, setSoundOn } = useSession();
   const hudImage = (name: string) => artStyle === '3d' && ['PlayerAvatar', 'HealthHeartFilled', 'HealthHeartEmpty', 'Pause'].includes(name) ? threeD(name) : hud(name);
   function selectArtStyle(next: RunnerArtStyle) {
     if (next === artStyle) return;
+    if (game.current.mode === 'running' || game.current.mode === 'paused') {
+      analytics.track('game_exited', {
+        game_id: 'hanuman_runner',
+        difficulty: artStyle,
+        exit_reason: 'switch_style',
+      });
+    }
+    analytics.track('difficulty_selected', { game_id: 'hanuman_runner', difficulty: next });
+    analytics.track('theme_changed', {
+      theme_id: next === '3d' ? 'runner_3d' : 'runner_classic',
+      section_id: 'hanuman_runner',
+    });
     audio.stop();
     game.current = newGame(next);
     setReady(false);
@@ -90,11 +105,32 @@ export default function Runner() {
           g.lowEffects = slow > 15 || reducedMotion.matches;
           carry += Math.min(0.1, elapsed);
           const before = g.mode;
+          const beforeScene = g.scene;
           while (carry >= 1 / 120) {
             g.step(1 / 120, Math.min(130, width * 0.2));
             carry -= 1 / 120;
           }
+          if (before === 'running' && g.scene !== beforeScene) {
+            analytics.track('level_completed', {
+              game_id: 'hanuman_runner',
+              level: g.scene === 0 ? scenes.length : g.scene,
+              scene_id: toSafeSlug(scenes[beforeScene]),
+            });
+          }
           if (before === 'running' && g.mode !== before) {
+            const prevBest = bestRef.current;
+            if (g.score > prevBest && prevBest > 0) {
+              analytics.track('achievement_unlocked', {
+                achievement_id: 'runner_new_best',
+                source_activity: 'hanuman_runner',
+              });
+            }
+            analytics.track('game_completed', {
+              game_id: 'hanuman_runner',
+              difficulty: artStyle,
+              score_band: toScoreBand(Math.min(100, Math.round(g.score / 5))),
+              duration_bucket: toDurationBucket(g.time),
+            });
             setBest((previous) => {
               const value = Math.max(previous, g.score);
               try {
@@ -173,8 +209,31 @@ export default function Runner() {
       document.removeEventListener('visibilitychange', visibility);
     };
   }, [attempt, artStyle]);
+  useEffect(() => () => {
+    if (game.current.mode === 'running' || game.current.mode === 'paused') {
+      analytics.track('game_exited', {
+        game_id: 'hanuman_runner',
+        difficulty: artStyle,
+        exit_reason: 'navigation',
+      });
+    }
+  }, [artStyle]);
+
   const g = game.current;
   function start() {
+    const wasRestart = game.current.mode === 'paused' || game.current.mode === 'over';
+    if (wasRestart) {
+      analytics.track('game_restarted', {
+        game_id: 'hanuman_runner',
+        difficulty: artStyle,
+        reason: 'restart_run',
+      });
+    }
+    analytics.track('game_started', {
+      game_id: 'hanuman_runner',
+      difficulty: artStyle,
+      is_restart: wasRestart,
+    });
     audio.stop();
     game.current = newGame();
     game.current.mode = 'running';
@@ -184,6 +243,10 @@ export default function Runner() {
   function toggle() {
     audio.stop();
     g.pause();
+    analytics.track('feature_used', {
+      feature_id: g.mode === 'paused' ? 'pause' : 'resume',
+      section_id: 'hanuman_runner',
+    });
     refresh();
     if (g.mode === 'running') canvas.current?.focus();
   }
@@ -196,7 +259,7 @@ export default function Runner() {
   return (
     <main className="runner">
       <GameDetailHeader title="Hanuman Runner" description="Jump over traps and collect Ram Coins as you run." icon={hud('Hanuma Run Game Icon')}>
-        <button className="run-sound" onClick={() => setSoundOn(!soundOn)} aria-label={soundOn ? 'Sound on' : 'Sound off'} aria-pressed={soundOn}>
+        <button className="run-sound" onClick={() => {const next=!soundOn;setSoundOn(next);analytics.track('feature_used',{feature_id:next?'sound_on':'sound_off',section_id:'hanuman_runner'});}} aria-label={soundOn ? 'Sound on' : 'Sound off'} aria-pressed={soundOn}>
           <img src={hud(soundOn ? 'Sound On-Ic' : 'Sound Off-ic')} alt="" />
         </button>
       </GameDetailHeader>

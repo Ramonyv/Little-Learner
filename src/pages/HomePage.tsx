@@ -7,6 +7,7 @@ import { SubjectCard } from '../components/cards/SubjectCard';
 import { ENGLISH_TOPICS, SUBJECTS, getTopicQuestionCount, getAllSubjectQuestions } from '../data/questionRepository';
 
 import { cardIcons } from '../data/cardIcons';
+import { analytics } from '../analytics';
 
 export const HomePage: React.FC = () => {
   const { selectedClass } = useSession();
@@ -46,6 +47,7 @@ export const HomePage: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
               <Link
                 to="/intro/english/mixed-practice"
+                onClick={() => analytics.track('activity_selected', { activity_type: 'education', activity_id: 'english_mixed_practice', source_section: 'home' })}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-brand-yellow hover:bg-brand-yellow-hover text-brand-ink font-black text-lg shadow-chunky transition-all btn-chunky active:scale-95"
               >
                 <span>Start Practice</span>
@@ -78,7 +80,7 @@ export const HomePage: React.FC = () => {
 
       <section className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-8">
         <h2 className="text-2xl font-black mb-3">Explore</h2>
-        <Link to="/explore/seed" className="flex items-center gap-4 rounded-3xl bg-green-50 border-2 border-green-200 p-5 hover:border-green-500">
+        <Link to="/explore/seed" onClick={() => analytics.track('activity_selected', { activity_type: 'explore', activity_id: 'explore_seed', source_section: 'home' })} className="flex items-center gap-4 rounded-3xl bg-green-50 border-2 border-green-200 p-5 hover:border-green-500">
           <span aria-hidden="true" className="text-4xl">🌱</span>
           <span><strong className="block text-xl">Help a seed grow</strong><span>Trace a seed and discover its roots · 5 min</span></span>
           <span aria-hidden="true" className="ml-auto text-xl">→</span>

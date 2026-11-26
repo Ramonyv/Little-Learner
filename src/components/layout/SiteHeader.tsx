@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSession } from '../../context/SessionContext';
+import { analytics } from '../../analytics';
 import './site-header.css';
 
 const links = [
@@ -45,7 +46,7 @@ export function SiteHeader() {
     <div className="site-tablet-menu" ref={menuRef}><button className="site-menu-toggle" type="button" aria-label={menuOpen?'Close navigation menu':'Open navigation menu'} aria-controls="site-mobile-menu" aria-expanded={menuOpen} onClick={()=>setMenuOpen(open=>!open)}><span/><span/><span/></button>{menuOpen && <div id="site-mobile-menu" className="site-mobile-menu">{links.map(([label,path])=><Link key={label} to={path} aria-current={isActive(label,path)?'page':undefined} onClick={()=>setMenuOpen(false)}>{mobileIcons[label] && <img src={mobileIcons[label]} alt=""/>}<span>{label === 'About' ? 'About LL' : label}</span></Link>)}</div>}</div>
     <Link className="site-trophy" to="/progress" aria-label={'Progress, '+puzzleWins+' puzzle wins'}><img src="/puzzle-ui/imgGroup46.svg" alt="" />{puzzleWins}</Link>
     <details className="site-profile" key={pathname}><summary aria-label="Learner menu"><img src="/puzzle-ui/imgUserProfile.svg" alt="" /></summary>
-      <div><strong>Class {selectedClass}</strong><Link to="/my-work">My Work</Link><button aria-pressed={soundOn} onClick={()=>setSoundOn(!soundOn)}>Sound {soundOn?'on':'off'}</button></div>
+      <div><strong>Class {selectedClass}</strong><Link to="/my-work">My Work</Link><button aria-pressed={soundOn} onClick={()=>{const next=!soundOn;setSoundOn(next);analytics.track('feature_used',{feature_id:next?'sound_on':'sound_off'});}}>Sound {soundOn?'on':'off'}</button></div>
     </details>
   </nav></header>;
 }

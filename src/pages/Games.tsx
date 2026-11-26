@@ -4,6 +4,15 @@ import { Link } from 'react-router-dom';
 import './games.css';
 import { useSession } from '../context/SessionContext';
 import { playEffect } from '../utils/soundEffects';
+import { useRef } from 'react';
+import {
+  analytics,
+  toDurationBucket,
+  toSafeSlug,
+  type AchievementId,
+  type BadgeId,
+  type DifficultyId,
+} from '../analytics';
 
 const pictures = [
   {
@@ -61,14 +70,14 @@ export function Games() {
     <nav className="catalog-crumb" aria-label="Breadcrumb"><Link to="/">Home</Link><span aria-hidden="true">❯</span><b aria-current="page">Games</b></nav>
     <h1 className="catalog-title">Games for kids</h1>
     <div className="catalog-list">
-    <Link className="catalog-card" to="/games/sliding-puzzle" aria-label="Play Sliding Puzzle">
+    <Link className="catalog-card" to="/games/sliding-puzzle" aria-label="Play Sliding Puzzle" onClick={() => analytics.track('activity_selected', { activity_type: 'game', activity_id: 'sliding_puzzle', source_section: 'games' })}>
       <div className="catalog-tools"><span className="catalog-category catalog-category-puzzles">Puzzles <img src="/puzzle-ui/category-puzzles.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
       <div className="catalog-preview">
         <img className="catalog-thumbnail" src="/Slide Puzzle Game/Ganesha Card Thumnail.svg" alt="Ganesha sliding puzzle" width="178" height="197" />
       </div>
       <h2>Sliding Puzzle</h2><p>Slide the tiles to complete the picture!</p>
     </Link>
-    <Link className="catalog-card catalog-runner" to="/games/hanuman-runner" aria-label="Play Hanuman Runner">
+    <Link className="catalog-card catalog-runner" to="/games/hanuman-runner" aria-label="Play Hanuman Runner" onClick={() => analytics.track('activity_selected', { activity_type: 'game', activity_id: 'hanuman_runner', source_section: 'games' })}>
       <div className="catalog-tools"><span className="catalog-category catalog-category-adventure">Adventure <img src="/puzzle-ui/category-adventure.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
       <div className="catalog-preview"><img className="catalog-thumbnail" src="/Hanuman Run/Hanuman Run Thumbnail.webp" alt="Hanuman Run" width="296" height="226" /></div>
       <h2>Hanuman Run</h2><p>Leap over obstacles and collect Ram Coins!</p>
@@ -123,6 +132,18 @@ export function Puzzle() {
     tiles.every((tile, slot) => slot === last || slot === empty || tile === slot);
   const [showNudge, setShowNudge] = useState(false);
   const [nudged, setNudged] = useState(false);
+  const exitStateRef = useRef({ started: 0, solved: false, size: 3 });
+  exitStateRef.current = { started, solved, size };
+  useEffect(() => () => {
+    const state = exitStateRef.current;
+    if (state.started > 0 && !state.solved) {
+      analytics.track('game_exited', {
+        game_id: 'sliding_puzzle',
+        difficulty: `${state.size}x${state.size}` as DifficultyId,
+        exit_reason: 'navigation',
+      });
+    }
+  }, []);
   useEffect(() => {
     if (oneMoveAway && !nudged && moves > 0) {
       setNudged(true);
@@ -141,6 +162,23 @@ export function Puzzle() {
   }, [started, solved]);
   function restart(n: number, board: number[], cue: "ui-tap" | "puzzle-shuffle" = "ui-tap") {
     void playEffect(cue);
+    const difficulty = `${n}x${n}` as DifficultyId;
+    if (n !== size) {
+      analytics.track('difficulty_selected', { game_id: 'sliding_puzzle', difficulty });
+    }
+    if (cue === 'puzzle-shuffle') {
+      if (started > 0 && !solved) {
+        analytics.track('game_restarted', { game_id: 'sliding_puzzle', difficulty, reason: 'shuffle' });
+      }
+      analytics.track('game_started', {
+        game_id: 'sliding_puzzle',
+        difficulty,
+        template_id: toSafeSlug(name),
+        is_restart: started > 0,
+      });
+    } else if (started > 0 && !solved && n === size) {
+      analytics.track('game_restarted', { game_id: 'sliding_puzzle', difficulty, reason: 'reset' });
+    }
     setNudged(false);
     setShowNudge(false);
     setHints(3);
@@ -150,18 +188,53 @@ export function Puzzle() {
   }
   function move(slot: number) {
     if (hint || solved || !neighbors(empty, size).includes(slot)) return;
+    const difficulty = `${size}x${size}` as DifficultyId;
+    const templateId = toSafeSlug(name);
+    if (!started) {
+      analytics.track('game_started', {
+        game_id: 'sliding_puzzle',
+        difficulty,
+        template_id: templateId,
+      });
+    }
     const next = [...tiles];
     [next[empty], next[slot]] = [next[slot], next[empty]];
     setSlidingTile(tiles[slot]);
     void playEffect("tile-slide");
     if (next.every((tile,i) => tile === i)) {
       recordPuzzleWin();
+      const durationSec = started ? Math.max(1, Math.floor((Date.now() - started) / 1000)) : 1;
+      analytics.track('game_completed', {
+        game_id: 'sliding_puzzle',
+        difficulty,
+        template_id: templateId,
+        duration_bucket: toDurationBucket(durationSec),
+      });
+      analytics.track('level_completed', {
+        game_id: 'sliding_puzzle',
+        level: size - 2,
+      });
+      const nextStars = Math.min(3, wins + 1);
+      if (nextStars > wins) {
+        analytics.track('badge_earned', {
+          badge_id: `puzzle_star_${nextStars}` as BadgeId,
+          source_activity: 'sliding_puzzle',
+        });
+        analytics.track('achievement_unlocked', {
+          achievement_id: `puzzle_master_${nextStars}` as AchievementId,
+          source_activity: 'sliding_puzzle',
+        });
+      }
       window.setTimeout(() => void playEffect("activity-complete"), 190);
     }
     setTiles(next); setMoves(moves + 1);
     if (!started) setStarted(Date.now());
   }
   function choosePicture(index: number) {
+    analytics.track('template_selected', {
+      template_category: 'puzzle_picture',
+      template_id: toSafeSlug(pictures[index].name),
+    });
     setPictureIndex(index);
     restart(size, ordered(size));
   }
@@ -169,7 +242,7 @@ export function Puzzle() {
   const stars = Math.min(3,wins);
   return <section className="puzzle">
     <GameDetailHeader title="Sliding Puzzle" description="Slide the tiles into place to complete the picture" icon="/puzzle-ui/imgSlidingPuzzle.svg">
-      {[false,true].map((on,i)=><button key={i} className="p-sound" aria-label={on?'Enable sound':'Mute sound'} aria-pressed={soundOn===on} onClick={()=>setSoundOn(on)}>{icon('Frame'+(9+i))}</button>)}
+      {[false,true].map((on,i)=><button key={i} className="p-sound" aria-label={on?'Enable sound':'Mute sound'} aria-pressed={soundOn===on} onClick={()=>{setSoundOn(on);analytics.track('feature_used',{feature_id:on?'sound_on':'sound_off',section_id:'sliding_puzzle'});}}>{icon('Frame'+(9+i))}</button>)}
       <div className="p-status"><b>Level {size-2}</b><b aria-label={stars+' stars'}>{'★'.repeat(stars)}{'☆'.repeat(3-stars)}</b><b>{icon('Frame11')}{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</b></div></GameDetailHeader>
     <div className="p-stage"><div className="p-columns">
     <section className="p-picker"><h2>Choose Picture</h2><div>{order.map((index,i)=><button key={index} aria-pressed={pictureIndex===index} onClick={()=>choosePicture(index)}>
@@ -193,7 +266,7 @@ export function Puzzle() {
       <div className="p-mobile-select"><label>Difficulty: <select value={size} onChange={e=>{const n=Number(e.target.value);restart(n,ordered(n));}}>{sizes.map(n=><option value={n} key={n}>{n}×{n}</option>)}</select></label>
       <label>Picture: <select value={pictureIndex} onChange={e=>choosePicture(Number(e.target.value))}>{order.map(i=><option key={i} value={i}>{pictures[i].name}</option>)}</select></label></div>
       <div className="p-actions"><button onClick={()=>restart(size,shuffle(size),"puzzle-shuffle")}>{icon('Frame4')}Shuffle</button>
-      <button disabled={!hint && hints===0} onClick={()=>{void playEffect(hint?"ui-tap":"hint-reveal");if(!hint)setHints(hints-1);setHint(!hint);}}>{icon('Frame5')}{hint?'Hide hint':'Hint ('+hints+')'}</button>
+      <button disabled={!hint && hints===0} onClick={()=>{void playEffect(hint?"ui-tap":"hint-reveal");if(!hint){setHints(hints-1);analytics.track('feature_used',{feature_id:'hint',section_id:'sliding_puzzle'});}setHint(!hint);}}>{icon('Frame5')}{hint?'Hide hint':'Hint ('+hints+')'}</button>
       <button onClick={()=>restart(size,initial)}>{icon('Frame6')}Reset</button></div>
       <div className="p-moves">{icon('Frame7')}{solved?'Puzzle complete!':'Moves: '+moves}</div>
     </aside></div></div>

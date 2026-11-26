@@ -91,6 +91,10 @@ const staticPages: Record<string, { title: string; description: string; ogType?:
     title: 'My Saved Drawings & Practice Backups',
     description: 'Review saved browser drawings, coloring sheets, and export or restore JSON backups locally.',
   },
+  '/insights': {
+    title: 'Jugnu Insights',
+    description: 'Private aggregate product analytics dashboard for Jugnu owners.',
+  },
 };
 
 const websiteNode = {
@@ -131,8 +135,16 @@ export function getRouteSeo(rawPathname: string): RouteSeo {
   const pathname = rawPathname === '/' ? '/' : rawPathname.replace(/\/+$/, '');
   const canonical = `${SITE_URL}${pathname}`;
   const isNoIndex =
-    pathname.startsWith('/exam/') || pathname === '/progress' || pathname === '/my-work';
-  const robots = isNoIndex ? 'noindex,follow' : 'index,follow,max-image-preview:large,max-snippet:-1';
+    pathname.startsWith('/exam/') ||
+    pathname === '/progress' ||
+    pathname === '/my-work' ||
+    pathname === '/insights';
+  const robots =
+    pathname === '/insights'
+      ? 'noindex,nofollow'
+      : isNoIndex
+        ? 'noindex,follow'
+        : 'index,follow,max-image-preview:large,max-snippet:-1';
 
   const infoSlug = pathname.startsWith('/information/') ? pathname.split('/information/')[1] : '';
   const info = infoSlug ? informationPages[infoSlug] : undefined;

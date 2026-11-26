@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { SubjectMeta } from '../../types';
+import { analytics } from '../../analytics';
 
 interface SubjectCardProps {
   iconSrc?: string;
@@ -45,6 +46,7 @@ export const SubjectCard: React.FC<SubjectCardProps> = ({ subject, iconSrc, ques
   return (
     <Link
       to={`/topics/${subject.id}`}
+      onClick={() => analytics.track('subject_selected', { subject_id: subject.id, source_section: 'home' })}
       className="p-6 bg-white rounded-3xl border-2 border-slate-200 hover:border-brand-blue hover:shadow-chunky transition-all flex flex-col justify-between group active:scale-[0.99]"
       aria-label={`Open ${subject.title} practice`}
     >

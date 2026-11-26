@@ -6,6 +6,7 @@ import { InformationPage } from './pages/InformationPage';
 import { ContactPage } from './pages/ContactPage';
 import { SiteFooter } from './components/layout/SiteFooter';
 import { PageMetadata } from './components/layout/PageMetadata';
+import { useSectionTracking } from './analytics';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { SessionProvider } from './context/SessionContext';
@@ -21,9 +22,12 @@ import { ProgressPage } from './pages/ProgressPage';
 import { AboutPage } from './pages/AboutPage';
 
 const Runner = React.lazy(() => import('./runner/Runner'));
+const InsightsPage = React.lazy(() => import('./pages/InsightsPage'));
 const BrushGallery = import.meta.env.DEV ? React.lazy(() => import('./pages/BrushGallery')) : null;
 
-export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ runnerComponent: RunnerOverride }) => (
+export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ runnerComponent: RunnerOverride }) => {
+  useSectionTracking();
+  return (
   <>
     <PageMetadata />
     <LocalSaveNotice />
@@ -31,6 +35,7 @@ export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ 
       <SiteHeader />
       <Routes>
         {BrushGallery && <Route path="/dev/brushes" element={<React.Suspense><BrushGallery /></React.Suspense>} />}
+        <Route path="/insights" element={<React.Suspense><InsightsPage /></React.Suspense>} />
         <Route path="/games" element={<main><Games /></main>} />
         <Route path="/games/hanuman-runner" element={RunnerOverride ? <RunnerOverride /> : <React.Suspense><Runner /></React.Suspense>} />
         <Route path="/games/sliding-puzzle" element={<main><Puzzle /></main>} />
@@ -52,7 +57,8 @@ export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ 
       </Routes>
     </div>
   </>
-);
+  );
+};
 
 export const App: React.FC = () => {
   return (

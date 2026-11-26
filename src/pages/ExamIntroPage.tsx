@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { useSession } from '../context/SessionContext';
 import { getTopics, SUBJECTS, getPracticeSet, getPracticeSetQuestionCount, getTopicQuestionCount } from '../data/questionRepository';
 import { ExamMode, PracticeSetId, SubjectId, TopicId } from '../types';
+import { analytics, toSafeSlug } from '../analytics';
 
 export const ExamIntroPage: React.FC = () => {
   const { subjectId = 'english', topicId = 'mixed-practice' } = useParams<{
@@ -34,6 +35,11 @@ export const ExamIntroPage: React.FC = () => {
   const estimatedMinutes = currentTopic.estimatedMinutes || Math.max(5, Math.ceil(totalQuestions * 1.2));
 
   const handleStart = () => {
+    analytics.track('activity_selected', {
+      activity_type: 'education',
+      activity_id: toSafeSlug(`${subjectId}_${topicId}`),
+      source_section: 'exam_intro',
+    });
     const setParam = isPracticePaper ? `&set=${practiceSetId}` : '';
     navigate(`/exam/${subjectId}/${topicId}?mode=${mode}&shuffle=${shuffleQuestions}${setParam}`);
   };

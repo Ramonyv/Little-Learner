@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react';
 import { TopicMeta } from '../../types';
 
 import { cardIcons } from '../../data/cardIcons';
+import { analytics, toSafeSlug } from '../../analytics';
 
 interface TopicCardProps {
   topic: TopicMeta;
@@ -20,12 +21,19 @@ export const TopicCard: React.FC<TopicCardProps> = ({
 }) => {
   const iconSrc = cardIcons[topic.id];
   const linkTo = `/intro/${topic.subjectId}/${topic.id}`;
+  const trackTopicSelect = () =>
+    analytics.track('activity_selected', {
+      activity_type: 'education',
+      activity_id: toSafeSlug(`${topic.subjectId}_${topic.id}`),
+      source_section: 'topics',
+    });
 
   if (variant === 'list') {
     // Mobile list style matching UI reference (Choose a Topic)
     return (
       <Link
         to={linkTo}
+        onClick={trackTopicSelect}
         className="flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-slate-200 hover:border-brand-blue/50 shadow-sm active:scale-[0.99] transition-all group"
       >
         <div className="flex items-center gap-3.5">
@@ -55,6 +63,7 @@ export const TopicCard: React.FC<TopicCardProps> = ({
   return (
     <Link
       to={linkTo}
+      onClick={trackTopicSelect}
       className="flex flex-col items-center text-center p-5 sm:p-6 bg-white rounded-3xl border-2 border-slate-100 hover:border-brand-blue/40 hover:shadow-chunky transition-all duration-200 group active:scale-[0.98]"
       aria-label={`${topic.title}, ${questionCount} questions for Class ${classNumber}`}
     >

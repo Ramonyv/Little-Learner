@@ -6,6 +6,7 @@ import { SUBJECTS, getPracticeSets, getTopics, getPracticeSetQuestionCount, getT
 import { cardIcons } from '../data/cardIcons';
 import { TopicCard } from '../components/cards/TopicCard';
 import { SubjectId } from '../types';
+import { analytics, toSafeSlug } from '../analytics';
 
 export const TopicsPage: React.FC = () => {
   const { subjectId = 'english' } = useParams<{ subjectId: SubjectId }>();
@@ -41,7 +42,7 @@ export const TopicsPage: React.FC = () => {
         {/* View mode toggle (hidden on very small screens) */}
         <div className="hidden sm:flex items-center bg-white border-2 border-slate-200 rounded-full p-1 shadow-sm">
           <button
-            onClick={() => setViewMode('grid')}
+            onClick={() => {setViewMode('grid');analytics.track('feature_used',{feature_id:'view_mode_grid',section_id:'topics'});}}
             className={`p-2 rounded-full transition-colors ${
               viewMode === 'grid' ? 'bg-brand-blue text-white' : 'text-slate-500 hover:text-brand-ink'
             }`}
@@ -51,7 +52,7 @@ export const TopicsPage: React.FC = () => {
             <Icon icon="solar:widget-bold" className="w-4 h-4" />
           </button>
           <button
-            onClick={() => setViewMode('list')}
+            onClick={() => {setViewMode('list');analytics.track('feature_used',{feature_id:'view_mode_list',section_id:'topics'});}}
             className={`p-2 rounded-full transition-colors ${
               viewMode === 'list' ? 'bg-brand-blue text-white' : 'text-slate-500 hover:text-brand-ink'
             }`}
@@ -81,6 +82,7 @@ export const TopicsPage: React.FC = () => {
               <Link
                 key={set.id}
                 to={`/intro/${subjectId}/mixed-practice?set=${set.id}`}
+                onClick={() => analytics.track('activity_selected', { activity_type: 'education', activity_id: toSafeSlug(`${subjectId}_${set.id}`), source_section: 'topics' })}
                 className="group flex sm:flex-col items-center sm:items-start gap-3.5 sm:gap-0 p-4 sm:p-5 bg-white rounded-2xl sm:rounded-3xl border-2 border-slate-100 hover:border-brand-blue/40 hover:shadow-chunky transition-all active:scale-[0.99]"
               >
                 <div

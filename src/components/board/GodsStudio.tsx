@@ -6,6 +6,7 @@ import { BottomToolMenu, drawingBrushes } from './BottomToolMenu';
 import { type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { BoardIcon } from './BoardIcon';
 import { Brush, InkCanvas, Stroke } from './InkCanvas';
+import { analytics, toSafeSlug, type BrushId } from '../../analytics';
 
 import { portrait } from './deityPortrait';
 const colours = [['Yellow','#ffc800'],['Orange','#ff911c'],['Pink','#ed519a'],['Blue','#4878ec'],['Green','#32a86c'],['Brown','#795548']] as const;
@@ -129,27 +130,52 @@ export function GodsStudio({focusControl,rail,settings,modernToolbar=false,locke
    ctx.restore();
   };
  },[sheet.fills,name,page,useImagePage]);
+ function emitColoringProgress(beforeMarks: number, afterMarks: number, currentBrush: Brush | 'Fill') {
+  const deitySlug = `deity_${toSafeSlug(name)}`;
+  const brushId = toSafeSlug(currentBrush) as BrushId;
+  if (beforeMarks === 0 && afterMarks > 0) {
+    analytics.track('coloring_started', {
+      board_mode: 'gods',
+      template_category: 'gods',
+      template_id: deitySlug,
+      brush_id: brushId,
+    });
+  }
+  if (afterMarks >= 3) {
+    analytics.track(
+      'coloring_completed',
+      {
+        board_mode: 'gods',
+        template_category: 'gods',
+        template_id: deitySlug,
+      },
+      { dedupeKey: `coloring_completed:${sheetKey}`, dedupeWindowMs: 60000 },
+    );
+  }
+}
  function fill(id:string){
   if(locked)return;
   if(tool!=='Fill')return;
+  const beforeMarks = sheet.strokes.length + Object.keys(sheet.fills).length;
   // Different taps in one raster region share one fill entry.
   if(page){const mask=page.mask(id);id=Object.keys(sheet.fills).reverse().find(key=>page.mask(key)===mask)??id}
   rememberColor(color);
   redoStack.current.delete(sheetKey);
   sheet.undo.push([id,sheet.fills[id]]);
   sheet.fills={...sheet.fills,[id]:color};redraw();
+  emitColoringProgress(beforeMarks, sheet.strokes.length + Object.keys(sheet.fills).length, 'Fill');
  }
  function region([id,d]:[string,string]){return <path key={id} d={d} fill={sheet.fills[id]||'white'} onClick={()=>fill(id)} role={tool==='Fill'?'button':undefined} aria-label={id} tabIndex={tool==='Fill'?0:undefined} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fill(id)}}}/>}
- function undo(){if(locked)return;const saved=cleared.get(sheetKey);if(!sheet.undo.length && !saved)return;redoStack.current.set(sheetKey,[...(redoStack.current.get(sheetKey)||[]),structuredClone(sheet)]);if(saved && saved.at===sheet.undo.length){sheets.current.set(sheetKey,saved.sheet);setCleared(m=>{const next=new Map(m);next.delete(sheetKey);return next});redraw();return}const action=sheet.undo.pop();if(!action)return;const [id,previous]=action;if(!id)sheet.strokes=sheet.strokes.slice(0,-1);else {sheet.fills={...sheet.fills};if(previous)sheet.fills[id]=previous;else delete sheet.fills[id]}redraw()}
- function redo(){if(locked)return;const stack=redoStack.current.get(sheetKey)||[];if(!stack.length)return;sheets.current.set(sheetKey,stack[stack.length-1]);redoStack.current.set(sheetKey,stack.slice(0,-1));redraw()}
- function clear(){if(locked||!sheet.strokes.length && !Object.keys(sheet.fills).length)return;redoStack.current.delete(sheetKey);setCleared(m=>new Map(m).set(sheetKey,{sheet,at:0}));sheets.current.set(sheetKey,{artwork:"svg",fills:{},strokes:[],undo:[]});redraw()}
+ function undo(){if(locked)return;const saved=cleared.get(sheetKey);if(!sheet.undo.length && !saved)return;redoStack.current.set(sheetKey,[...(redoStack.current.get(sheetKey)||[]),structuredClone(sheet)]);if(saved && saved.at===sheet.undo.length){sheets.current.set(sheetKey,saved.sheet);setCleared(m=>{const next=new Map(m);next.delete(sheetKey);return next});redraw();analytics.track('feature_used',{feature_id:'undo',section_id:'drawing_board'});return}const action=sheet.undo.pop();if(!action)return;const [id,previous]=action;if(!id)sheet.strokes=sheet.strokes.slice(0,-1);else {sheet.fills={...sheet.fills};if(previous)sheet.fills[id]=previous;else delete sheet.fills[id]}redraw();analytics.track('feature_used',{feature_id:'undo',section_id:'drawing_board'})}
+ function redo(){if(locked)return;const stack=redoStack.current.get(sheetKey)||[];if(!stack.length)return;sheets.current.set(sheetKey,stack[stack.length-1]);redoStack.current.set(sheetKey,stack.slice(0,-1));redraw();analytics.track('feature_used',{feature_id:'redo',section_id:'drawing_board'})}
+ function clear(){if(locked||!sheet.strokes.length && !Object.keys(sheet.fills).length)return;redoStack.current.delete(sheetKey);setCleared(m=>new Map(m).set(sheetKey,{sheet,at:0}));sheets.current.set(sheetKey,{artwork:"svg",fills:{},strokes:[],undo:[]});redraw();analytics.track('feature_used',{feature_id:'clear_canvas',section_id:'drawing_board'})}
 
  const actions = <div className="dock-actions"><span className="dock-label"><span aria-hidden="true">↶</span> Actions</span><button aria-label="Undo" disabled={!sheet.undo.length && !cleared.has(sheetKey)} onClick={undo}><BoardIcon name="Undo"/><span>Undo</span></button><button aria-label="Clear" disabled={!sheet.strokes.length && !Object.keys(sheet.fills).length} onClick={clear}><BoardIcon name="Clear"/><span>Clear</span></button></div>;
  const modernActions=<div className="db2-canvas-tools"><button aria-label="Undo" disabled={locked||!sheet.undo.length && !cleared.has(sheetKey)} onClick={undo}>{toolbarIcon('Undo ic')}</button><button aria-label="Redo" disabled={locked||!(redoStack.current.get(sheetKey)||[]).length} onClick={redo}>{toolbarIcon('Redo ic')}</button><button aria-label="Clear" disabled={locked} onClick={clear}>{toolbarIcon('Delete ic')}</button></div>;
- return <div className="board-frame"><div className="board-top"><label className="font-black">Colour a deity <span className="deity-picker"><select value={name} onChange={e=>select(e.target.value)}>{names.map(n=><option key={n}>{n}</option>)}</select></span></label><span className="font-bold">{tool==='Fill'?'Tap a shape to colour it':'Draw on the page'}</span>{modernToolbar && focusControl}</div>
- <div className="board-paper">{!modernToolbar && focusControl}<DownloadDrawing/>{modernToolbar?modernActions:<div className="tablet-actions">{actions}</div>}{rail}{useImagePage?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+ return <div className="board-frame"><div className="board-top"><label className="font-black">Colour a deity <span className="deity-picker"><select value={name} onChange={e=>{const next=e.target.value;if(!onDeityChange)analytics.track('template_selected',{template_category:'gods',template_id:`deity_${toSafeSlug(next)}`,board_mode:'gods'});select(next)}}>{names.map(n=><option key={n}>{n}</option>)}</select></span></label><span className="font-bold">{tool==='Fill'?'Tap a shape to colour it':'Draw on the page'}</span>{modernToolbar && focusControl}</div>
+ <div className="board-paper">{!modernToolbar && focusControl}<DownloadDrawing boardMode="gods" templateCategory="gods" templateId={`deity_${toSafeSlug(name)}`} />{modernToolbar?modernActions:<div className="tablet-actions">{actions}</div>}{rail}{useImagePage?<DeityCanvas name={name} page={page} fills={sheet.fills} onFill={fill}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-label={name+' colouring page'} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
  {portrait(name).map(region)}
- </svg>}<div className="absolute inset-0" style={{pointerEvents:tool==='Fill'||locked?'none':'auto'}}><InkCanvas key={sheetKey} disabled={tool==='Fill'||locked} afterStroke={afterStroke} brush={tool==='Fill'?'Marker':tool} color={color} widthScale={size} strokes={sheet.strokes} onFinish={()=>{redoStack.current.delete(sheetKey);sheet.undo.push([]);redraw()}}/></div>{useImagePage?<img src={imageUrl} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-hidden="true" style={{pointerEvents:'none'}} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
+ </svg>}<div className="absolute inset-0" style={{pointerEvents:tool==='Fill'||locked?'none':'auto'}}><InkCanvas key={sheetKey} disabled={tool==='Fill'||locked} afterStroke={afterStroke} brush={tool==='Fill'?'Marker':tool} color={color} widthScale={size} strokes={sheet.strokes} onFinish={()=>{const beforeMarks=Math.max(0,sheet.strokes.length-1)+Object.keys(sheet.fills).length;redoStack.current.delete(sheetKey);sheet.undo.push([]);redraw();emitColoringProgress(beforeMarks,sheet.strokes.length+Object.keys(sheet.fills).length,tool)}}/></div>{useImagePage?<img src={imageUrl} alt="" aria-hidden="true" className="board-guide" draggable={false} style={{objectFit:'contain',mixBlendMode:'multiply',pointerEvents:'none'}}/>:<svg className="board-guide" viewBox="0 0 200 200" aria-hidden="true" style={{pointerEvents:'none'}} stroke="#243451" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none">
  {portrait(name).map(([id,d])=><path key={id} d={d}/>)}
  <g strokeWidth="2.8">
  <path d="M80 80q4-6 9 0m22 0q5-6 9 0"/>
@@ -161,6 +187,6 @@ export function GodsStudio({focusControl,rail,settings,modernToolbar=false,locke
  </g>
  </svg>}</div>
  <div className="mobile-board-bar"><button aria-expanded={toolsOpen} aria-controls="gods-tools" onClick={()=>setToolsOpen(v=>!v)}><span className="mobile-colour-dot" style={{backgroundColor:color}}/> {tool} tools <span aria-hidden="true">{toolsOpen?'⌄':'⌃'}</span></button><button disabled={!sheet.undo.length && !cleared.has(sheetKey)} onClick={undo}>Undo</button></div>
- <BottomToolMenu brushes={['Fill',...drawingBrushes]} brush={tool} onBrush={value=>{void playEffect("ui-tap");setTool(value)}} colors={colours} color={color} onColor={value=>{void playEffect("ui-tap");setColor(value)}} size={size} onSize={setSize}/>
+ <BottomToolMenu brushes={['Fill',...drawingBrushes]} brush={tool} onBrush={value=>{void playEffect("ui-tap");analytics.track('brush_selected',{brush_id:toSafeSlug(value) as BrushId,board_mode:'gods'});setTool(value)}} colors={colours} color={color} onColor={value=>{void playEffect("ui-tap");setColor(value)}} size={size} onSize={setSize}/>
 </div>
 }

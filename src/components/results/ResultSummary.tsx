@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react';
 import './result-badge.css';
 import { ExamResultSummary, TopicMeta } from '../../types';
 import { playCelebrationFanfare } from '../../utils/soundEffects';
+import { analytics, toSafeSlug, type BadgeId } from '../../analytics';
 
 interface ResultSummaryProps {
   summary: ExamResultSummary;
@@ -23,8 +24,28 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({
 
   const [badgeReady, setBadgeReady] = useState(false);
 
-  // Trigger celebration effects on mount
+  // Trigger celebration effects and achievement analytics on mount
   useEffect(() => {
+    const pct = summary.scorePercentage;
+    const badgeId: BadgeId =
+      pct >= 90 ? 'awesome_champion' : pct >= 75 ? 'super_work' : pct >= 50 ? 'great_effort' : 'good_try';
+    const sourceActivity = `practice_${toSafeSlug(topic.id)}`;
+    analytics.track(
+      'badge_earned',
+      { badge_id: badgeId, source_activity: sourceActivity },
+      { dedupeKey: `badge_earned:${badgeId}:${sourceActivity}`, dedupeWindowMs: 2000 },
+    );
+    if (pct >= 90 || summary.passed) {
+      analytics.track(
+        'achievement_unlocked',
+        {
+          achievement_id: pct >= 90 ? 'champion_score' : 'first_practice_complete',
+          source_activity: sourceActivity,
+        },
+        { dedupeKey: `achievement:${sourceActivity}:${pct >= 90}`, dedupeWindowMs: 2000 },
+      );
+    }
+
     // Sound fanfare
     playCelebrationFanfare();
 
@@ -187,7 +208,10 @@ export const ResultSummary: React.FC<ResultSummaryProps> = ({
         {/* Review Answers Button */}
         <button
           type="button"
-          onClick={onReviewAnswers}
+          onClick={() => {
+            analytics.track('feature_used', { feature_id: 'answer_review', section_id: 'exam_session' });
+            onReviewAnswers();
+          }}
           className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3.5 sm:py-4 px-6 rounded-full bg-white border-2 border-slate-300 hover:border-brand-blue text-brand-ink font-extrabold text-base shadow-sm hover:bg-slate-50 transition-all btn-chunky"
         >
           <Icon icon="solar:document-text-bold" className="w-5 h-5 text-brand-blue" />

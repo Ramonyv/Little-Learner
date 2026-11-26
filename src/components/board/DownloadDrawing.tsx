@@ -1,5 +1,11 @@
 import { playEffect } from '../../utils/soundEffects';
 import { useState } from 'react';
+import {
+  analytics,
+  type BoardModeId,
+  type ExportFormatId,
+  type TemplateCategoryId,
+} from '../../analytics';
 
 function save(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -39,7 +45,17 @@ function pdf(jpeg: Uint8Array, width: number, height: number) {
   return new Blob(parts, { type: 'application/pdf' });
 }
 
-export function DownloadDrawing() {
+export interface DownloadDrawingProps {
+  boardMode?: BoardModeId;
+  templateCategory?: TemplateCategoryId;
+  templateId?: string;
+}
+
+export function DownloadDrawing({
+  boardMode = 'free_draw',
+  templateCategory = 'free_draw',
+  templateId,
+}: DownloadDrawingProps = {}) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   async function download(button: HTMLButtonElement, format: string) {
@@ -90,6 +106,19 @@ export function DownloadDrawing() {
       const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(result => result ? resolve(result) : reject(new Error('Export failed')), 'image/jpeg', .95));
       const filename = 'little-learner-drawing';
       save(format === 'pdf' ? pdf(new Uint8Array(await blob.arrayBuffer()), canvas.width, canvas.height) : blob, filename + '.' + format);
+      const exportFormat = format as ExportFormatId;
+      analytics.track('drawing_exported', {
+        board_mode: boardMode,
+        export_format: exportFormat,
+        template_category: templateCategory,
+      });
+      if (boardMode === 'worksheet') {
+        analytics.track('worksheet_downloaded', {
+          export_format: exportFormat,
+          template_category: templateCategory,
+          ...(templateId ? { template_id: templateId } : {}),
+        });
+      }
       void playEffect('work-saved');
     } catch {
       setError('Could not download. Please try again.');

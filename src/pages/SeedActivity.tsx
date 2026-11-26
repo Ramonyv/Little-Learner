@@ -2,6 +2,7 @@ import { playEffect } from '../utils/soundEffects';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { InkCanvas, Stroke } from '../components/board/InkCanvas';
+import { analytics } from '../analytics';
 
 const prompts = [
   'Trace around the seed and follow its first root down.',
@@ -32,7 +33,7 @@ export function SeedActivity(){
   const message=feedback || prompts[step] || 'You found the roots of two different plants!';
   function speak(words:string){window.speechSynthesis.cancel();const speech=new SpeechSynthesisUtterance(words);speech.lang='en-IN';speech.rate=.85;window.speechSynthesis.speak(speech)}
   useEffect(()=>{if(voice && available)speak(message);return ()=>{if(available)window.speechSynthesis.cancel()}},[voice,message,available]);
-  function advance(){if(step===3 && !voice)void playEffect("activity-complete");setStep(step+1);setCorrect(false);setFeedback('')}
+  function advance(){if(step===3){if(!voice)void playEffect("activity-complete");analytics.track('practice_completed',{subject_id:'science',topic_id:'explore_seed',practice_mode:'explore_seed',score_band:'90_plus',duration_bucket:'under_30s',passed:true});analytics.track('achievement_unlocked',{achievement_id:'seed_explorer_complete',source_activity:'explore_seed'});}setStep(step+1);setCorrect(false);setFeedback('')}
   function answer(part:Part){
     if(correct)return;
     const right=part==='Roots';if(!voice)void playEffect(right?'answer-correct':'try-again');setCorrect(right);
@@ -42,11 +43,11 @@ export function SeedActivity(){
   return <section className="max-w-2xl mx-auto px-4 pt-6 pb-28"><Link to="/" className="font-bold text-brand-blue">← Home</Link>
     <article className="mt-4 bg-white rounded-3xl border-2 border-slate-200 p-5 sm:p-8">
     <div className="flex justify-between items-center gap-3"><span className="font-black text-green-700">{step<4?'Explore · '+(step+1)+' of 4':'Activity complete'}</span>
-    {available && <button className="rounded-full px-3 py-2 bg-blue-50 font-bold" aria-pressed={voice} onClick={()=>setVoice(!voice)}>{voice?'Mute voice':'Read aloud'}</button>}</div>
+    {available && <button className="rounded-full px-3 py-2 bg-blue-50 font-bold" aria-pressed={voice} onClick={()=>{const next=!voice;setVoice(next);analytics.track('feature_used',{feature_id:next?'read_aloud_on':'read_aloud_off',section_id:'explore_seed'});}}>{voice?'Mute voice':'Read aloud'}</button>}</div>
     <h1 className="text-3xl font-black my-3">Help a seed grow</h1>
     {step<4 && <p className="text-lg font-bold mb-4">{prompts[step]}</p>}
     {step===0?<div className="relative aspect-[5/3] bg-amber-50 rounded-2xl overflow-hidden"><svg viewBox="0 0 400 240" className="w-full" aria-label="Dotted seed outline with a curved root"><path d="M207 120 C145 145 118 86 153 65 C190 39 238 81 207 120 Q230 146 202 172 T205 211" fill="none" stroke="#ab875d" strokeWidth="5" strokeDasharray="5 6" strokeLinecap="round"/><circle cx="207" cy="120" r="6" fill="#249459"/><text x="223" y="119" fill="#177345" fontWeight="bold">Start</text></svg>
-    <InkCanvas strokes={strokes.current} brush="Marker" color="#925125" onFinish={()=>setCorrect(true)}/></div>
+    <InkCanvas strokes={strokes.current} brush="Marker" color="#925125" onFinish={()=>{setCorrect(true);analytics.track('tracing_completed',{template_category:'science_seed',template_id:'seed_root'},{dedupeKey:'tracing:seed_root',dedupeWindowMs:30000});}}/></div>
     :<Plant grass={step>=3} choose={step===1||step===3?answer:undefined} highlight={correct||step===4}/>}
     {step===2 && <div className="flex gap-2 mt-4">{(['Leaves','Roots','Stem'] as Part[]).map(p=><button key={p} onClick={()=>answer(p)} disabled={correct} className="rounded-xl bg-blue-50 font-black px-4 py-3">{p}</button>)}</div>}
     <p aria-live="polite" className="font-bold my-3">{step===4?message:feedback}</p>

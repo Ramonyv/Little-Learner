@@ -3,6 +3,8 @@ Allow: /
 Disallow: /exam/
 Disallow: /progress
 Disallow: /my-work
+Disallow: /insights
+Disallow: /.netlify/
 
 # Search & AI Search / Answer Engine Crawlers
 User-agent: Googlebot

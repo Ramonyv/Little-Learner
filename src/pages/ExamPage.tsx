@@ -11,6 +11,7 @@ import { FinishConfirmation } from '../components/exam/FinishConfirmation';
 import { ResultSummary } from '../components/results/ResultSummary';
 import { AnswerReview } from '../components/results/AnswerReview';
 import { playClickSound, playCorrectSound, playIncorrectSound } from '../utils/soundEffects';
+import { analytics, toDurationBucket, toSafeSlug, toScoreBand } from '../analytics';
 
 export const ExamPage: React.FC = () => {
   const { subjectId = 'english', topicId = 'mixed-practice' } = useParams<{
@@ -65,13 +66,28 @@ export const ExamPage: React.FC = () => {
   const initializeTest = useCallback(() => {
     const loaded = getQuestionsForTest(selectedClass, subjectId as SubjectId, topicId as TopicId, shuffleParam, practiceSetId);
     const revision=readWork<UserExamSession[]>('ll-results',[]).find(session=>session.sessionId===searchParams.get('mistakes'));
-    setQuestions(revision ? revision.questions.filter((question,index)=>revision.userAnswers[index]!==undefined && revision.userAnswers[index]!==question.correctAnswer) : loaded);
+    const nextQuestions = revision ? revision.questions.filter((question,index)=>revision.userAnswers[index]!==undefined && revision.userAnswers[index]!==question.correctAnswer) : loaded;
+    setQuestions(nextQuestions);
     setCurrentIndex(0);
     setUserAnswers({});
     setIsSubmitted(false);
     setIsReviewing(false);
     setTimeLeft(Math.max(180, loaded.length * 75));
-  }, [selectedClass, subjectId, topicId, shuffleParam, practiceSetId]);
+    analytics.track(
+      'practice_started',
+      {
+        subject_id: subjectId as SubjectId,
+        topic_id: toSafeSlug(topicId),
+        practice_mode: revision ? 'mistakes_revision' : mode,
+        practice_set_id: toSafeSlug(practiceSetId),
+        question_count: nextQuestions.length,
+      },
+      {
+        dedupeKey: `practice_started:${subjectId}:${topicId}:${mode}:${practiceSetId}:${nextQuestions.length}`,
+        dedupeWindowMs: 2000,
+      },
+    );
+  }, [selectedClass, subjectId, topicId, shuffleParam, practiceSetId, mode]);
 
   useEffect(() => {
     initializeTest();
@@ -202,6 +218,16 @@ export const ExamPage: React.FC = () => {
     };
 
     saveCompletedSession(sessionRecord);
+    const totalQ = questions.length || 1;
+    const scorePct = Math.round((correct / totalQ) * 100);
+    analytics.track('practice_completed', {
+      subject_id: subjectId as SubjectId,
+      topic_id: toSafeSlug(topicId),
+      practice_mode: searchParams.get('mistakes') ? 'mistakes_revision' : mode,
+      score_band: toScoreBand(scorePct),
+      duration_bucket: toDurationBucket(sessionRecord.durationSeconds),
+      passed: scorePct >= 50,
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

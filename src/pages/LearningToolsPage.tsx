@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { readWork } from '../utils/localWork';
 import type { UserExamSession } from '../types';
+import { analytics } from '../analytics';
 
 export function LearningToolsPage() {
   const [words,setWords]=useState('cat, sun, apple');
@@ -39,6 +40,7 @@ export function LearningToolsPage() {
       page.document.body.append(section);
     });
     const button=page.document.createElement('button');button.textContent='Print / Save as PDF';button.onclick=()=>page.print();page.document.body.prepend(button);
+    analytics.track('worksheet_printed',{board_mode:'worksheet',template_category:'custom_worksheet',entry_count:letters.length});
   }
   const sessions=readWork<UserExamSession[]>('ll-results',[]);
   const mistakes=sessions.filter(session=>session.questions.some((question,index)=>session.userAnswers[index]!==undefined && session.userAnswers[index]!==question.correctAnswer));
@@ -49,13 +51,13 @@ export function LearningToolsPage() {
       <textarea className="block w-full border rounded-xl p-3 my-3" value={words} maxLength={500} onChange={event=>setWords(event.target.value)}/>
     </label>
     <div className="flex flex-wrap gap-4">
-      <Link className="rounded-xl bg-brand-yellow p-3 font-bold" to={'/drawing-board?'+new URLSearchParams({mode:'Worksheet',custom:words.split(/[,\n]/)[0].trim().slice(0,30) || 'cat'})}>Draw custom worksheet</Link>
+      <Link className="rounded-xl bg-brand-yellow p-3 font-bold" to={'/drawing-board?'+new URLSearchParams({mode:'Worksheet',custom:words.split(/[,\n]/)[0].trim().slice(0,30) || 'cat'})} onClick={()=>analytics.track('activity_selected',{activity_type:'education',activity_id:'custom_worksheet',source_section:'learning_tools'})}>Draw custom worksheet</Link>
       <button className="rounded-xl border p-3 font-bold" onClick={printPack}>Create printable pack</button>
     </div>
     <p role="alert">{error}</p>
     <p className="mt-3 text-slate-600">The drawing worksheet uses the first entry. Printable packs use up to 30 entries and give each letter or digit its own A4 practice page. Use the print dialog to print or save as PDF.</p>
     <h2 className="text-xl font-bold mt-10 mb-4">Practice mistakes again</h2>
     {!mistakes.length && <p>Complete a quiz to build a revision session from incorrect answers.</p>}
-    {mistakes.map(session=><Link key={session.sessionId} className="block border rounded-xl p-4 mb-3" to={'/exam/'+session.subjectId+'/'+session.topicId+'?mode=practice&mistakes='+encodeURIComponent(session.sessionId)}>Retry mistakes · {session.topicTitle}</Link>)}
+    {mistakes.map(session=><Link key={session.sessionId} className="block border rounded-xl p-4 mb-3" to={'/exam/'+session.subjectId+'/'+session.topicId+'?mode=practice&mistakes='+encodeURIComponent(session.sessionId)} onClick={()=>analytics.track('feature_used',{feature_id:'retry_mistakes',section_id:'learning_tools'})}>Retry mistakes · {session.topicTitle}</Link>)}
   </article>;
 }
