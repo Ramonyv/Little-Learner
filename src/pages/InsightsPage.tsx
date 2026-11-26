@@ -222,7 +222,8 @@ export default function InsightsPage() {
       }
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
-        setDataError(body.error || `Server returned ${response.status}`);
+        const msg = body.details ? `${body.error || 'Error'}: ${body.details}` : (body.error || `Server returned ${response.status}`);
+        setDataError(msg);
         return;
       }
       const summary = (await response.json()) as InsightsSummary;
