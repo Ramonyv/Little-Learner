@@ -289,7 +289,56 @@ export function getRouteSeo(rawPathname: string): RouteSeo {
   if (page) {
     const jsonLd: Record<string, unknown>[] = [];
     if (pathname === '/') {
-      jsonLd.push(websiteNode, organizationNode);
+      jsonLd.push(
+        websiteNode,
+        organizationNode,
+        {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: 'Is Jugnu completely free? Are there any in-app ads or subscriptions?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes, Jugnu is 100% free forever. There are zero subscriptions, zero microtransactions, and strictly no advertisements, banner popups, or sponsored links. We believe early childhood learning should be peaceful, safe, and universally accessible.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'What grade levels and curriculum does Jugnu cover?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Jugnu is tailored for children ages 4 to 8 (Nursery, LKG, UKG, and CBSE/ICSE Class 1). Content spans Mathematics, English Phonics & Grammar, General Science (EVS), and Logical Reasoning aligned with International Olympiad exams (IMO, IEO, NSO).',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Do children need an account or login to play?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'No account, email, or sign-up is required. Children can jump straight into drawing, games, or quiz practice with one click. We do not track, collect, or store any personal information or child identity.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Can kids use the Drawing Board for handwriting and pencil grip?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Yes! The Drawing Board includes specialized ruled guidelines: 4-line English handwriting grids, 2-line Hindi guidelines, and math squares. With 13 creative brushes and stroke stabilization, kids develop line control and motor confidence before or alongside pencil and paper.',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'Can I use Jugnu on iPad, tablets, or touchscreen laptops?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'Absolutely. Jugnu is designed touch-first with responsive touch controls, stylus/Apple Pencil support, and instant browser access without needing to download anything from the App Store or Play Store.',
+              },
+            },
+          ],
+        },
+      );
     } else {
       jsonLd.push(
         breadcrumb([
