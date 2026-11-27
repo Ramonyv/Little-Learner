@@ -1,32 +1,32 @@
-# Jugnu (Jugnu)
+# Jugnu (jugnu.fun)
 
-> Free, ad-free, privacy-first CBSE Class 1 learning web app (`https://www.jugnu.fun`) featuring Olympiad practice quizzes, interactive letter/number/word tracing, a multi-brush drawing board, printable A4 worksheets, and educational games for young children (ages 5–7). No logins, accounts, or tracking cookies required.
+> Free, ad-free, privacy-first creative and learning studio for kids ages 4–8 (`https://www.jugnu.fun`) featuring a 3D Voxel block studio, multi-brush drawing & handwriting tracing board, custom printable A4 worksheets, child-safe brain games, and CBSE Class 1 Olympiad practice. Zero logins, zero ads, zero tracking cookies.
 
-For a complete, detailed reference of all topics, question counts, FAQs, and guides, see [llms-full.txt](https://www.jugnu.fun/llms-full.txt).
+For complete details on all studios, games, topics, FAQs, and guides, see [llms-full.txt](https://www.jugnu.fun/llms-full.txt).
 
-## Olympiad Practice (CBSE Class 1)
-- [Home](https://www.jugnu.fun/): Overview of Class 1 English topics, Subject Catalog, and quick start into Practice or Exam modes.
-- [English Olympiad Practice](https://www.jugnu.fun/topics/english): 120 questions across Vocabulary, Grammar, Spelling, Reading Comprehension, Sentence Formation, Opposites, and Mock Practice Papers.
-- [Mathematics Olympiad Practice](https://www.jugnu.fun/topics/mathematics): Numbers, shapes, addition, and word puzzles for Class 1.
-- [Science Olympiad Practice](https://www.jugnu.fun/topics/science): 100 questions covering living things, plants, animals, the human body, and earth.
-- [General Knowledge Practice](https://www.jugnu.fun/topics/general-knowledge): World facts, flags, festivals, seasons, and general awareness.
-
-## Creative Drawing, Tracing & Worksheets
-- [Drawing Board & Tracing Worksheets](https://www.jugnu.fun/drawing-board): Four modes — Trace (single large guide), Free Draw (blank canvas + temporary trace-image upload with size/rotation/opacity), Gods (deity coloring studio with fill & brushes), and Worksheet (6-row repeated practice sheets). Supports JPG and PDF export.
-- [Learning Tools](https://www.jugnu.fun/learning-tools): Custom A4 printable tracing pack generator and mistake-revision quiz builder.
+## Creative Studios & Printable Tools
+- [3D Voxel Studio](https://www.jugnu.fun/voxel-studio): Interactive 3D candy-clay block builder with guided Build Together templates, symmetry mirror mode, paint/erase/fill tools, and local save/export.
+- [Drawing Board & Tracing Worksheets](https://www.jugnu.fun/drawing-board): Four modes — Trace (4-line English, 2-line Hindi, math squares), Worksheet (6-row repeated sheets), Free Draw (13 brushes + temporary trace-image upload), and Gods Coloring Studio (12 illustrations). Exports JPG and PDF.
+- [Printable Worksheets & Mistake Revision](https://www.jugnu.fun/learning-tools): Custom A4 printable tracing pack generator and automatic mistake-revision quiz builder.
 - [Help a Seed Grow](https://www.jugnu.fun/explore/seed): Short guided nature and tracing activity on how seeds grow.
 
 ## Educational Kids Games
-- [Games Catalog](https://www.jugnu.fun/games): Curated ad-free mini-games for young learners.
-- [Hanuman Run](https://www.jugnu.fun/games/hanuman-runner): Endless runner adventure with Classic and 3D clay artwork, power-ups, and keyboard/touch controls.
-- [Sliding Picture Puzzle](https://www.jugnu.fun/games/sliding-puzzle): 3×3, 4×4, and 5×5 tile puzzles across 12 children's illustrations with optional picture hints.
+- [Games Arcade](https://www.jugnu.fun/games): Curated ad-free mini-games for young learners.
+- [Sliding Picture Puzzle](https://www.jugnu.fun/games/sliding-puzzle): 3×3, 4×4, and 5×5 tile puzzles across 12 children's illustrations plus **Custom Photo Upload** to play with any family picture.
+- [Hanuman Run](https://www.jugnu.fun/games/hanuman-runner): Endless adventure runner with Classic and 3D clay artwork, Ram Coin collection, and keyboard/one-tap touch controls.
 
-## Guides, Trust & Support
-- [Frequently Asked Questions](https://www.jugnu.fun/information/faq): Answers on tracing, iPad/Apple Pencil support, brushes, local storage, and exports.
-- [Parent's Guide](https://www.jugnu.fun/information/parent-guide): Tips for short, supported Class 1 practice and tracing sessions.
+## Class 1 Olympiad & Subject Practice
+- [Home](https://www.jugnu.fun/): Overview of Creative Studios, Games, Subject Catalog, and Practice/Exam modes.
+- [English Olympiad Practice](https://www.jugnu.fun/topics/english): 120 questions across Vocabulary, Grammar, Spelling, Reading Comprehension, Sentence Formation, Opposites, and Mock Papers.
+- [Mathematics Olympiad Practice](https://www.jugnu.fun/topics/mathematics): Numbers, shapes, addition, and word puzzles for Class 1.
+- [Science Olympiad Practice](https://www.jugnu.fun/topics/science): 100 questions covering living things, plants, animals, the human body, and earth.
+- [General Knowledge Practice](https://www.jugnu.fun/topics/general-knowledge): World facts, flags, festivals, seasons, and general awareness.
+- [Logical Reasoning Practice](https://www.jugnu.fun/topics/logical-reasoning): Patterns, visual puzzles, sequences, and early critical thinking.
+
+## Parent Guides, Updates & Trust
+- [What's New](https://www.jugnu.fun/whats-new): Latest features, 3D Voxel Studio releases, and tool updates.
+- [Parent Blog & Guides](https://www.jugnu.fun/blog): Practical guides on Maths Olympiad prep, 4-line handwriting, and healthy screen time.
+- [Frequently Asked Questions](https://www.jugnu.fun/information/faq): Answers on tracing, iPad/Apple Pencil support, 3D Voxel Studio, local storage, and exports.
+- [Parent's Guide](https://www.jugnu.fun/information/parent-guide): Tips for short, balanced learning and creative sessions.
 - [About Jugnu](https://www.jugnu.fun/about): Core principles (Zero Data Collection, Instant Access, Client-Side Memory, Children's Book Design).
-- [Privacy Policy](https://www.jugnu.fun/information/privacy)
-- [Terms of Use](https://www.jugnu.fun/information/terms)
-- [Educational Disclaimer](https://www.jugnu.fun/information/disclaimer)
-- [Contact](https://www.jugnu.fun/contact)
-
+- [Privacy Policy](https://www.jugnu.fun/information/privacy) | [Terms of Use](https://www.jugnu.fun/information/terms) | [Educational Disclaimer](https://www.jugnu.fun/information/disclaimer) | [Contact](https://www.jugnu.fun/contact)

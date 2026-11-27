@@ -73,13 +73,13 @@ export function Games() {
     <Link className="catalog-card" to="/games/sliding-puzzle" aria-label="Play Sliding Puzzle" onClick={() => analytics.track('activity_selected', { activity_type: 'game', activity_id: 'sliding_puzzle', source_section: 'games' })}>
       <div className="catalog-tools"><span className="catalog-category catalog-category-puzzles">Puzzles <img src="/puzzle-ui/category-puzzles.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
       <div className="catalog-preview">
-        <img className="catalog-thumbnail" src="/Slide Puzzle Game/Ganesha Card Thumnail.svg" alt="Ganesha sliding puzzle" width="178" height="197" />
+        <img className="catalog-thumbnail" src="/Tools and Game Icons/Slide Puzzle App icon.webp" alt="Ganesha sliding puzzle" width="197" height="197" />
       </div>
       <h2>Sliding Puzzle</h2><p>Slide the tiles to complete the picture!</p>
     </Link>
     <Link className="catalog-card catalog-runner" to="/games/hanuman-runner" aria-label="Play Hanuman Runner" onClick={() => analytics.track('activity_selected', { activity_type: 'game', activity_id: 'hanuman_runner', source_section: 'games' })}>
       <div className="catalog-tools"><span className="catalog-category catalog-category-adventure">Adventure <img src="/puzzle-ui/category-adventure.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
-      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Hanuman Run/Hanuman Run Thumbnail.webp" alt="Hanuman Run" width="296" height="226" /></div>
+      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Tools and Game Icons/Hanuman Run App icon.webp" alt="Hanuman Run" width="226" height="226" /></div>
       <h2>Hanuman Run</h2><p>Leap over obstacles and collect Ram Coins!</p>
     </Link>
     </div>
@@ -111,9 +111,40 @@ function icon(asset: string) {
   return <img className="p-icon" alt="" src={'/puzzle-ui/img' + asset + '.svg'} />;
 }
 
+async function cropImageToSquareUrl(file: File): Promise<string> {
+  const srcUrl = URL.createObjectURL(file);
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = reject;
+      el.src = srcUrl;
+    });
+    const side = Math.min(img.naturalWidth, img.naturalHeight);
+    const sx = (img.naturalWidth - side) / 2;
+    const sy = (img.naturalHeight - side) / 2;
+    const outSize = Math.min(720, Math.max(360, side));
+    const canvas = document.createElement('canvas');
+    canvas.width = outSize;
+    canvas.height = outSize;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Canvas unavailable');
+    ctx.drawImage(img, sx, sy, side, side, 0, 0, outSize, outSize);
+    const blob = await new Promise<Blob | null>((res) => canvas.toBlob(res, 'image/webp', 0.9));
+    if (!blob) throw new Error('Export failed');
+    return URL.createObjectURL(blob);
+  } finally {
+    URL.revokeObjectURL(srcUrl);
+  }
+}
+
 export function Puzzle() {
   const [pictureIndex, setPictureIndex] = useState(0);
-  const { name, src: art } = pictures[pictureIndex];
+  const [customArt, setCustomArt] = useState<string | null>(null);
+  const [useCustomArt, setUseCustomArt] = useState(false);
+  const uploadInputRef = useRef<HTMLInputElement>(null);
+  const name = useCustomArt && customArt ? 'My Photo' : pictures[pictureIndex].name;
+  const art = useCustomArt && customArt ? customArt : pictures[pictureIndex].src;
   const [size, setSize] = useState(3);
   const [initial, setInitial] = useState(() => ordered(3));
   const [tiles, setTiles] = useState(initial);
@@ -230,13 +261,34 @@ export function Puzzle() {
     setTiles(next); setMoves(moves + 1);
     if (!started) setStarted(Date.now());
   }
+  useEffect(() => () => {
+    if (customArt) URL.revokeObjectURL(customArt);
+  }, [customArt]);
+
   function choosePicture(index: number) {
     analytics.track('template_selected', {
       template_category: 'puzzle_picture',
       template_id: toSafeSlug(pictures[index].name),
     });
+    setUseCustomArt(false);
     setPictureIndex(index);
     restart(size, ordered(size));
+  }
+
+  async function handleCustomPhotoUpload(file?: File) {
+    if (!file || !/^image\/(png|jpeg|webp|gif)$/i.test(file.type)) return;
+    try {
+      const nextUrl = await cropImageToSquareUrl(file);
+      setCustomArt(nextUrl);
+      setUseCustomArt(true);
+      analytics.track('template_selected', {
+        template_category: 'puzzle_picture',
+        template_id: 'custom_upload',
+      });
+      restart(size, ordered(size));
+    } catch {
+      /* Ignore unreadable image files */
+    }
   }
   const sizes = [3,4,5];
   const stars = Math.min(3,wins);
@@ -245,8 +297,35 @@ export function Puzzle() {
       {[false,true].map((on,i)=><button key={i} className="p-sound" aria-label={on?'Enable sound':'Mute sound'} aria-pressed={soundOn===on} onClick={()=>{setSoundOn(on);analytics.track('feature_used',{feature_id:on?'sound_on':'sound_off',section_id:'sliding_puzzle'});}}>{icon('Frame'+(9+i))}</button>)}
       <div className="p-status"><b>Level {size-2}</b><b aria-label={stars+' stars'}>{'★'.repeat(stars)}{'☆'.repeat(3-stars)}</b><b>{icon('Frame11')}{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</b></div></GameDetailHeader>
     <div className="p-stage"><div className="p-columns">
-    <section className="p-picker"><h2>Choose Picture</h2><div>{order.map((index,i)=><button key={index} aria-pressed={pictureIndex===index} onClick={()=>choosePicture(index)}>
-      <img loading="lazy" src={i<4?'/puzzle-ui/imgChibiGaneshaOnAPinkLotus'+(i+1)+'.webp':pictures[index].src} alt=""/>{pictures[index].name}{pictureIndex===index && icon('Frame')}</button>)}</div></section>
+    <input
+      ref={uploadInputRef}
+      type="file"
+      accept="image/png,image/jpeg,image/webp,image/gif"
+      hidden
+      onChange={(e) => {
+        void handleCustomPhotoUpload(e.target.files?.[0]);
+        e.target.value = '';
+      }}
+    />
+    <section className="p-picker"><h2>Choose Picture</h2><div>
+      <button type="button" className="p-upload-card" onClick={() => uploadInputRef.current?.click()}>
+        <span className="p-upload-icon" aria-hidden="true">📷</span>
+        <span>{customArt ? 'New Photo' : 'Upload Photo'}</span>
+      </button>
+      {customArt && (
+        <button
+          type="button"
+          aria-pressed={useCustomArt}
+          onClick={() => {
+            setUseCustomArt(true);
+            restart(size, ordered(size));
+          }}
+        >
+          <img src={customArt} alt="My uploaded puzzle" />My Photo{useCustomArt && icon('Frame')}
+        </button>
+      )}
+      {order.map((index,i)=><button key={index} aria-pressed={!useCustomArt && pictureIndex===index} onClick={()=>choosePicture(index)}>
+      <img loading="lazy" src={i<4?'/puzzle-ui/imgChibiGaneshaOnAPinkLotus'+(i+1)+'.webp':pictures[index].src} alt=""/>{pictures[index].name}{!useCustomArt && pictureIndex===index && icon('Frame')}</button>)}</div></section>
     <div className="p-frame">
       {showNudge && oneMoveAway && !hint && <div className="p-nudge" role="status">{icon('RewardBadge')} One more slide!</div>}    <div className="puzzle-board" aria-label={name + ' sliding puzzle'}>
       {!solved && <span className="p-empty" aria-hidden="true" style={{left:(empty%size)*100/size+'%',top:Math.floor(empty/size)*100/size+'%',width:100/size+'%',height:100/size+'%'}} />}
@@ -264,7 +343,8 @@ export function Puzzle() {
 </div>
     <aside className="p-panel"><div className="p-desktop-level"><h2>Difficulty</h2><div>{sizes.map(n=><button key={n} aria-pressed={size===n} onClick={()=>restart(n,ordered(n))}>{icon('Frame'+(n-2))}{n}×{n}</button>)}</div></div>
       <div className="p-mobile-select"><label>Difficulty: <select value={size} onChange={e=>{const n=Number(e.target.value);restart(n,ordered(n));}}>{sizes.map(n=><option value={n} key={n}>{n}×{n}</option>)}</select></label>
-      <label>Picture: <select value={pictureIndex} onChange={e=>choosePicture(Number(e.target.value))}>{order.map(i=><option key={i} value={i}>{pictures[i].name}</option>)}</select></label></div>
+      <label>Picture: <select value={useCustomArt ? 'custom' : pictureIndex} onChange={e=>{if(e.target.value==='custom'){setUseCustomArt(true);restart(size,ordered(size));}else{choosePicture(Number(e.target.value));}}}>{customArt && <option value="custom">My Photo</option>}{order.map(i=><option key={i} value={i}>{pictures[i].name}</option>)}</select></label>
+      <button type="button" className="p-mobile-upload" onClick={() => uploadInputRef.current?.click()} aria-label="Upload your own photo">📷</button></div>
       <div className="p-actions"><button onClick={()=>restart(size,shuffle(size),"puzzle-shuffle")}>{icon('Frame4')}Shuffle</button>
       <button disabled={!hint && hints===0} onClick={()=>{void playEffect(hint?"ui-tap":"hint-reveal");if(!hint){setHints(hints-1);analytics.track('feature_used',{feature_id:'hint',section_id:'sliding_puzzle'});}setHint(!hint);}}>{icon('Frame5')}{hint?'Hide hint':'Hint ('+hints+')'}</button>
       <button onClick={()=>restart(size,initial)}>{icon('Frame6')}Reset</button></div>

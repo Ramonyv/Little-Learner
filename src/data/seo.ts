@@ -52,9 +52,9 @@ const staticPages: Record<string, { title: string; description: string; ogType?:
       'Practical, research-backed guides on Class 1 Olympiad prep, handwriting motor skills, early reading, and healthy screen time for kids.',
   },
   '/': {
-    title: 'Class 1 Olympiad Practice, Tracing & Kids Games',
+    title: '3D Voxel Studio, Drawing, Tracing, Kids Games & Class 1 Practice',
     description:
-      'Free, child-safe CBSE Class 1 learning platform: English, Maths, Science & GK Olympiad practice, letter & word tracing, creative drawing board, and kids games with zero login.',
+      'Free, ad-free creative and learning studio for kids (Ages 4–8): 3D Voxel block builder, 13-brush drawing and handwriting tracing board, printable A4 worksheets, brain games, and Class 1 Olympiad practice with zero login.',
   },
   '/games': {
     title: 'Educational Games for Kids',
@@ -69,7 +69,7 @@ const staticPages: Record<string, { title: string; description: string; ogType?:
   '/games/sliding-puzzle': {
     title: 'Sliding Picture Puzzle for Kids (3×3, 4×4 & 5×5)',
     description:
-      'Solve 12 colourful sliding picture puzzles including Ganesha, Krishna, Shiva, and festive illustrations with picture hints and timer tracking.',
+      'Solve 12 colourful sliding picture puzzles or upload your own photo to turn it into a playable 3×3, 4×4, or 5×5 puzzle with hints and timer tracking.',
   },
   '/about': {
     title: 'About Jugnu',
@@ -128,7 +128,7 @@ const websiteNode = {
   url: SITE_URL,
   inLanguage: 'en',
   description:
-    'Free, ad-free CBSE Class 1 Olympiad practice, interactive tracing & drawing board, printable worksheets, and educational kids games.',
+    'Free, ad-free creative and learning studio for kids (Ages 4–8): 3D Voxel Studio, interactive drawing & handwriting tracing board, printable A4 worksheets, brain games, and Class 1 Olympiad practice.',
 };
 
 const organizationNode = {
@@ -359,7 +359,7 @@ export function getRouteSeo(rawPathname: string): RouteSeo {
           { name: page.title, path: pathname },
         ]),
       );
-      if (pathname === '/drawing-board' || pathname === '/learning-tools') {
+      if (pathname === '/drawing-board' || pathname === '/learning-tools' || pathname === '/voxel-studio') {
         jsonLd.push({
           '@context': 'https://schema.org',
           '@type': 'WebApplication',

@@ -3,7 +3,7 @@
 Canonical URL: https://www.jugnu.fun
 Contact: ramandesigns9@gmail.com
 Creator: https://ramanyv.work
-Target Audience: Children ages 5–7 (CBSE Class 1) with parent or teacher supervision.
+Target Audience: Children ages 4–8 (early learners & CBSE Class 1) with parent or teacher supervision.
 Cost & Privacy: 100% free, no accounts, no logins, no advertising, no tracking cookies. Drawings, coloring sheets, and completed quiz results stay locally in the visitor's browser.
 
 ---
@@ -32,6 +32,9 @@ Every subject supports two modes:
 ### General Knowledge (`https://www.jugnu.fun/topics/general-knowledge`) — 12 Questions
 - World awareness, flags, festivals, seasons, and fun facts.
 
+### Logical Reasoning (`https://www.jugnu.fun/topics/logical-reasoning`)
+- Pattern recognition, visual sequences, odd-one-out, and early critical thinking puzzles.
+
 ---
 
 ## 2. Drawing Board & Tracing Worksheets (`https://www.jugnu.fun/drawing-board`)
@@ -59,12 +62,29 @@ Works with finger, mouse, and stylus (pressure-sensitive support on Pen and Ink)
 
 ## 4. Educational Kids Games (`https://www.jugnu.fun/games`)
 - **Hanuman Run (`https://www.jugnu.fun/games/hanuman-runner`):** Endless runner featuring Classic and 3D clay art styles, jumping/flying/attacking controls, Ram Coins, and power-ups (shield, magnet, flight).
-- **Sliding Picture Puzzle (`https://www.jugnu.fun/games/sliding-puzzle`):** 3×3, 4×4, and 5×5 sliding tile puzzles across 12 illustrations with picture hint preview and move/time counters.
+- **Sliding Picture Puzzle (`https://www.jugnu.fun/games/sliding-puzzle`):** 3×3, 4×4, and 5×5 sliding tile puzzles across 12 illustrations plus **Custom Photo Upload** (parents or kids can upload any photo from their device, cropped in-browser into a playable puzzle), picture hint preview, and move/time counters.
 - **Help a Seed Grow (`https://www.jugnu.fun/explore/seed`):** Guided ~5-minute tracing and plant-growth discovery activity.
 
 ---
 
-## 5. Frequently Asked Questions (`https://www.jugnu.fun/information/faq`)
+## 5. 3D Voxel Studio (`https://www.jugnu.fun/voxel-studio`)
+- Interactive 3D candy-clay block builder running natively in the browser (no login or install required).
+- **Tools:** Add, Paint, Erase, 3D Flood Fill, Symmetry Mirror (X / Z / Both), Block Style switcher, and Undo/Redo.
+- **Build Together Guided Templates:** Step-by-step layer-by-layer building guides for houses, castles, trees, cars, robots, and more.
+- **Local Save & Export:** Auto-saves to browser storage (`My Work`) and supports `.json` model import/export.
+
+---
+
+## 6. Parent Guides & Updates
+- **What's New (`https://www.jugnu.fun/whats-new`):** Release notes for new studios, games, and learning tools.
+- **Learning Guides / Blog (`https://www.jugnu.fun/blog`):**
+  - [Class 1 Maths Olympiad Guide](https://www.jugnu.fun/blog/class-1-maths-olympiad-guide)
+  - [4-Line Handwriting Method for Kindergarten](https://www.jugnu.fun/blog/4-line-handwriting-method-kindergarten)
+  - [Healthy Screen Time for Early Learners](https://www.jugnu.fun/blog/healthy-screen-time-early-learners)
+
+---
+
+## 7. Frequently Asked Questions (`https://www.jugnu.fun/information/faq`)
 
 - **What is the difference between Trace and Worksheet?** Trace shows one large guide at a time. Worksheet repeats the selected item across six rows, with a solid example at the start of each row and dotted copies after it.
 - **Can I make a number or word bigger?** In Trace, select Letters, Numbers, or Words and move the size slider (`60%–140%`). Long words fit to width; the slider does not change Worksheet's repeated rows.

@@ -92,7 +92,7 @@ export const HomePage: React.FC = () => {
             <img
               src="/home/play-games.webp"
               alt="Play Games"
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-18 md:h-18 object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.3] group-active:scale-95"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px] object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.3] group-active:scale-95"
             />
           </Link>
 
@@ -106,7 +106,7 @@ export const HomePage: React.FC = () => {
             <img
               src="/home/draw-pencil.webp"
               alt="Drawing Board"
-              className="w-15 h-15 sm:w-20 sm:h-20 md:w-22 md:h-22 object-contain drop-shadow-md transition-transform duration-200 group-hover:scale-[1.3] group-active:scale-95"
+              className="w-14 h-14 sm:w-20 sm:h-20 md:w-[88px] md:h-[88px] object-contain drop-shadow-md transition-transform duration-200 group-hover:scale-[1.3] group-active:scale-95"
             />
           </Link>
 
@@ -120,7 +120,7 @@ export const HomePage: React.FC = () => {
             <img
               src="/home/tales-book.webp"
               alt="Reading Tales"
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-18 md:h-18 object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.3] group-active:scale-95"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px] object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.3] group-active:scale-95"
             />
           </Link>
 
@@ -131,7 +131,7 @@ export const HomePage: React.FC = () => {
             className="group animate-hero-wave cursor-pointer"
           >
             <img
-              src="/home/discover-compass.webp"
+              src="/Tools and Game Icons/3D Voxel Studio App icon.webp"
               alt="Explore 3D Voxel Studio"
               className="w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.3] group-active:scale-95"
             />
