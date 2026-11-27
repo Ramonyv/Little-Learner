@@ -14,9 +14,9 @@ export function GameDetailHeader({ title, description, icon, children }: Props) 
     <GameBreadcrumb title={title} />
     <header className="p-heading">
       <Link to="/games" aria-label="Back to Games"><img className="p-icon" src="/puzzle-ui/imgFrame8.svg" alt="" /></Link>
-      <span className="p-symbol"><img className="p-icon" src={icon} alt="" /></span>
+      <span className="p-symbol p-symbol-app"><img className="p-app-icon" src={icon} alt="" /></span>
       <div className="game-heading-copy"><h1>{title}</h1><p>{description}</p></div>
-      {children}
+      {children && <div className="game-detail-actions">{children}</div>}
     </header>
   </>;
 }

@@ -69,6 +69,36 @@ const JUGNU_GAMES: MegaMenuItem[] = [
 
 const JUGNU_TOOLS: MegaMenuItem[] = [
   {
+    id: 'draw-animate',
+    name: 'Draw & Animate',
+    tagline: 'Draw it. Tap it. Watch it move!',
+    description:
+      'Draw any character with waxy crayons, pick a fun move like Wiggle, Bounce, Fly, or Dance, and bring your art to life on an animated stage!',
+    path: '/tools/draw-animate',
+    badge: 'NEW · ANIMATION STUDIO',
+    icon: 'solar:magic-stick-3-bold',
+    iconBg: 'bg-purple-100 text-[#7c3aed]',
+    appIcon: '/Tools and Game Icons/Draw and Animate App icon.webp',
+    previewImg: '/Tools and Game Icons/Draw and Animate App icon.webp',
+    cardGradient: 'from-[#22c55e] via-[#087CF7] to-[#7c3aed]',
+    ctaLabel: 'Open Draw & Animate',
+  },
+  {
+    id: 'pixel-art',
+    name: 'Pixel Art Studio',
+    tagline: 'Make tiny pictures, one square at a time',
+    description:
+      'Color, stamp, mirror, and trace pixel art in a golden frame — with Paint-by-Number, Flipbook animations, and Make it 3D!',
+    path: '/tools/pixel-art',
+    badge: 'NEW · PIXEL STUDIO',
+    icon: 'solar:palette-round-bold',
+    iconBg: 'bg-sky-100 text-[#087CF7]',
+    appIcon: '/Tools and Game Icons/Pixel Art Studio App icon.webp',
+    previewImg: '/Tools and Game Icons/Pixel Art Studio App icon.webp',
+    cardGradient: 'from-[#087CF7] via-[#38bdf8] to-[#22c55e]',
+    ctaLabel: 'Open Pixel Art Studio',
+  },
+  {
     id: 'voxel-studio',
     name: '3D Voxel Studio',
     tagline: 'Build in 3D with candy-clay blocks',
@@ -301,7 +331,7 @@ export function SiteHeader() {
       : pathname === path || pathname.startsWith(path + '/');
 
   const isGamesActive = pathname === '/games' || pathname.startsWith('/games/');
-  const isToolsActive = ['/voxel-studio', '/learning-tools', '/my-work'].some(
+  const isToolsActive = ['/tools/draw-animate', '/tools/pixel-art', '/voxel-studio', '/learning-tools', '/my-work'].some(
     (p) => pathname === p || pathname.startsWith(p + '/'),
   );
 

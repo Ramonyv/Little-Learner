@@ -4,13 +4,15 @@ import { readWork, saveWork, workKeys } from '../utils/localWork';
 import type { Stroke } from '../components/board/InkCanvas';
 import { guides } from '../components/board/guides';
 import { analytics } from '../analytics';
+import { PIXEL_MY_WORK_KEY, type SavedPixelWork } from '../tools/pixel-art/storage/myWork';
 
 export function MyWorkPage() {
   const [, refresh] = useState(0);
   const [message, setMessage] = useState('');
   const drawings = readWork<[string,Stroke[]][]>('ll-drawings',[]);
   const coloring = readWork<[string,{strokes:Stroke[];fills:Record<string,string>}][]>('ll-coloring',[]);
-  const items = drawings.filter(([,strokes])=>strokes.length).map(([key])=>{
+  const pixelWorks = readWork<[string,SavedPixelWork][]>(PIXEL_MY_WORK_KEY,[]);
+  const items: Array<{ key: string; title: string; url: string; store: string; thumbnail?: string; actionLabel?: string }> = drawings.filter(([,strokes])=>strokes.length).map(([key])=>{
     if(key.startsWith('WorksheetCustom:')) return {key,title:key.slice(16),url:'/drawing-board?'+new URLSearchParams({mode:'Worksheet',custom:key.slice(16)}),store:'ll-drawings'};
     if(key==='free') return {key,title:'Free drawing',url:'/drawing-board?mode=Free%20Draw',store:'ll-drawings'};
     for(const mode of ['Trace','Worksheet']) for(const category of Object.keys(guides)) {
@@ -21,7 +23,8 @@ export function MyWorkPage() {
       }
     }
     return {key,title:key,url:'/drawing-board',store:'ll-drawings'};
-  }).concat(coloring.filter(([,sheet])=>sheet.strokes.length || Object.keys(sheet.fills).length).map(([key])=>({key,title:'Coloring · '+key,url:'/drawing-board?mode=Gods&deity='+encodeURIComponent(key),store:'ll-coloring'})));
+  }).concat(coloring.filter(([,sheet])=>sheet.strokes.length || Object.keys(sheet.fills).length).map(([key])=>({key,title:'Coloring · '+key,url:'/drawing-board?mode=Gods&deity='+encodeURIComponent(key),store:'ll-coloring'})))
+    .concat(pixelWorks.filter(([,w])=>w && w.type==='pixel').map(([key,w])=>({key,title:'Pixel Art · '+w.title,url:'/tools/pixel-art?work='+encodeURIComponent(key),store:PIXEL_MY_WORK_KEY,thumbnail:w.thumbnail,actionLabel:'Continue pixel art'})));
   function backup() {
     const data=Object.fromEntries(workKeys.map(key=>[key,readWork(key,[])]));
     const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,data})],{type:'application/json'}));
@@ -72,9 +75,10 @@ export function MyWorkPage() {
     <p role="status">{message}</p>
     {!items.length && <p className="py-8">Your drawings and coloring pages will appear here after you draw. <Link className="underline" to="/drawing-board">Open Drawing Board</Link></p>}
     <div className="grid sm:grid-cols-2 gap-4">{items.map(item=><section key={item.store+item.key} className="rounded-2xl border bg-white p-5">
+      {item.thumbnail && <img src={item.thumbnail} alt={item.title} style={{imageRendering:'pixelated'}} className="w-16 h-16 rounded-xl border border-slate-200 mb-3 object-contain bg-white" />}
       <h2 className="font-extrabold mb-4">{readWork<Record<string,string>>('ll-work-names',{})[item.key] || item.title}</h2>
       <button className="underline mr-4" onClick={()=>{const name=window.prompt('Drawing name',item.title);if(name?.trim()){saveWork('ll-work-names',{...readWork('ll-work-names',{}),[item.key]:name.trim().slice(0,80)});refresh(value=>value+1)}}}>Rename</button>
-      <Link className="text-brand-blue underline mr-5" to={item.url}>Continue drawing</Link>
+      <Link className="text-brand-blue underline mr-5" to={item.url}>{item.actionLabel || 'Continue drawing'}</Link>
       <button className="text-red-700 underline" onClick={()=>{if(window.confirm('Delete this saved drawing?')){saveWork(item.store,readWork<[string,unknown][]>(item.store,[]).filter(([key])=>key!==item.key));refresh(value=>value+1)}}}>Delete</button>
     </section>)}</div>
   </article>;

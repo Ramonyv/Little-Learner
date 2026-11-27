@@ -224,27 +224,47 @@
   .db2-focus .db2-canvas-panel,.db2-focus .db2-gods{height:calc(100dvh - 16px);min-height:0}
 }
 
-.db2-mobile-tabs{display:none}
+.db2-mobile-tabs,.db2-sheet-bar{display:none}
 
 /* Canvas-first mobile portrait folder-tab layout (phones <= 720px) */
 @media (max-width:720px){
   .db2{padding:10px 8px 20px}
   .db2-header{margin-bottom:10px;min-height:0;position:relative;z-index:30}
   .db2-header h1{display:none}
-  .db2-modes{width:100%;justify-content:space-between;gap:6px;overflow:visible}
-  .db2-modes>button{flex:1;justify-content:center;padding:8px 6px;font-size:12px;gap:5px}
+  .db2-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:6px;overflow:visible;padding:0}
+  .db2-modes>button{width:100%;justify-content:center;min-height:42px;padding:8px 10px;font-size:13px;gap:6px}
+  .db2-modes>button img{width:18px;height:18px;flex:none}
   .db2-mode-menu,.db2-modes:has(.db2-mode-menu) .db2-mode-menu{grid-template-columns:repeat(3,minmax(0,1fr));width:100%;left:0;right:0;transform:none;animation:none;z-index:35}
   .db2-category-toggle{position:static;transform:none;margin:6px auto 0}
   .db2-mobile-tabs{display:flex;align-items:flex-end;gap:6px;padding:0 2px;margin-bottom:0;position:relative;z-index:2}
   .db2-mobile-tabs button{border:0;border-radius:16px 16px 0 0;background:#d3e7fb;color:#425b87;padding:10px 18px;font-size:13px;font-weight:900;transition:background-color 140ms ease,color 140ms ease}
   .db2-mobile-tabs button[aria-selected=true]{background:#f2f8fe;color:#172951;padding-top:12px}
   .db2-focus .db2-mobile-tabs{display:none}
+  .db2-focus{position:fixed;inset:0;z-index:150;height:100dvh;min-height:0;padding:8px 8px 78px;overflow:hidden}
+  .db2-focus .db2-grid,.db2-focus .db2-center{height:100%;padding-bottom:0 !important}
+  .db2-focus .db2-canvas-panel{height:100%;min-height:0}
+  .db2-focus .db2-focus-rail{display:none}
   .db2-grid{display:block}
   .db2:not([data-mobile-tab='canvas']) .db2-center{display:none}
   .db2:not([data-mobile-tab='settings']) .db2-settings-wrap{display:none}
   .db2:not([data-mobile-tab='pages']) .db2-pages{display:none}
   .db2-canvas-panel,.db2 .db2-gods,.db2-center>.board-frame,.db2-settings,.db2-pages{border-radius:0 20px 20px 20px}
   .db2[data-mobile-tab='settings'] .db2-settings,.db2[data-mobile-tab='pages'] .db2-pages{border-radius:20px}
+  .db2-ux-toggle{margin-left:auto;border-radius:999px !important;background:#1676ed !important;color:#fff !important;padding:7px 13px !important;font-size:12px !important;margin-bottom:6px}
+  .db2[data-mobile-ux='sheets'] .db2-center{display:block !important;padding-bottom:74px}
+  .db2[data-mobile-ux='sheets'] .db2-settings-wrap,.db2[data-mobile-ux='sheets'] .db2-pages{display:none !important}
+  .db2-sheet-bar{position:fixed;left:12px;right:12px;bottom:14px;z-index:35;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:8px;border-radius:22px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border:1.5px solid #dbe7f6;box-shadow:0 12px 30px rgba(23,41,81,.16)}
+  .db2-sheet-bar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:48px;border:0;border-radius:14px;background:#f4f8ff;color:#172951;font-size:11px;font-weight:900}
+  .db2-sheet-bar button img{width:20px;height:20px}
+  .db2-sheet-color-dot{width:20px;height:20px;border-radius:999px;border:2px solid #fff;box-shadow:0 0 0 1.5px #cbd5e1}
+  .db2-sheet-backdrop{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;justify-content:flex-end}
+  .db2-sheet-scrim{position:absolute;inset:0;border:0;background:rgba(15,23,42,.38);backdrop-filter:blur(2px)}
+  .db2-sheet-panel{position:relative;z-index:1;background:#fff;border-radius:24px 24px 0 0;padding:16px 16px 24px;max-height:72dvh;overflow-y:auto;box-shadow:0 -12px 32px rgba(15,23,42,.2)}
+  .db2-sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .db2-sheet-head strong{font-size:15px;font-weight:900;color:#172951}
+  .db2-sheet-head button{border:0;border-radius:999px;padding:6px 14px;background:#eef5ff;color:#1676ed;font-size:12px;font-weight:900}
+  .db2-sheet-body{display:flex;flex-direction:column;gap:12px}
+  .db2-sheet-sub{margin:0;font-size:12px;font-weight:800;color:#516587}
   .db2-canvas-panel,.db2 .db2-gods,.db2-center>.board-frame{height:calc(100dvh - 195px);min-height:430px;padding:10px}
   .db2-canvas-head{padding-bottom:8px;gap:6px}
   .db2-activity>img{width:36px;height:36px}

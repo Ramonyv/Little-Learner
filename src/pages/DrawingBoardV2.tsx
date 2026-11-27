@@ -98,6 +98,16 @@ export function DrawingBoardV2() {
   const params = new URLSearchParams(readQuery());
   const [mode,setMode] = useState(params.get('mode') || 'Trace');
   const [mobileTab,setMobileTab] = useState<'canvas'|'settings'|'pages'>('canvas');
+  const [mobileSheetMode,setMobileSheetMode] = useState<boolean>(true);
+  const [mobileSheet,setMobileSheet] = useState<'tools'|'colors'|'pages'|'more'|null>(null);
+  const toggleMobileSheetMode = () => {
+    setMobileSheetMode(prev => {
+      const next = !prev;
+      setMobileSheet(null);
+      try { localStorage.setItem('ll-board-mobile-sheets', next ? '1' : '0'); } catch {}
+      return next;
+    });
+  };
   const [tracePages,setTracePages] = useState<Page[]>(readPages);
   const [freePages,setFreePages] = useState<Page[]>(readFreePages);
   const [godPages,setGodPages] = useState<Page[]>(readGodPages);
@@ -225,13 +235,19 @@ export function DrawingBoardV2() {
     </div>
     {focusColorsOpen && <div className="db2-focus-colors" role="dialog" aria-label="Colors"><label className="db2-custom-color">Custom<input type="range" min="0" max="359" value={colorHue(color)} aria-label="Custom color hue" style={{'--db2-picker-color':color} as React.CSSProperties} onChange={e=>setColor(`hsl(${e.target.value} 72% 55%)`)}/></label><p>Shades</p><div className="db2-swatches">{shades.map(c=><button key={c} type="button" style={{backgroundColor:c}} aria-label={'Color '+c} aria-pressed={color===c} onClick={()=>setColor(c)}/>)}</div><p>Recent Colors</p><div className="db2-swatches">{recent.map(c=><button key={c} type="button" style={{backgroundColor:c}} aria-label={'Recent color '+c} onClick={()=>setColor(c)}/>)}</div></div>}
   </div> : null;
-  return <section className={'db2'+(focus?' db2-focus':'')} data-mode={mode} data-mobile-tab={mobileTab}>
+  return <section className={'db2'+(focus?' db2-focus':'')} data-mode={mode} data-mobile-tab={mobileTab} data-mobile-ux={mobileSheetMode?'sheets':'classic'}>
     <header className="db2-header"><h1>{icon('Drawing Board')} Drawing Board</h1><div className="db2-modes">{modes.map(([name,asset])=><button key={name} aria-pressed={mode===name} aria-expanded={(name==='Trace'||name==='Worksheet')?menu:undefined} onClick={()=>{analytics.track('activity_selected',{activity_type:'drawing',activity_id:toBoardModeId(name),source_section:'drawing_board'});setMode(name);setSelectedId(name==='Free Draw'?freePages[0].id:name==='Gods'?godPages[0].id:tracePages[0].id);setPageMenu(null);setMenu(name==='Trace'||name==='Worksheet' ? mode===name?!menu:true : false)}}>{icon(asset)}{name}</button>)}{menu && (mode==='Trace'||mode==='Worksheet') && <div className="db2-mode-menu">{categoryNames.map(name=><button key={name} aria-pressed={activeCategory===name} onClick={()=>chooseCategory(name)}>{icon(categoryIcons[name])}<span>{name==='Lines & curves'?'Lines':name}</span></button>)}</div>}</div></header>
-    <div className="db2-mobile-tabs" role="tablist" aria-label="Drawing workspace panels">
-      <button type="button" role="tab" aria-selected={mobileTab==='canvas'} onClick={()=>setMobileTab('canvas')}>Canvas</button>
-      <button type="button" role="tab" aria-selected={mobileTab==='settings'} onClick={()=>setMobileTab('settings')}>Customize</button>
-      <button type="button" role="tab" aria-selected={mobileTab==='pages'} onClick={()=>setMobileTab('pages')}>Pages</button>
-    </div>
+    {/* Legacy mobile tabs kept intact for future fallback; hidden while Sheet UX is active */}
+    {!mobileSheetMode && (
+      <div className="db2-mobile-tabs" role="tablist" aria-label="Drawing workspace panels">
+        <button type="button" role="tab" aria-selected={mobileTab==='canvas'} onClick={()=>setMobileTab('canvas')}>Canvas</button>
+        <button type="button" role="tab" aria-selected={mobileTab==='settings'} onClick={()=>setMobileTab('settings')}>Customize</button>
+        <button type="button" role="tab" aria-selected={mobileTab==='pages'} onClick={()=>setMobileTab('pages')}>Pages</button>
+        <button type="button" className="db2-ux-toggle" onClick={toggleMobileSheetMode}>
+          ✨ Try Sheet UX
+        </button>
+      </div>
+    )}
     <div className="db2-grid">
       <div className="db2-settings-wrap">
       <aside id="db2-settings-panel" ref={settingsRef} className="db2-settings" tabIndex={0} aria-label="Drawing settings" onScroll={event=>setSettingsScroll({top:event.currentTarget.scrollTop,max:Math.max(0,event.currentTarget.scrollHeight-event.currentTarget.clientHeight)})}><h2>{icon('Customize Workseet Ic')} {mode==='Gods'?'Customize Coloring':mode==='Free Draw'?'Customize Drawing':mode==='Trace'?'Customize Trace':'Customize Worksheet'}</h2>
@@ -266,5 +282,73 @@ export function DrawingBoardV2() {
         <button role="menuitem" disabled={visiblePages.length===1||Boolean(page.locked)} onClick={()=>remove(page)}>{icon('Options -Delete ic')} Delete</button>
       </>})()}
     </div>,document.body)}
+    {mobileSheetMode && (
+      <div className="db2-sheet-bar">
+        <button type="button" onClick={()=>setMobileSheet('tools')}>
+          {icon('Drawing Tools')}
+          <span>Tools</span>
+        </button>
+        <button type="button" onClick={()=>setMobileSheet('colors')}>
+          <span className="db2-sheet-color-dot" style={{backgroundColor:color}} aria-hidden="true" />
+          <span>Colors</span>
+        </button>
+        <button type="button" onClick={()=>setMobileSheet('pages')}>
+          {icon('Quick Actions')}
+          <span>Pages</span>
+        </button>
+        <button type="button" onClick={()=>setMobileSheet('more')}>
+          {icon('Frame')}
+          <span>More</span>
+        </button>
+      </div>
+    )}
+    {mobileSheetMode && mobileSheet && createPortal(
+      <div className="db2-sheet-backdrop" role="dialog" aria-label={`Drawing ${mobileSheet}`}>
+        <button type="button" className="db2-sheet-scrim" aria-label="Close panel" onClick={()=>setMobileSheet(null)} />
+        <div className="db2-sheet-panel">
+          <div className="db2-sheet-head">
+            <strong>{mobileSheet === 'tools' ? 'Brushes & Sizes' : mobileSheet === 'colors' ? 'Pick a Color' : mobileSheet === 'pages' ? 'Pages' : 'Actions & Settings'}</strong>
+            <button type="button" onClick={()=>setMobileSheet(null)}>Done</button>
+          </div>
+          {mobileSheet === 'tools' && (
+            <div className="db2-sheet-body">
+              <p className="db2-sheet-sub">Draw &amp; Write</p>
+              <div className="db2-tool-grid">{writeTools.map(([value,asset])=><button key={value} title={value} aria-label={value} aria-pressed={(mode==='Gods'?godBrush:brush)===value} onClick={()=>{selectBoardBrush(value);setMobileSheet(null)}}>{icon('Draw & Write/'+asset)}</button>)}</div>
+              <p className="db2-sheet-sub">Color &amp; Paint</p>
+              <div className="db2-tool-grid">{(mode==='Gods'?godPaintTools:paintTools).map(([value,asset])=><button key={value} title={value} aria-label={value} aria-pressed={(mode==='Gods'?godBrush:brush)===value} onClick={()=>{selectBoardBrush(value);setMobileSheet(null)}}>{icon('Color & Paint/'+asset)}</button>)}</div>
+              <p className="db2-sheet-sub">Brush Size</p>
+              <div className="db2-sizes">{[.5,1,1.5,2,3,4,5].map((n,i)=><button key={n} aria-label={'Brush size '+n} aria-pressed={size===n} onClick={()=>setSize(n)}>{icon(`Brush Stroke ${i+1}`)}</button>)}</div>
+            </div>
+          )}
+          {mobileSheet === 'colors' && (
+            <div className="db2-sheet-body">
+              <label className="db2-custom-color">Custom<input type="range" min="0" max="359" value={colorHue(color)} aria-label="Custom color hue" style={{'--db2-picker-color':color} as React.CSSProperties} onChange={e=>setColor(`hsl(${e.target.value} 72% 55%)`)}/></label>
+              <p className="db2-sheet-sub">Shades</p>
+              <div className="db2-swatches">{shades.map(c=><button key={c} style={{backgroundColor:c}} aria-label={'Color '+c} aria-pressed={color===c} onClick={()=>{setColor(c);setMobileSheet(null)}}/>)}</div>
+              <p className="db2-sheet-sub">Recent Colors</p>
+              <div className="db2-swatches">{recent.map(c=><button key={c} style={{backgroundColor:c}} aria-label={'Recent color '+c} onClick={()=>{setColor(c);setMobileSheet(null)}}/>)}</div>
+            </div>
+          )}
+          {mobileSheet === 'pages' && (
+            <div className="db2-sheet-body">
+              <div className="db2-page-list">{visiblePages.map((page,i)=>{const item=guides[page.category]?.[page.index]||guides.Letters[0];const label=page.custom||item.text||item.title;return <div className="db2-page-row" key={page.id} data-selected={page.id===selectedId}><button className="db2-page-select" onClick={()=>{setSelectedId(page.id);if(mode==='Trace'||mode==='Worksheet'){setCategory(page.category);setIndex(page.index)}setMobileSheet(null)}}>{mode==='Free Draw'?<span className="db2-thumb db2-free-thumb"><FreeDrawPreview strokes={drawings.current.get('free'+(page.id==='first'?'':':'+page.id))||[]}/></span>:mode==='Gods'?<GodPreview name={deityNames[page.index]||'Ganesha'}/>:item.path?<GuidePreview guide={item}/>:<span className="db2-thumb"><b>{String(label).slice(0,1).toUpperCase()}</b><i>{String(label).slice(0,1).toUpperCase()}</i><i>{String(label).slice(0,1).toUpperCase()}</i></span>}<span>{i+1}. {mode==='Free Draw'?(page.title||'Drawing '+(i+1)):(mode==='Gods'?(page.title||deityNames[page.index]):(page.title||item.title))}{page.locked?' 🔒':''}</span></button></div>})}</div>
+              <button className="db2-add" onClick={addPage}>＋ Add Page</button>
+            </div>
+          )}
+          {mobileSheet === 'more' && (
+            <div className="db2-sheet-body db2-actions">
+              {(mode==='Trace'||mode==='Worksheet') && (
+                <div className="db2-form-row"><span>Choose {itemType}</span><button type="button" className="db2-letter-picker" disabled={Boolean(selected.locked)} onClick={()=>{setMobileSheet(null);toggleLetterMenu()}}><span>{pickerLabel(list[Math.min(activeIndex,list.length-1)])}</span>{icon('choose letter dropdpwn arrow icon')}</button></div>
+              )}
+              <button onClick={()=>{exportPage('pdf');setMobileSheet(null)}}>{icon('Download PDF ic')} Download PDF</button>
+              <button onClick={()=>{triggerBoardPrint();setMobileSheet(null)}}>{icon('Print Worksheet ic')} Print</button>
+              <button className="db2-danger" onClick={()=>{clear();setMobileSheet(null)}}>{icon('Clear Canvas ic')} Clear Canvas</button>
+              <button className="db2-save" onClick={()=>{triggerBoardSave();setMobileSheet(null)}}>✓ Save</button>
+            </div>
+          )}
+        </div>
+      </div>,
+      document.body,
+    )}
   </section>;
 }

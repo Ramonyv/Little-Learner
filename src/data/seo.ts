@@ -26,6 +26,8 @@ export const INDEXABLE_ROUTES = [
   '/topics/logical-reasoning',
   '/drawing-board',
   '/voxel-studio',
+  '/tools/pixel-art',
+  '/tools/draw-animate',
   '/learning-tools',
   '/games',
   '/games/hanuman-runner',
@@ -95,6 +97,16 @@ const staticPages: Record<string, { title: string; description: string; ogType?:
     title: 'Voxel Studio — 3D Block Builder for Kids',
     description:
       'Build 3D houses, castles, trees, animals, cars, and robots with rounded candy blocks in Jugnu Voxel Studio. Free, ad-free, and works right in your browser.',
+  },
+  '/tools/pixel-art': {
+    title: 'Pixel Art Studio — Kids Pixel Drawing & Templates',
+    description:
+      'Make tiny pictures, one square at a time! Free, ad-free pixel art editor for kids ages 4–12 with Trace mode, Paint-by-Number, Magic Mirror, and 3D export.',
+  },
+  '/tools/draw-animate': {
+    title: 'Draw & Animate — Kids Drawing & Animation Studio',
+    description:
+      'Draw it. Tap it. Watch it move! Kids draw anything with crayons and bring it to life on an animated 3D stage with Wiggle, Bounce, Walk, Fly, Swim, and Dance.',
   },
   '/learning-tools': {
     title: 'Printable Tracing Pack & Mistake Revision Tools',
@@ -359,7 +371,7 @@ export function getRouteSeo(rawPathname: string): RouteSeo {
           { name: page.title, path: pathname },
         ]),
       );
-      if (pathname === '/drawing-board' || pathname === '/learning-tools' || pathname === '/voxel-studio') {
+      if (pathname === '/drawing-board' || pathname === '/learning-tools' || pathname === '/voxel-studio' || pathname === '/tools/pixel-art' || pathname === '/tools/draw-animate') {
         jsonLd.push({
           '@context': 'https://schema.org',
           '@type': 'WebApplication',

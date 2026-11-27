@@ -258,15 +258,15 @@ export default function Runner() {
         : 'Game over';
   return (
     <main className="runner">
-      <GameDetailHeader title="Hanuman Runner" description="Jump over traps and collect Ram Coins as you run." icon={hud('Hanuma Run Game Icon')}>
-        <button className="run-sound" onClick={() => {const next=!soundOn;setSoundOn(next);analytics.track('feature_used',{feature_id:next?'sound_on':'sound_off',section_id:'hanuman_runner'});}} aria-label={soundOn ? 'Sound on' : 'Sound off'} aria-pressed={soundOn}>
+      <GameDetailHeader title="Hanuman Run" description="Leap over obstacles and collect Ram Coins as you run." icon="/Tools and Game Icons/Hanuman Run App icon.webp">
+        <button type="button" className="game-sound-btn" onClick={() => {const next=!soundOn;setSoundOn(next);analytics.track('feature_used',{feature_id:next?'sound_on':'sound_off',section_id:'hanuman_runner'});}} aria-label={soundOn ? 'Sound on' : 'Sound off'} aria-pressed={soundOn}>
           <img src={hud(soundOn ? 'Sound On-Ic' : 'Sound Off-ic')} alt="" />
         </button>
+        <div className="run-art-switch" role="group" aria-label="Hanuman Run art mode">
+          <button type="button" aria-pressed={artStyle === 'classic'} onClick={() => selectArtStyle('classic')}>Classic</button>
+          <button type="button" aria-pressed={artStyle === '3d'} onClick={() => selectArtStyle('3d')}>3D Style</button>
+        </div>
       </GameDetailHeader>
-      <div className="run-art-switch" role="group" aria-label="Hanuman Runner art mode">
-        <button type="button" aria-pressed={artStyle === 'classic'} onClick={() => selectArtStyle('classic')}>Classic</button>
-        <button type="button" aria-pressed={artStyle === '3d'} onClick={() => selectArtStyle('3d')}>3D Style</button>
-      </div>
       <section className="run-stage" data-art-style={artStyle} aria-label={scenes[g.scene]}>
         <div className="run-hud">
           <div className="run-health" aria-label={g.hearts + ' hearts'}>

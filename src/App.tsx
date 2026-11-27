@@ -15,6 +15,8 @@ import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { SeedActivity } from './pages/SeedActivity';
 import { DrawingBoardV2 } from './pages/DrawingBoardV2';
 import { VoxelStudioPage } from './pages/VoxelStudioPage';
+import { PixelStudio } from './tools/pixel-art/PixelStudio';
+import { DrawAnimate } from './tools/draw-animate/DrawAnimate';
 import { HomePage } from './pages/HomePage';
 import { TopicsPage } from './pages/TopicsPage';
 import { ExamIntroPage } from './pages/ExamIntroPage';
@@ -48,7 +50,9 @@ export const AppShell: React.FC<{ runnerComponent?: React.ComponentType }> = ({ 
         <Route path="/games/hanuman-runner" element={RunnerOverride ? <RunnerOverride /> : <React.Suspense><Runner /></React.Suspense>} />
         <Route path="/games/sliding-puzzle" element={<main><Puzzle /></main>} />
         <Route path="/drawing-board" element={<main><DrawingBoardV2 /></main>} />
-        <Route path="/voxel-studio" element={<main><VoxelStudioPage /></main>} />
+        <Route path="/voxel-studio" element={<main className="flex-1 flex flex-col"><VoxelStudioPage /></main>} />
+        <Route path="/tools/pixel-art" element={<main className="flex-1 flex flex-col"><PixelStudio /></main>} />
+        <Route path="/tools/draw-animate" element={<main className="flex-1 flex flex-col"><DrawAnimate /></main>} />
         <Route element={<><main className="flex-1"><Outlet /></main><SiteFooter /><MobileBottomNav /></>}>
           <Route path="/explore/seed" element={<SeedActivity />} />
           <Route path="/" element={<HomePage />} />

@@ -7,6 +7,7 @@ export interface VoxelCanvasHandle {
   setCameraView: (view: CameraView) => void;
   frameModel: (voxels: VoxelTuple[]) => void;
   capturePng: () => string | null;
+  triggerCelebrationSpin: () => void;
 }
 
 interface VoxelCanvasProps {
@@ -85,6 +86,7 @@ export const VoxelCanvas = forwardRef<VoxelCanvasHandle, VoxelCanvasProps>(
       setCameraView: (view: CameraView) => controllerRef.current?.setCameraView(view),
       frameModel: (targetVoxels: VoxelTuple[]) => controllerRef.current?.frameModel(targetVoxels),
       capturePng: () => controllerRef.current?.capturePngDataUrl() ?? null,
+      triggerCelebrationSpin: () => controllerRef.current?.triggerCelebrationSpin(),
     }));
 
     return (

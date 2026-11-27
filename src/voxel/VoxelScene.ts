@@ -14,6 +14,7 @@ export interface VoxelInteractionPayload {
   x: number;
   y: number;
   z: number;
+  action?: 'erase';
 }
 
 export interface VoxelSceneOptions {
@@ -39,6 +40,19 @@ export class VoxelSceneController {
   private guideMesh: THREE.InstancedMesh;
 
   private hoverMesh: THREE.Mesh;
+  private hoverOutline: THREE.LineSegments;
+  private nextGuideMesh: THREE.Mesh;
+  private confettiMesh: THREE.InstancedMesh;
+  private confettiParticles: Array<{
+    x: number;
+    y: number;
+    z: number;
+    vx: number;
+    vy: number;
+    vz: number;
+    life: number;
+    maxLife: number;
+  }> = [];
   private contactShadowMesh: THREE.Mesh;
   private contactShadowTex: THREE.CanvasTexture;
   private gridHelper: THREE.GridHelper;
@@ -49,7 +63,15 @@ export class VoxelSceneController {
   private currentTool: VoxelTool = 'add';
   private activeColor = '#FFC300';
   private maxVisibleLayer = GRID_MAX_Y;
+  private prefersReducedMotion = false;
+  private prevVoxelKeys = new Set<string>();
+  private activeBounces = new Map<string, { index: number; start: number; x: number; y: number; z: number }>();
+  private lastInteractionTime = performance.now();
+  private celebrationSpinUntil = 0;
   private pointerDownPos: { x: number; y: number } | null = null;
+  private pointerDownTime = 0;
+  private longPressTimer: number | null = null;
+  private longPressFired = false;
   private rafId = 0;
   private resizeObserver: ResizeObserver;
 
@@ -82,44 +104,40 @@ export class VoxelSceneController {
 
     const { maxPixelRatio, outputColorSpace, toneMapping, toneMappingExposure } =
       JUGNU_VOXEL_DNA.renderer;
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    this.prefersReducedMotion = Boolean(prefersReducedMotion);
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       preserveDrawingBuffer: true,
       powerPreference: 'high-performance',
     });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, Math.min(maxPixelRatio, 2)));
     this.renderer.setSize(width, height);
     this.renderer.outputColorSpace = outputColorSpace;
     this.renderer.toneMapping = toneMapping;
     this.renderer.toneMappingExposure = toneMappingExposure;
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // Use lightweight fake contact shadow instead of expensive real-time shadow maps
+    this.renderer.shadowMap.enabled = false;
     container.appendChild(this.renderer.domElement);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.target.set(...defaultTarget);
-    this.controls.enableDamping = true;
+    this.controls.enableDamping = !prefersReducedMotion;
     this.controls.dampingFactor = JUGNU_VOXEL_DNA.camera.dampingFactor;
+    this.controls.enablePan = true;
+    this.controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
     this.controls.minZoom = JUGNU_VOXEL_DNA.camera.minZoom;
     this.controls.maxZoom = JUGNU_VOXEL_DNA.camera.maxZoom;
     this.controls.maxPolarAngle = JUGNU_VOXEL_DNA.camera.maxPolarAngle;
     this.controls.update();
 
-    // Balanced pastel studio lighting
-    applyStudioLighting(this.scene, true);
+    // Balanced pastel studio lighting (no real-time shadow map needed)
+    applyStudioLighting(this.scene, false);
 
     // Subtle procedural sky clouds
     this.addClouds();
-
-    // Soft directional floor shadow catcher
-    const shadowPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry(34, 34),
-      new THREE.ShadowMaterial({ opacity: JUGNU_VOXEL_DNA.shadows.floorShadowOpacity }),
-    );
-    shadowPlane.rotation.x = -Math.PI / 2;
-    shadowPlane.position.y = 0.001;
-    shadowPlane.receiveShadow = true;
-    this.scene.add(shadowPlane);
 
     // Soft radial contact shadow directly beneath the model
     this.contactShadowTex = createSoftContactShadowTexture();
@@ -153,6 +171,9 @@ export class VoxelSceneController {
       JUGNU_VOXEL_DNA.colors.gridLines,
     );
     this.gridHelper.position.set(-0.5, 0.004, -0.5);
+    const gridMat = this.gridHelper.material as THREE.Material;
+    gridMat.transparent = true;
+    gridMat.opacity = 0.55;
     this.scene.add(this.gridHelper);
 
     // Matte candy-clay rounded block geometry & material from Visual DNA
@@ -178,7 +199,7 @@ export class VoxelSceneController {
     this.guideMesh.count = 0;
     this.scene.add(this.guideMesh);
 
-    // Subtle rounded ghost block preview before placement
+    // Subtle rounded ghost block preview + EdgesGeometry hover outline before placement
     this.hoverMesh = new THREE.Mesh(
       this.voxelGeometry,
       new THREE.MeshBasicMaterial({
@@ -188,9 +209,46 @@ export class VoxelSceneController {
         depthWrite: false,
       }),
     );
+    this.hoverOutline = new THREE.LineSegments(
+      new THREE.EdgesGeometry(this.voxelGeometry, 24),
+      new THREE.LineBasicMaterial({
+        color: '#172951',
+        transparent: true,
+        opacity: 0.65,
+      }),
+    );
+    this.hoverMesh.add(this.hoverOutline);
     this.hoverMesh.scale.setScalar(1.02);
     this.hoverMesh.visible = false;
     this.scene.add(this.hoverMesh);
+
+    // Next-layer pulsing highlight for guided Ideas
+    this.nextGuideMesh = new THREE.Mesh(
+      this.voxelGeometry,
+      new THREE.MeshBasicMaterial({
+        color: '#FFC300',
+        transparent: true,
+        opacity: 0.65,
+        depthWrite: false,
+      }),
+    );
+    this.nextGuideMesh.scale.setScalar(1.05);
+    this.nextGuideMesh.visible = false;
+    this.scene.add(this.nextGuideMesh);
+
+    // Pooled 24-particle InstancedMesh for block-place confetti
+    const confettiGeo = new THREE.PlaneGeometry(0.16, 0.16);
+    const confettiMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.92,
+      depthWrite: false,
+    });
+    this.confettiMesh = new THREE.InstancedMesh(confettiGeo, confettiMat, 24);
+    this.confettiMesh.count = 0;
+    this.confettiMesh.frustumCulled = false;
+    this.scene.add(this.confettiMesh);
 
     const dom = this.renderer.domElement;
     dom.addEventListener('pointerdown', this.handlePointerDown);
@@ -258,6 +316,8 @@ export class VoxelSceneController {
     this.voxelMesh.geometry = nextGeo;
     this.guideMesh.geometry = nextGeo;
     this.hoverMesh.geometry = nextGeo;
+    this.hoverOutline.geometry.dispose();
+    this.hoverOutline.geometry = new THREE.EdgesGeometry(nextGeo, 24);
     oldGeo.dispose();
   }
 
@@ -334,8 +394,40 @@ export class VoxelSceneController {
     this.controls.update();
   }
 
+  triggerCelebrationSpin(durationMs = 1500) {
+    if (this.prefersReducedMotion) return;
+    this.celebrationSpinUntil = performance.now() + durationMs;
+  }
+
+  private spawnConfetti(x: number, y: number, z: number, hex: string) {
+    if (this.prefersReducedMotion) return;
+    const palette = [hex, '#FFC300', '#38BDF8', '#FF4D6D', '#22C55E'];
+    this.confettiParticles = [];
+    for (let i = 0; i < 18; i++) {
+      const angle = (Math.PI * 2 * i) / 18 + Math.random() * 0.3;
+      const speed = 1.6 + Math.random() * 2.2;
+      this.confettiParticles.push({
+        x,
+        y: y + 0.65,
+        z,
+        vx: Math.cos(angle) * speed,
+        vy: 2.2 + Math.random() * 2.4,
+        vz: Math.sin(angle) * speed,
+        life: 0,
+        maxLife: 0.38 + Math.random() * 0.18,
+      });
+      this.tempColor.set(palette[i % palette.length]);
+      this.confettiMesh.setColorAt(i, this.tempColor);
+    }
+    if (this.confettiMesh.instanceColor) {
+      this.confettiMesh.instanceColor.needsUpdate = true;
+    }
+  }
+
   updateVoxels(voxels: VoxelTuple[], guideVoxels: VoxelTuple[] = []) {
     this.renderedCoords = [];
+    const nextKeys = new Set<string>();
+    const newlyAdded: Array<{ key: string; index: number; x: number; y: number; z: number; hex: string }> = [];
     let count = 0;
     let minX = Infinity, maxX = -Infinity;
     let minZ = Infinity, maxZ = -Infinity;
@@ -343,7 +435,13 @@ export class VoxelSceneController {
     for (const [x, y, z, hex] of voxels) {
       if (y > this.maxVisibleLayer) continue;
       if (count >= MAX_VOXELS) break;
+      const key = `${x},${y},${z}`;
+      nextKeys.add(key);
+      if (this.prevVoxelKeys.size > 0 && !this.prevVoxelKeys.has(key)) {
+        newlyAdded.push({ key, index: count, x, y, z, hex });
+      }
       this.dummy.position.set(x, y + 0.5, z);
+      this.dummy.scale.set(1, 1, 1);
       this.dummy.updateMatrix();
       this.voxelMesh.setMatrixAt(count, this.dummy.matrix);
       this.tempColor.set(hex);
@@ -355,6 +453,22 @@ export class VoxelSceneController {
       if (z > maxZ) maxZ = z;
       count++;
     }
+
+    if (!this.prefersReducedMotion && newlyAdded.length > 0 && newlyAdded.length <= 8) {
+      const now = performance.now();
+      for (const item of newlyAdded) {
+        this.activeBounces.set(item.key, {
+          index: item.index,
+          start: now,
+          x: item.x,
+          y: item.y,
+          z: item.z,
+        });
+      }
+      const first = newlyAdded[0];
+      this.spawnConfetti(first.x, first.y, first.z, first.hex);
+    }
+    this.prevVoxelKeys = nextKeys;
 
     this.voxelMesh.count = count;
     this.voxelMesh.instanceMatrix.needsUpdate = true;
@@ -392,17 +506,37 @@ export class VoxelSceneController {
       this.guideMesh.instanceColor.needsUpdate = true;
     }
     this.guideMesh.computeBoundingSphere();
+
+    // Highlight the next block on the lowest remaining layer
+    if (guideVoxels.length > 0) {
+      let minGuideY = Infinity;
+      for (const [, gy] of guideVoxels) {
+        if (gy < minGuideY) minGuideY = gy;
+      }
+      const nextBlock = guideVoxels.find(([, gy]) => gy === minGuideY);
+      if (nextBlock) {
+        this.nextGuideMesh.position.set(nextBlock[0], nextBlock[1] + 0.5, nextBlock[2]);
+        this.nextGuideMesh.visible = true;
+      } else {
+        this.nextGuideMesh.visible = false;
+      }
+    } else {
+      this.nextGuideMesh.visible = false;
+    }
   }
 
   capturePngDataUrl(): string {
     const prevHover = this.hoverMesh.visible;
     const prevGuide = this.guideMesh.visible;
+    const prevNextGuide = this.nextGuideMesh.visible;
     this.hoverMesh.visible = false;
     this.guideMesh.visible = false;
+    this.nextGuideMesh.visible = false;
     this.renderer.render(this.scene, this.camera);
     const dataUrl = this.renderer.domElement.toDataURL('image/png');
     this.hoverMesh.visible = prevHover;
     this.guideMesh.visible = prevGuide;
+    this.nextGuideMesh.visible = prevNextGuide;
     return dataUrl;
   }
 
@@ -455,12 +589,59 @@ export class VoxelSceneController {
     return null;
   }
 
+  private clearLongPress() {
+    if (this.longPressTimer !== null) {
+      window.clearTimeout(this.longPressTimer);
+      this.longPressTimer = null;
+    }
+  }
+
+  private pickExistingVoxel(clientX: number, clientY: number): VoxelInteractionPayload | null {
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    this.pointerNDC.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+    this.pointerNDC.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+    this.raycaster.setFromCamera(this.pointerNDC, this.camera);
+    const hits = this.voxelMesh.count > 0 ? this.raycaster.intersectObject(this.voxelMesh, false) : [];
+    if (hits.length > 0 && hits[0].instanceId !== undefined) {
+      const [bx, by, bz] = this.renderedCoords[hits[0].instanceId!];
+      return { x: bx, y: by, z: bz };
+    }
+    return null;
+  }
+
   private handlePointerDown = (e: PointerEvent) => {
+    this.lastInteractionTime = performance.now();
     if (e.button !== 0 && e.pointerType === 'mouse') return;
+    if (!e.isPrimary) {
+      this.clearLongPress();
+      this.pointerDownPos = null;
+      return;
+    }
     this.pointerDownPos = { x: e.clientX, y: e.clientY };
+    this.pointerDownTime = performance.now();
+    this.longPressFired = false;
+    this.clearLongPress();
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    this.longPressTimer = window.setTimeout(() => {
+      this.longPressTimer = null;
+      const existing = this.pickExistingVoxel(startX, startY);
+      if (existing) {
+        this.longPressFired = true;
+        this.hoverMesh.visible = false;
+        this.onBlockAction({ ...existing, action: 'erase' });
+      }
+    }, 500);
   };
 
   private handlePointerMove = (e: PointerEvent) => {
+    if (this.pointerDownPos) {
+      const moved = Math.hypot(e.clientX - this.pointerDownPos.x, e.clientY - this.pointerDownPos.y);
+      if (moved >= 6) {
+        this.clearLongPress();
+      }
+    }
     const target = this.pickVoxelTarget(e.clientX, e.clientY);
     if (target) {
       this.hoverMesh.position.set(target.x, target.y + 0.5, target.z);
@@ -471,11 +652,19 @@ export class VoxelSceneController {
   };
 
   private handlePointerUp = (e: PointerEvent) => {
+    this.clearLongPress();
+    if (this.longPressFired) {
+      this.longPressFired = false;
+      this.pointerDownPos = null;
+      return;
+    }
     if (!this.pointerDownPos) return;
     const dx = e.clientX - this.pointerDownPos.x;
     const dy = e.clientY - this.pointerDownPos.y;
+    const elapsed = performance.now() - this.pointerDownTime;
     this.pointerDownPos = null;
-    if (Math.hypot(dx, dy) > 6) return;
+    // Separate tap from drag: must move < 6px and finish within ~260ms
+    if (Math.hypot(dx, dy) > 6 || elapsed > 260) return;
 
     const target = this.pickVoxelTarget(e.clientX, e.clientY);
     if (target) {
@@ -484,6 +673,7 @@ export class VoxelSceneController {
   };
 
   private handlePointerLeave = () => {
+    this.clearLongPress();
     this.hoverMesh.visible = false;
     this.pointerDownPos = null;
   };
@@ -503,11 +693,91 @@ export class VoxelSceneController {
 
   private animate = () => {
     this.rafId = requestAnimationFrame(this.animate);
+    const now = performance.now();
+
+    // Squash-and-bounce newly placed voxels (~260ms)
+    if (this.activeBounces.size > 0) {
+      let updated = false;
+      for (const [key, b] of this.activeBounces) {
+        if (b.index >= this.voxelMesh.count) {
+          this.activeBounces.delete(key);
+          continue;
+        }
+        const t = Math.min(1, (now - b.start) / 260);
+        let sy = 1;
+        let sxz = 1;
+        if (t < 1) {
+          const wave = Math.sin(t * Math.PI * 1.5) * (1 - t);
+          sy = 1 + wave * 0.28 - (t < 0.25 ? (0.25 - t) * 1.1 : 0);
+          sxz = 1 / Math.sqrt(Math.max(0.55, sy));
+        } else {
+          this.activeBounces.delete(key);
+        }
+        this.dummy.position.set(b.x, b.y + 0.5 * sy, b.z);
+        this.dummy.scale.set(sxz, sy, sxz);
+        this.dummy.updateMatrix();
+        this.voxelMesh.setMatrixAt(b.index, this.dummy.matrix);
+        updated = true;
+      }
+      if (updated) {
+        this.voxelMesh.instanceMatrix.needsUpdate = true;
+      }
+    }
+
+    // Pooled confetti burst
+    if (this.confettiParticles.length > 0) {
+      const dt = 0.016;
+      const alive: typeof this.confettiParticles = [];
+      for (let i = 0; i < this.confettiParticles.length; i++) {
+        const p = this.confettiParticles[i];
+        p.life += dt;
+        if (p.life >= p.maxLife) continue;
+        p.vy -= 9.5 * dt;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.z += p.vz * dt;
+        const s = Math.max(0.1, 1 - p.life / p.maxLife);
+        this.dummy.position.set(p.x, p.y, p.z);
+        this.dummy.rotation.set(p.life * 8, p.life * 6, 0);
+        this.dummy.scale.setScalar(s);
+        this.dummy.updateMatrix();
+        this.confettiMesh.setMatrixAt(alive.length, this.dummy.matrix);
+        alive.push(p);
+      }
+      this.dummy.rotation.set(0, 0, 0);
+      this.dummy.scale.setScalar(1);
+      this.confettiParticles = alive;
+      this.confettiMesh.count = alive.length;
+      if (alive.length > 0) {
+        this.confettiMesh.instanceMatrix.needsUpdate = true;
+      }
+    }
+
+    // Pulsing glow on next guided block
+    if (this.nextGuideMesh.visible && !this.prefersReducedMotion) {
+      const mat = this.nextGuideMesh.material as THREE.MeshBasicMaterial;
+      mat.opacity = 0.42 + 0.32 * (0.5 + 0.5 * Math.sin(now * 0.006));
+    }
+
+    // Celebratory save spin or gentle idle turntable
+    if (!this.prefersReducedMotion) {
+      if (now < this.celebrationSpinUntil) {
+        this.controls.autoRotate = true;
+        this.controls.autoRotateSpeed = 8.0;
+      } else if (now - this.lastInteractionTime > 5500 && this.renderedCoords.length > 0) {
+        this.controls.autoRotate = true;
+        this.controls.autoRotateSpeed = 0.8;
+      } else {
+        this.controls.autoRotate = false;
+      }
+    }
+
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
   };
 
   dispose() {
+    this.clearLongPress();
     cancelAnimationFrame(this.rafId);
     this.resizeObserver.disconnect();
     const dom = this.renderer.domElement;
@@ -522,7 +792,12 @@ export class VoxelSceneController {
     this.contactShadowTex.dispose();
     (this.contactShadowMesh.material as THREE.Material).dispose();
     this.contactShadowMesh.geometry.dispose();
+    this.hoverOutline.geometry.dispose();
+    (this.hoverOutline.material as THREE.Material).dispose();
     (this.hoverMesh.material as THREE.Material).dispose();
+    (this.nextGuideMesh.material as THREE.Material).dispose();
+    this.confettiMesh.geometry.dispose();
+    (this.confettiMesh.material as THREE.Material).dispose();
     this.renderer.dispose();
     if (dom.parentElement === this.container) {
       this.container.removeChild(dom);

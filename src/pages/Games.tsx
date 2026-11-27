@@ -73,13 +73,13 @@ export function Games() {
     <Link className="catalog-card" to="/games/sliding-puzzle" aria-label="Play Sliding Puzzle" onClick={() => analytics.track('activity_selected', { activity_type: 'game', activity_id: 'sliding_puzzle', source_section: 'games' })}>
       <div className="catalog-tools"><span className="catalog-category catalog-category-puzzles">Puzzles <img src="/puzzle-ui/category-puzzles.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
       <div className="catalog-preview">
-        <img className="catalog-thumbnail" src="/Tools and Game Icons/Slide Puzzle App icon.webp" alt="Ganesha sliding puzzle" width="197" height="197" />
+        <img className="catalog-thumbnail" src="/Game Thumbnails/sliding-puzzle-thumb.webp" alt="Sliding Puzzle" width="320" height="180" />
       </div>
       <h2>Sliding Puzzle</h2><p>Slide the tiles to complete the picture!</p>
     </Link>
-    <Link className="catalog-card catalog-runner" to="/games/hanuman-runner" aria-label="Play Hanuman Runner" onClick={() => analytics.track('activity_selected', { activity_type: 'game', activity_id: 'hanuman_runner', source_section: 'games' })}>
+    <Link className="catalog-card catalog-runner" to="/games/hanuman-runner" aria-label="Play Hanuman Run" onClick={() => analytics.track('activity_selected', { activity_type: 'game', activity_id: 'hanuman_runner', source_section: 'games' })}>
       <div className="catalog-tools"><span className="catalog-category catalog-category-adventure">Adventure <img src="/puzzle-ui/category-adventure.svg" alt="" /></span><i><img src="/puzzle-ui/play.svg" alt="" /></i></div>
-      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Tools and Game Icons/Hanuman Run App icon.webp" alt="Hanuman Run" width="226" height="226" /></div>
+      <div className="catalog-preview"><img className="catalog-thumbnail" src="/Game Thumbnails/hanuman-run-thumb.webp" alt="Hanuman Run" width="320" height="180" /></div>
       <h2>Hanuman Run</h2><p>Leap over obstacles and collect Ram Coins!</p>
     </Link>
     </div>
@@ -293,8 +293,20 @@ export function Puzzle() {
   const sizes = [3,4,5];
   const stars = Math.min(3,wins);
   return <section className="puzzle">
-    <GameDetailHeader title="Sliding Puzzle" description="Slide the tiles into place to complete the picture" icon="/puzzle-ui/imgSlidingPuzzle.svg">
-      {[false,true].map((on,i)=><button key={i} className="p-sound" aria-label={on?'Enable sound':'Mute sound'} aria-pressed={soundOn===on} onClick={()=>{setSoundOn(on);analytics.track('feature_used',{feature_id:on?'sound_on':'sound_off',section_id:'sliding_puzzle'});}}>{icon('Frame'+(9+i))}</button>)}
+    <GameDetailHeader title="Sliding Puzzle" description="Slide the tiles into place to complete the picture" icon="/Tools and Game Icons/Slide Puzzle App icon.webp">
+      <button
+        type="button"
+        className="game-sound-btn"
+        aria-label={soundOn ? 'Sound on' : 'Sound off'}
+        aria-pressed={soundOn}
+        onClick={() => {
+          const next = !soundOn;
+          setSoundOn(next);
+          analytics.track('feature_used', { feature_id: next ? 'sound_on' : 'sound_off', section_id: 'sliding_puzzle' });
+        }}
+      >
+        <img src={soundOn ? '/Hanuman Run/Game HUD/Sound On-Ic.svg' : '/Hanuman Run/Game HUD/Sound Off-ic.svg'} alt="" />
+      </button>
       <div className="p-status"><b>Level {size-2}</b><b aria-label={stars+' stars'}>{'★'.repeat(stars)}{'☆'.repeat(3-stars)}</b><b>{icon('Frame11')}{String(Math.floor(seconds/60)).padStart(2,'0')}:{String(seconds%60).padStart(2,'0')}</b></div></GameDetailHeader>
     <div className="p-stage"><div className="p-columns">
     <input
