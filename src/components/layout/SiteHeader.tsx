@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useSession } from '../../context/SessionContext';
 import { analytics } from '../../analytics';
+import { BetaBadge } from './StudioModeTabs';
 import './site-header.css';
 
 interface MegaMenuItem {
@@ -12,6 +13,7 @@ interface MegaMenuItem {
   description: string;
   path: string;
   badge: string;
+  isBeta?: boolean;
   icon: string;
   iconBg: string;
   appIcon?: string;
@@ -75,7 +77,8 @@ const JUGNU_TOOLS: MegaMenuItem[] = [
     description:
       'Draw any character with waxy crayons, pick a fun move like Wiggle, Bounce, Fly, or Dance, and bring your art to life on an animated stage!',
     path: '/tools/draw-animate',
-    badge: 'NEW · ANIMATION STUDIO',
+    badge: 'BETA · ANIMATION STUDIO',
+    isBeta: true,
     icon: 'solar:magic-stick-3-bold',
     iconBg: 'bg-purple-100 text-[#7c3aed]',
     appIcon: '/Tools and Game Icons/Draw and Animate App icon.webp',
@@ -90,7 +93,8 @@ const JUGNU_TOOLS: MegaMenuItem[] = [
     description:
       'Color, stamp, mirror, and trace pixel art in a golden frame — with Paint-by-Number, Flipbook animations, and Make it 3D!',
     path: '/tools/pixel-art',
-    badge: 'NEW · PIXEL STUDIO',
+    badge: 'BETA · PIXEL STUDIO',
+    isBeta: true,
     icon: 'solar:palette-round-bold',
     iconBg: 'bg-sky-100 text-[#087CF7]',
     appIcon: '/Tools and Game Icons/Pixel Art Studio App icon.webp',
@@ -105,7 +109,8 @@ const JUGNU_TOOLS: MegaMenuItem[] = [
     description:
       'Stack, paint, and mirror colorful 3D blocks to build houses, castles, cars, and robots — or follow step-by-step Build Together guides.',
     path: '/voxel-studio',
-    badge: 'NEW · 3D STUDIO',
+    badge: 'BETA · 3D STUDIO',
+    isBeta: true,
     icon: 'solar:box-bold',
     iconBg: 'bg-blue-100 text-[#1676ed]',
     appIcon: '/Tools and Game Icons/3D Voxel Studio App icon.webp',
@@ -235,7 +240,10 @@ function NavMegaDropdown({
                       )}
                     </span>
                     <span className="min-w-0">
-                      <span className="site-tool-name">{item.name}</span>
+                      <span className="site-tool-name inline-flex items-center gap-1.5">
+                        <span>{item.name}</span>
+                        {item.isBeta && <BetaBadge />}
+                      </span>
                       <span className="site-tool-sub">{item.tagline}</span>
                     </span>
                   </Link>
@@ -430,9 +438,7 @@ export function SiteHeader() {
                                 <Icon icon={tool.icon} width={20} height={20} />
                               )}
                             </span>
-                            {tool.id === 'voxel-studio' && (
-                              <span className="site-mobile-new-pill">NEW</span>
-                            )}
+                            {tool.isBeta && <BetaBadge />}
                           </div>
                           <span className="site-mobile-tool-title">{tool.name}</span>
                           <span className="site-mobile-tool-sub">{tool.tagline}</span>

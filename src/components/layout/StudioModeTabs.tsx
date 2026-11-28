@@ -4,6 +4,14 @@ import { STUDIO_SYSTEM_ICONS } from '../../utils/studioLayoutAb';
 
 export type StudioTabId = 'pixel-art' | 'voxel-studio' | 'draw-animate' | 'drawing';
 
+export const BetaBadge: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <span
+    className={`inline-flex items-center justify-center px-[5px] py-[2px] rounded-[5px] border border-[#bc4414] bg-gradient-to-b from-[#ec632c] to-[#e25a23] shadow-[inset_0_-1.7px_1.2px_0_rgba(0,0,0,0.25)] text-[9px] font-extrabold leading-none text-white uppercase tracking-[0.03em] shrink-0 select-none ${className}`}
+  >
+    Beta
+  </span>
+);
+
 const STUDIO_TABS: {
   id: StudioTabId;
   label: string;
@@ -12,6 +20,7 @@ const STUDIO_TABS: {
   to: string;
   iconSrc: string;
   activeBorder: string;
+  isBeta?: boolean;
 }[] = [
   {
     id: 'voxel-studio',
@@ -21,6 +30,7 @@ const STUDIO_TABS: {
     to: '/voxel-studio',
     iconSrc: '/Tools and Game Icons/3D Voxel Studio App icon.webp',
     activeBorder: 'border-[#9333ea]',
+    isBeta: true,
   },
   {
     id: 'draw-animate',
@@ -30,6 +40,7 @@ const STUDIO_TABS: {
     to: '/tools/draw-animate',
     iconSrc: '/Tools and Game Icons/Draw and Animate App icon.webp',
     activeBorder: 'border-[#087CF7]',
+    isBeta: true,
   },
   {
     id: 'pixel-art',
@@ -39,6 +50,7 @@ const STUDIO_TABS: {
     to: '/tools/pixel-art',
     iconSrc: '/Tools and Game Icons/Pixel Art Studio App icon.webp',
     activeBorder: 'border-[#fb7185]',
+    isBeta: true,
   },
   {
     id: 'drawing',
@@ -85,9 +97,12 @@ export const StudioSwitcher: React.FC<{
         className="w-[46px] h-[46px] rounded-2xl object-cover shrink-0 shadow-2xs"
       />
       <div className="min-w-0">
-        <h1 className="text-[18px] sm:text-[20px] leading-[26px] font-black text-[#1b294e] truncate">
-          {current.menuTitle}
-        </h1>
+        <div className="flex items-center gap-2 min-w-0">
+          <h1 className="text-[18px] sm:text-[20px] leading-[26px] font-black text-[#1b294e] truncate">
+            {current.menuTitle}
+          </h1>
+          {current.isBeta && <BetaBadge />}
+        </div>
         <p className="text-[11px] sm:text-[12px] leading-[16px] font-bold text-[#556484] truncate">
           {subtitle ?? current.tagline}
         </p>
@@ -127,8 +142,9 @@ export const StudioSwitcher: React.FC<{
                   className="w-11 h-11 rounded-2xl object-cover shrink-0 shadow-2xs"
                 />
                 <div className="min-w-0">
-                  <div className="text-sm font-black text-[#1b294e] leading-tight">
-                    {tab.menuTitle}
+                  <div className="flex items-center gap-1.5 text-sm font-black text-[#1b294e] leading-tight">
+                    <span>{tab.menuTitle}</span>
+                    {tab.isBeta && <BetaBadge />}
                   </div>
                   <div className="text-xs font-bold text-[#556484] truncate">
                     {tab.tagline}

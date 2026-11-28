@@ -1247,14 +1247,14 @@ export const PixelStudio: React.FC = () => {
             />
           </div>
 
-          <div className="bg-white/95 rounded-full border border-[#dbe7f6] shadow-xs px-3 py-1.5 flex items-center gap-1.5">
+          <div className="bg-white/95 rounded-full border border-[#dbe7f6] shadow-xs px-3 py-1.5 flex items-center gap-1.5 [&_svg_*]:[stroke-width:2px]">
             <button
               type="button"
               onClick={() => canvasRef.current?.zoomOut()}
               aria-label="Zoom out"
               className="min-w-[40px] min-h-[40px] rounded-full hover:bg-[#f0f6ff] flex items-center justify-center text-[#172951]"
             >
-              <Icon icon="solar:magnifer-zoom-out-bold" className="w-5 h-5" />
+              <Icon icon="hugeicons:zoom-out" className="w-5 h-5" />
             </button>
             <button
               type="button"
@@ -1270,7 +1270,7 @@ export const PixelStudio: React.FC = () => {
               aria-label="Zoom in"
               className="min-w-[40px] min-h-[40px] rounded-full hover:bg-[#f0f6ff] flex items-center justify-center text-[#172951]"
             >
-              <Icon icon="solar:magnifer-zoom-in-bold" className="w-5 h-5" />
+              <Icon icon="hugeicons:zoom-in" className="w-5 h-5" />
             </button>
             <div className="w-px h-5 bg-slate-200 mx-1" />
             <button
@@ -1281,7 +1281,7 @@ export const PixelStudio: React.FC = () => {
                 showGrid ? 'bg-[#e8f2ff] text-[#087CF7]' : 'text-[#516587] hover:bg-[#f0f6ff]'
               }`}
             >
-              <Icon icon="solar:hashtag-bold" className="w-4 h-4" />
+              <Icon icon="hugeicons:grid" className="w-4 h-4" />
               <span>Grid</span>
             </button>
             <button
@@ -1305,7 +1305,7 @@ export const PixelStudio: React.FC = () => {
                   : 'text-[#516587] hover:bg-[#f0f6ff]'
               }`}
             >
-              <Icon icon="solar:mirror-left-bold" className="w-4 h-4" />
+              <Icon icon="hugeicons:center-focus" className="w-4 h-4" />
               <span>Center</span>
             </button>
             {ageMode !== 'little' && (
@@ -1317,7 +1317,7 @@ export const PixelStudio: React.FC = () => {
                   flipbookOpen ? 'bg-amber-100 text-amber-900' : 'text-[#516587] hover:bg-[#f0f6ff]'
                 }`}
               >
-                <Icon icon="solar:clapperboard-play-bold" className="w-4 h-4" />
+                <Icon icon="hugeicons:clapperboard" className="w-4 h-4" />
                 <span>Flipbook</span>
                 {frames.length > 1 && (
                   <span className="px-1.5 py-0.5 rounded-full bg-white/80 text-[10px] font-black text-amber-900">
@@ -1325,7 +1325,7 @@ export const PixelStudio: React.FC = () => {
                   </span>
                 )}
                 <Icon
-                  icon={flipbookOpen ? 'solar:alt-arrow-up-bold' : 'solar:alt-arrow-down-bold'}
+                  icon={flipbookOpen ? 'hugeicons:arrow-up-01' : 'hugeicons:arrow-down-01'}
                   className="w-3 h-3 opacity-75"
                 />
               </button>
