@@ -5,7 +5,7 @@ import { BLOG_POSTS, BlogPost } from '../data/blogPosts';
 export function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
-  const categories = ['All', 'Olympiad Prep', 'Handwriting & Motor Skills', 'Parenting & Learning'];
+  const categories = ['All', 'Our Story', 'Olympiad Prep', 'Handwriting & Motor Skills', 'Parenting & Learning'];
 
   const filteredPosts =
     selectedCategory === 'All'

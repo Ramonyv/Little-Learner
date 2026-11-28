@@ -42,6 +42,7 @@ export const INDEXABLE_ROUTES = [
   '/information/terms',
   '/information/disclaimer',
   '/blog',
+  '/blog/it-started-with-an-olympiad-tomorrow',
   '/blog/class-1-maths-olympiad-guide',
   '/blog/4-line-handwriting-method-kindergarten',
   '/blog/healthy-screen-time-early-learners',

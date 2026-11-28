@@ -8,7 +8,7 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  category: 'Olympiad Prep' | 'Handwriting & Motor Skills' | 'Parenting & Learning' | 'Maths & Logic';
+  category: 'Olympiad Prep' | 'Handwriting & Motor Skills' | 'Parenting & Learning' | 'Maths & Logic' | 'Our Story';
   categoryColor: string;
   icon: string;
   publishedDate: string;
@@ -26,6 +26,65 @@ export interface BlogPost {
 }
 
 export const BLOG_POSTS: BlogPost[] = [
+  {
+    slug: 'it-started-with-an-olympiad-tomorrow',
+    title: 'It Started with an Olympiad Tomorrow',
+    excerpt:
+      'How an unexpected evening helping our son prepare for his Olympiad exams sparked the idea for Jugnu — an ad-free, joyful learning and creative world for every child.',
+    category: 'Our Story',
+    categoryColor: 'bg-amber-50 text-amber-800 border-amber-200',
+    icon: '✨',
+    publishedDate: 'November 27, 2026',
+    updatedDate: 'November 27, 2026',
+    readTime: '2 min read',
+    author: 'Raman (Founder & Dad, Jugnu)',
+    keyTakeaways: [
+      'Built by a father for his son’s Olympiad prep, and now shared with every little learner.',
+      'Replacing endless scrolling with curiosity, creative tools, and meaningful discovery.',
+      'Completely free, no ads, no login, and zero tracking — just learning, creativity, and magic.',
+    ],
+    sections: [
+      {
+        heading: 'The Night Before the Olympiad',
+        paragraphs: [
+          'One evening, my wife and I were both busy with work. Our son had his Science and English Olympiads the next day, and we needed to help him prepare.',
+          "I knew handing him a stack of question papers wouldn't excite him. Printing a hundred questions wasn't particularly convenient either.",
+          'So I opened ChatGPT and asked it to create a practice question set with answers.',
+        ],
+      },
+      {
+        heading: 'A Little Idea Struck Me',
+        paragraphs: [
+          "That's when a little idea struck me.",
+          'What if I could build a small app where he could tap answers, get hints and practise questions in a fun, interactive way?',
+          'So I built one. Just for him.',
+        ],
+      },
+      {
+        heading: 'From One Child to Something Much Bigger',
+        paragraphs: [
+          'But as I kept building, I realised this could become something much bigger. Something that could help other children and parents facing the same everyday challenges.',
+          "Screens aren't going away from our children's lives. Instead of fighting screen time altogether, why not make it more meaningful?",
+          'Why not replace endless scrolling with a little more curiosity, creativity and learning?',
+          'And why should parents need a hundred different apps when children could learn, play, draw, practise and discover in one happy little place?',
+        ],
+      },
+      {
+        heading: 'How Jugnu Was Born',
+        paragraphs: [
+          "That's how Jugnu was born.",
+          'An independent project built by a father, for his child, and now shared with every little learner.',
+          '**Completely free. No ads. No login. Just learning, creativity and a little bit of magic.**',
+        ],
+      },
+    ],
+    relatedActivity: {
+      title: 'Practice Class 1 Olympiads on Jugnu',
+      description: 'Explore interactive Science, Math, and English Olympiad questions with hints, cheerful audio, and zero stress.',
+      path: '/exam',
+      cta: 'Try Olympiad Practice',
+    },
+  },
   {
     slug: 'class-1-maths-olympiad-guide',
     title: 'How to Prepare for Class 1 Maths Olympiad (IMO): A Stress-Free Parent Guide',

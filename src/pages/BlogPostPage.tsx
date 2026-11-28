@@ -1,6 +1,21 @@
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { getBlogPost } from '../data/blogPosts';
 
+function renderFormattedParagraph(text: string) {
+  if (!text.includes('**')) return text;
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <strong key={i} className="font-extrabold text-brand-ink">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
+
 export function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
 
@@ -75,12 +90,14 @@ export function BlogPostPage() {
         <div className="space-y-10 text-slate-700 text-base sm:text-lg leading-relaxed">
           {post.sections.map((sec, sIdx) => (
             <section key={sIdx} className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-black text-brand-ink pt-2">
-                {sec.heading}
-              </h2>
+              {sec.heading && (
+                <h2 className="text-xl sm:text-2xl font-black text-brand-ink pt-2">
+                  {sec.heading}
+                </h2>
+              )}
               {sec.paragraphs.map((p, pIdx) => (
                 <p key={pIdx} className="text-slate-700 leading-relaxed font-normal">
-                  {p}
+                  {renderFormattedParagraph(p)}
                 </p>
               ))}
               {sec.tips && sec.tips.length > 0 && (
@@ -88,7 +105,7 @@ export function BlogPostPage() {
                   {sec.tips.map((tip, tIdx) => (
                     <div key={tIdx} className="flex items-start gap-2.5 text-sm sm:text-base">
                       <span className="text-brand-blue font-bold mt-0.5" aria-hidden="true">✔</span>
-                      <span className="text-slate-800">{tip}</span>
+                      <span className="text-slate-800">{renderFormattedParagraph(tip)}</span>
                     </div>
                   ))}
                 </div>
