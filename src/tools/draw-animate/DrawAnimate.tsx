@@ -48,11 +48,11 @@ function speakLabel(text: string): void {
 }
 
 const TOOL_ITEMS: { id: DrawTool; label: string; icon: string; svg: string }[] = [
-  { id: 'draw', label: 'Draw', icon: 'solar:pen-new-square-bold', svg: STUDIO_SYSTEM_ICONS.toolDraw },
-  { id: 'erase', label: 'Erase', icon: 'solar:eraser-bold', svg: STUDIO_SYSTEM_ICONS.toolErase },
-  { id: 'fill', label: 'Fill', icon: 'solar:paint-roller-bold', svg: STUDIO_SYSTEM_ICONS.toolFill },
-  { id: 'colors', label: 'Colors', icon: 'solar:pallete-2-bold', svg: STUDIO_SYSTEM_ICONS.toolColors },
-  { id: 'stickers', label: 'Stickers', icon: 'solar:star-bold', svg: STUDIO_SYSTEM_ICONS.toolStickers },
+  { id: 'draw', label: 'Draw', icon: 'solar:pen-new-square-bold', svg: '/Draw and animate 3D icons/Draw.webp' },
+  { id: 'erase', label: 'Erase', icon: 'solar:eraser-bold', svg: '/Draw and animate 3D icons/Erase.webp' },
+  { id: 'fill', label: 'Fill', icon: 'solar:paint-roller-bold', svg: '/Draw and animate 3D icons/Fill.webp' },
+  { id: 'colors', label: 'Colors', icon: 'solar:pallete-2-bold', svg: '/Draw and animate 3D icons/Colors.webp' },
+  { id: 'stickers', label: 'Stickers', icon: 'solar:star-bold', svg: '/Draw and animate 3D icons/Stickers.webp' },
 ];
 
 export const DrawAnimate: React.FC = () => {
@@ -897,9 +897,9 @@ export const DrawAnimate: React.FC = () => {
                   >
                     <span className="flex items-center gap-3">
                       {isUnified ? (
-                        <img src={item.svg} alt="" className="w-5 h-5 object-contain" />
+                        <img src={item.svg} alt="" className="w-6 h-6 object-contain" />
                       ) : (
-                        <Icon icon={item.icon} className="w-5 h-5" />
+                        <Icon icon={item.icon} className="w-6 h-6" />
                       )}
                       <span>{item.label}</span>
                     </span>
@@ -1295,9 +1295,9 @@ export const DrawAnimate: React.FC = () => {
               }`}
             >
               {isUnified ? (
-                <img src={item.svg} alt="" className="w-5 h-5 object-contain" />
+                <img src={item.svg} alt="" className="w-6 h-6 object-contain" />
               ) : (
-                <Icon icon={item.icon} className="w-5 h-5" />
+                <Icon icon={item.icon} className="w-6 h-6" />
               )}
               <span>{item.label}</span>
             </button>
